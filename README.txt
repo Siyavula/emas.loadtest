@@ -1,4 +1,4 @@
 Introduction
 ============
 
-Load testing package for Everything Mathsc & Science
+Load testing package for Everything Maths & Science
