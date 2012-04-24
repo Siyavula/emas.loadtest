@@ -3,9 +3,10 @@
 
 import unittest
 from collective.funkload import testcase
+from funkload.FunkLoadTestCase import FunkLoadTestCase
 from funkload.utils import xmlrpc_get_credential
 
-class practice(testcase.FLTestCase):
+class practice(FunkLoadTestCase):
     """Functional test for practice system
 
     This test use a configuration file practice.conf.
