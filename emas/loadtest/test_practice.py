@@ -2,7 +2,6 @@
 """Practice System FunkLoad test"""
 
 import unittest
-from collective.funkload import testcase
 from funkload.FunkLoadTestCase import FunkLoadTestCase
 from funkload.utils import xmlrpc_get_credential
 
