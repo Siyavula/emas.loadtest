@@ -24,8 +24,10 @@ class mobile(FunkLoadTestCase):
             description="Get /")
 
         for path in open('maths_paths.txt').readlines():
+            path = path.rstrip('\n')
             url = "http://m.qa.everythingmaths.co.za" + path
-            self.get(path, description="Get " + path)
+            print url
+            self.get(url, description="Get " + path)
 
     def tearDown(self):
         """Setting up test."""
