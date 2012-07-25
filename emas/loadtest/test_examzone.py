@@ -4,6 +4,7 @@
 import unittest
 from funkload.FunkLoadTestCase import FunkLoadTestCase
 from funkload.utils import xmlrpc_get_credential
+from funkload.utils import xmlrpc_list_credentials
 
 
 class examzone(FunkLoadTestCase):
@@ -34,20 +35,23 @@ class examzone(FunkLoadTestCase):
 
         self.get(base_url, description="Get /maths/grade-10")
         
-        login, password = xmlrpc_get_credential(self.credential_host,
-                                                self.credential_port,
-                                                'examzonegroup')
         # prep response params and headers
         url = base_url + "/@@mxitpaymentresponse"
-        self.addHeader("X_MXIT_USERID_R", login)
         params = {
             "mxit_transaction_res": "0"
         }
         description = "MXit response"
-        self.post(url, params, description)
 
-        self.get(examzone_url, description="Get /maths/grade-10/exam-zone")
-        body = self.getBody()
+        creds = xmlrpc_list_credentials(self.credential_host,
+                                        self.credential_port,
+                                        group='examzonegroup')
+        for login, pwd in creds:
+            self.delHeader("X_MXIT_USERID_R")
+            self.addHeader("X_MXIT_USERID_R", login)
+            self.post(url, params, description)
+
+            self.get(examzone_url, description="Get /maths/grade-10/exam-zone")
+            body = self.getBody()
 
     def tearDown(self):
         """Setting up test."""
