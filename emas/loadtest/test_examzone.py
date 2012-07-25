@@ -4,7 +4,6 @@
 import unittest
 from funkload.FunkLoadTestCase import FunkLoadTestCase
 
-from pas.plugins.mxit.plugin import USER_ID_TOKEN
 
 class examzone(FunkLoadTestCase):
     """Functional test for examzone site
@@ -19,7 +18,7 @@ class examzone(FunkLoadTestCase):
 
         # better set the HTTP_USER_AGENT header to inform the theme that this
         # is a mxit request.
-        self.addHeader('HTTP_USER_AGENT', 'MXit WebBot')
+        self.addHeader('USER_AGENT', 'MXit WebBot')
         self.debugHeaders()
 
     def test_ExamZone(self):
@@ -33,9 +32,9 @@ class examzone(FunkLoadTestCase):
         self.get(base_url, description="Get /maths/grade-10")
         
         # prep response params and headers
-        url = examzone_url + "/@@mxitpaymentresponse"
-        params_dict = {
-            USER_ID_TOKEN: "m1",
+        url = base_url + "/@@mxitpaymentresponse"
+        self.addHeader("X_MXIT_USERID_R", "m1")
+        params = {
             "mxit_transaction_res": "0"
         }
         description = "MXit response"
