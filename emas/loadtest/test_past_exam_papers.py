@@ -28,7 +28,7 @@ class past_exam_papers(FunkLoadTestCase):
         self.server = "http://m.qa.everythingmaths.co.za"
         self.load_auto_links = True
     
-    def test_localserver(self):
+    def localserver(self):
         self.server = "http://localhost:8080/emas/maths"
         self.load_auto_links = False
         self.test_PastExamPapers()
