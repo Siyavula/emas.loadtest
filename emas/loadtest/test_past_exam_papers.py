@@ -25,17 +25,25 @@ class past_exam_papers(FunkLoadTestCase):
         self.addHeader('USER_AGENT', 'MXit WebBot')
         self.debugHeaders()
 
+        self.server = "http://m.qa.everythingmaths.co.za"
+        self.load_auto_links = True
+    
+    def test_localserver(self):
+        self.server = "http://localhost:8080/emas/maths"
+        self.load_auto_links = False
+        self.test_PastExamPapers()
+
     def test_PastExamPapers(self):
         # The description should be set in the configuration file
         server_url = self.server_url
         # begin of test ---------------------------------------------
         
-        server = "http://m.qa.everythingmaths.co.za"
-        #server = "http://localhost:8080/emas/maths"
-        base_url = server + "/grade-10"
+        base_url = self.server + "/grade-10"
         exampapers_url = base_url + "/past-exam-papers"
 
-        self.get(base_url, description="Get /maths/grade-10")
+        self.get(base_url,
+                 description="Get /maths/grade-10",
+                 load_auto_links=self.load_auto_links)
         
         # prep response params and headers
         url = base_url + "/@@mxitpaymentresponse"
@@ -50,10 +58,14 @@ class past_exam_papers(FunkLoadTestCase):
         for login, pwd in creds:
             self.delHeader("X_MXIT_USERID_R")
             self.addHeader("X_MXIT_USERID_R", login)
-            self.post(url, params, description)
+            self.post(url,
+                      params,
+                      description,
+                      load_auto_links=self.load_auto_links)
 
             self.get(exampapers_url,
-                     description="Get /maths/grade-10/past-exam-papers")
+                     description="Get /maths/grade-10/past-exam-papers",
+                     load_auto_links=self.load_auto_links)
             body = self.getBody()
 
     def tearDown(self):
