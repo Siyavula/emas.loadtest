@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""Exam Zone FunkLoad test"""
+"""Past Exam Papers FunkLoad test"""
 
 import unittest
 from funkload.FunkLoadTestCase import FunkLoadTestCase
@@ -25,13 +25,13 @@ class past_exam_papers(FunkLoadTestCase):
         self.addHeader('USER_AGENT', 'MXit WebBot')
         self.debugHeaders()
 
-    def test_ExamZone(self):
+    def test_PastExamPapers(self):
         # The description should be set in the configuration file
         server_url = self.server_url
         # begin of test ---------------------------------------------
         
         base_url = "http://m.qa.everythingmaths.co.za/grade-10"
-        examzone_url = base_url + "/past-exam-papers"
+        exampapers_url = base_url + "/past-exam-papers"
 
         self.get(base_url, description="Get /maths/grade-10")
         
@@ -50,7 +50,7 @@ class past_exam_papers(FunkLoadTestCase):
             self.addHeader("X_MXIT_USERID_R", login)
             self.post(url, params, description)
 
-            self.get(examzone_url,
+            self.get(exampapers_url,
                      description="Get /maths/grade-10/past-exam-papers")
             body = self.getBody()
 
