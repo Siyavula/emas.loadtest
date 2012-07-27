@@ -7,10 +7,10 @@ from funkload.utils import xmlrpc_get_credential
 from funkload.utils import xmlrpc_list_credentials
 
 
-class examzone(FunkLoadTestCase):
-    """Functional test for examzone site
+class past_exam_papers(FunkLoadTestCase):
+    """Functional test for past_examp_papers
 
-    This test use a configuration file examezone.conf.
+    This test use a configuration file past_exam_papers.conf.
     """
 
     def setUp(self):
@@ -31,7 +31,7 @@ class examzone(FunkLoadTestCase):
         # begin of test ---------------------------------------------
         
         base_url = "http://m.qa.everythingmaths.co.za/grade-10"
-        examzone_url = base_url + "/exam-zone"
+        examzone_url = base_url + "/past-exam-papers"
 
         self.get(base_url, description="Get /maths/grade-10")
         
@@ -50,7 +50,8 @@ class examzone(FunkLoadTestCase):
             self.addHeader("X_MXIT_USERID_R", login)
             self.post(url, params, description)
 
-            self.get(examzone_url, description="Get /maths/grade-10/exam-zone")
+            self.get(examzone_url,
+                     description="Get /maths/grade-10/past-exam-papers")
             body = self.getBody()
 
     def tearDown(self):
@@ -59,7 +60,7 @@ class examzone(FunkLoadTestCase):
 
 
 def test_suite():
-    return unittest.makeSuite(examzone)
+    return unittest.makeSuite(past_exam_papers)
 
 additional_tests = test_suite
 
