@@ -30,7 +30,9 @@ class past_exam_papers(FunkLoadTestCase):
         server_url = self.server_url
         # begin of test ---------------------------------------------
         
-        base_url = "http://m.qa.everythingmaths.co.za/grade-10"
+        server = "http://m.qa.everythingmaths.co.za"
+        #server = "http://localhost:8080/emas/maths"
+        base_url = server + "/grade-10"
         exampapers_url = base_url + "/past-exam-papers"
 
         self.get(base_url, description="Get /maths/grade-10")
@@ -44,7 +46,7 @@ class past_exam_papers(FunkLoadTestCase):
 
         creds = xmlrpc_list_credentials(self.credential_host,
                                         self.credential_port,
-                                        group='examzonegroup')
+                                        group='pastpapersgroup')
         for login, pwd in creds:
             self.delHeader("X_MXIT_USERID_R")
             self.addHeader("X_MXIT_USERID_R", login)
