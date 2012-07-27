@@ -46,9 +46,9 @@ class past_exam_papers(FunkLoadTestCase):
                  load_auto_links=self.load_auto_links)
         
         # prep response params and headers
-        url = base_url + "/@@mxitpaymentresponse"
+        url = base_url + "/@@mxitpaymentresponse?productId=PastMathsExamPapers"
         params = {
-            "mxit_transaction_res": "0"
+            "mxit_transaction_res": "0",
         }
         description = "MXit response"
 
