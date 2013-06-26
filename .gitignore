@@ -1,0 +1,7 @@
+*.pyc
+*.log
+*.xml
+*.bak-*
+.~lock.*
+Paste*
+*egg-info*
