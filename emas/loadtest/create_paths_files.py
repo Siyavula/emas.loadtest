@@ -15,14 +15,12 @@ except IndexError:
 try:
     subject = sys.argv[2]
 except IndexError:
-    print 'You have to supply a subject.'
-    sys.exit(0)
+    subject = None
 
 try:
     grade = sys.argv[3]
 except IndexError:
-    print 'You have to supply a grade.'
-    sys.exit(0)
+    grade = None
 
 if not app.hasObject(portal_id):
     print "Please specify the id of your plone site as the first argument "
@@ -41,7 +39,13 @@ newSecurityManager(None, user.__of__(app.acl_users))
 
 paths = []
 pc = getToolByName(portal, 'portal_catalog')
-search_path = '/'.join([portal_id, subject, grade])
+if grade and subject:
+    search_path = '/'.join([portal_id, subject, grade])
+elif subject:
+    search_path = '/'.join([portal_id, subject])
+else:
+    search_path = '/'.join([portal_id])
+    
 query = {'portal_type': 'rhaptos.xmlfile.xmlfile',
          'path': search_path}
 brains = pc(query)
