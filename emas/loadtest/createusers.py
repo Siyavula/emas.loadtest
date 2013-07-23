@@ -41,30 +41,38 @@ userids = mst.listMemberIds()
 auth = portal.acl_users.credentials_cookie_auth
 ac_name = getattr(auth, 'name_cookie', '__ac_name')
 ac_password = getattr(auth, 'pw_cookie', '__ac_password')
+pw = '12345'
+roles = ('Member',)
+domains = None
+pr = portal.portal_registration
+acl_users = getToolByName(portal, "acl_users")
 
 for i in range(1000000):
     username = 'funkload_testuser_%s' % i
-    if username in userids:
-        continue
-    roles = ('Member',)
-    pr = portal.portal_registration
-    pw = ''.join(choice(chars) for _ in range(8))
-    member = pr.addMember(username, pw, roles,
-                          properties={'username': username,
-                                      'email': 'devnull@upfrontsystems.co.za'})
-    member.setMemberProperties({'credits': 1000})
 
-    app.REQUEST[ac_name] = username
-    app.REQUEST[ac_password] = pw
-    mst.loginUser(REQUEST=app.REQUEST)
-    mst.logoutUser(REQUEST=app.REQUEST)
+    # print in the format required by the credential server
+    print "%s:%s" % (username, pw)
+
+    if username in userids:
+        user = acl_users.getUserById(username)
+        if hasattr(user, 'changePassword'):
+            user.changePassword(pw)
+        else:
+            acl_users._doChangeUser(username, pw, roles, domains)
+    else:
+        member = pr.addMember(username, pw, roles,
+                              properties={'username': username,
+                                          'email': 'devnull@upfrontsystems.co.za'})
+        member.setMemberProperties({'credits': 1000})
+
+        app.REQUEST[ac_name] = username
+        app.REQUEST[ac_password] = pw
+        mst.loginUser(REQUEST=app.REQUEST)
+        mst.logoutUser(REQUEST=app.REQUEST)
     
     # commit every 1000 transactions
     if i % 1000:
         transaction.commit()
-
-    # print in the format required by the credential server
-    print "%s:%s" % (username, pw)
 
 transaction.commit()
 end = datetime.datetime.now()
