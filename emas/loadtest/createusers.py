@@ -23,6 +23,9 @@ if not app.hasObject(portal_id):
     sys.exit(1)
 
 
+start = datetime.datetime.now()
+print 'Starting at:%s' % start.strftime('%H:%M:%S:%s')
+
 app = makerequest.makerequest(app)
 portal = app[portal_id]
 setSite(portal)
@@ -33,8 +36,16 @@ newSecurityManager(None, user.__of__(app.acl_users))
 
 chars = string.letters + string.digits
 
-for i in range(100):
+mst = getToolByName(portal, 'portal_membership')
+userids = mst.listMemberIds()
+auth = portal.acl_users.credentials_cookie_auth
+ac_name = getattr(auth, 'name_cookie', '__ac_name')
+ac_password = getattr(auth, 'pw_cookie', '__ac_password')
+
+for i in range(1000000):
     username = 'funkload_testuser_%s' % i
+    if username in userids:
+        continue
     roles = ('Member',)
     pr = portal.portal_registration
     pw = ''.join(choice(chars) for _ in range(8))
@@ -42,7 +53,20 @@ for i in range(100):
                           properties={'username': username,
                                       'email': 'devnull@upfrontsystems.co.za'})
     member.setMemberProperties({'credits': 1000})
+
+    app.REQUEST[ac_name] = username
+    app.REQUEST[ac_password] = pw
+    mst.loginUser(REQUEST=app.REQUEST)
+    mst.logoutUser(REQUEST=app.REQUEST)
+    
+    # commit every 1000 transactions
+    if i % 1000:
+        transaction.commit()
+
     # print in the format required by the credential server
     print "%s:%s" % (username, pw)
 
 transaction.commit()
+end = datetime.datetime.now()
+print 'Done at:%s' % end.strftime('%H:%M:%S:%s')
+print 'Elapsed time=%s seconds.' % (end-start).seconds
