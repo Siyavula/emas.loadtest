@@ -34,8 +34,6 @@ setSite(portal)
 user = app.acl_users.getUser('admin')
 newSecurityManager(None, user.__of__(app.acl_users))
 
-chars = string.letters + string.digits
-
 mst = getToolByName(portal, 'portal_membership')
 userids = mst.listMemberIds()
 auth = portal.acl_users.credentials_cookie_auth
@@ -63,15 +61,14 @@ for i in range(1000000):
         member = pr.addMember(username, pw, roles,
                               properties={'username': username,
                                           'email': 'devnull@upfrontsystems.co.za'})
-        member.setMemberProperties({'credits': 1000})
 
         app.REQUEST[ac_name] = username
         app.REQUEST[ac_password] = pw
         mst.loginUser(REQUEST=app.REQUEST)
         mst.logoutUser(REQUEST=app.REQUEST)
     
-    # commit every 1000 transactions
-    if i % 1000:
+    # commit every 10000 transactions
+    if not i % 10000:
         transaction.commit()
 
 transaction.commit()
