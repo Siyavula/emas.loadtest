@@ -34,8 +34,8 @@ class CreateUsers(grok.View):
         pr = portal.portal_registration
         acl_users = getToolByName(portal, "acl_users")
         prefix = self.request.get('prefix', 'funkload_testuser')
-        start = self.request.get('start', 0)
-        numofusers = self.request.get('numofusers', 50)
+        start = int(self.request.get('start', 0))
+        numofusers = int(self.request.get('numofusers', 50))
 
         for i in range(start, start+numofusers):
             username = '%s_%s' % (prefix, i)
