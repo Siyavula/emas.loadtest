@@ -1,3 +1,4 @@
+import transaction
 from five import grok
 from zope.interface import Interface
 from zope.component import queryUtility
@@ -18,7 +19,9 @@ class CreateUsers(grok.View):
 
     def __call__(self):
         import pdb;pdb.set_trace()
-        portal = self.restrictedTraverse('@@plone_portal_state').portal()
+        start = datetime.datetime.now()
+        print 'Starting at:%s' % start.strftime('%H:%M:%S:%s')
+        portal = self.context.restrictedTraverse('@@plone_portal_state').portal()
         mst = getToolByName(portal, 'portal_membership')
         userids = mst.listMemberIds()
         auth = portal.acl_users.credentials_cookie_auth
