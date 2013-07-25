@@ -20,8 +20,8 @@ class CreateUsers(grok.View):
 
     def __call__(self):
         import pdb;pdb.set_trace()
-        start = datetime.datetime.now()
-        print 'Starting at:%s' % start.strftime('%H:%M:%S:%s')
+        starttime = datetime.datetime.now()
+        print 'Starting at:%s' % starttime.strftime('%H:%M:%S:%s')
         portal = self.context.restrictedTraverse('@@plone_portal_state').portal()
         mst = getToolByName(portal, 'portal_membership')
         userids = mst.listMemberIds()
@@ -64,8 +64,8 @@ class CreateUsers(grok.View):
                 transaction.commit()
 
         transaction.commit()
-        end = datetime.datetime.now()
-        print 'Done at:%s' % end.strftime('%H:%M:%S:%s')
+        endtime = datetime.datetime.now()
+        print 'Done at:%s' % endtime.strftime('%H:%M:%S:%s')
         print 'Elapsed time=%s seconds.' % (end-start).seconds
 
     def render(self):
