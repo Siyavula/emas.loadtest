@@ -13,6 +13,4 @@
 
   <include package=".browser" />
 
-  <grok:grok package="." />
-  
 </configure>

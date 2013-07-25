@@ -17,6 +17,7 @@ class CreateUsers(grok.View):
     grok.require('zope2.View')
 
     def __call__(self):
+        import pdb;pdb.set_trace()
         portal = self.restrictedTraverse('@@plone_portal_state').portal()
         mst = getToolByName(portal, 'portal_membership')
         userids = mst.listMemberIds()
