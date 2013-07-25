@@ -66,7 +66,7 @@ class CreateUsers(grok.View):
         transaction.commit()
         endtime = datetime.datetime.now()
         print 'Done at:%s' % endtime.strftime('%H:%M:%S:%s')
-        print 'Elapsed time=%s seconds.' % (end-start).seconds
+        print 'Elapsed time=%s seconds.' % (endtime-starttime).seconds
 
     def render(self):
         return ''
