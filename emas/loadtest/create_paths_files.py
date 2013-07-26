@@ -47,7 +47,8 @@ else:
     search_path = '/'.join([portal_id])
     
 query = {'portal_type': 'rhaptos.xmlfile.xmlfile',
-         'path': search_path}
+         'path': search_path,
+         'review_state': 'published'}
 brains = pc(query)
 
 for count, brain in enumerate(brains):
