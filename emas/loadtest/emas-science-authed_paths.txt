@@ -1,15 +1,15 @@
-/grade-12/01-organic-molecules/01-organic-molecules-07.cnxmlplus
-/grade-10/19-quantitative-aspects-of-chemical-change/19-quantitative-aspects-of-chemical-change-01.cnxmlplus
-/grade-10/19-quantitative-aspects-of-chemical-change/19-quantitative-aspects-of-chemical-change-06.cnxmlplus
-/grade-11/04-intermolecular-forces/04-intermolecular-forces-02.cnxmlplus Get grade-11/04-intermolecular-forces/04-intermolecular-forces-02.cnxmlplus
-/grade-10/05-the-periodic-table/05-the-periodic-table-01.cnxmlplus Get grade-10/05-the-periodic-table/05-the-periodic-table-01.cnxmlplus
-/grade-10/22-mechanical-energy/22-mechanical-energy-01.cnxmlplus
-/grade-10/24-units-used-in-the-book/24-units-used-in-the-book-01.cnxmlplus
-/grade-12/02-organic-macromolecules/02-organic-macromolecules-01.cnxmlplus
-/grade-12/05-the-chemical-industry/05-the-chemical-industry-02.cnxmlplus
-/grade-12/08-work-energy-and-power/08-work-energy-and-power-03.cnxmlplus
-/grade-12/10-colour/10-colour-06.cnxmlplus
-/grade-12/11-2d-and-3d-wavefronts/11-2d-and-3d-wavefronts-08.cnxmlplus
-/grade-12/12-wave-nature-of-matter/12-wave-nature-of-matter-01.cnxmlplus
-/grade-11/13-types-of-reactions/13-types-of-reactions-01.cnxmlplus
-/grade-11/14-lithosphere/14-lithosphere-01.cnxmlplus
+grade-12/01-organic-molecules/01-organic-molecules-07.cnxmlplus
+grade-10/19-quantitative-aspects-of-chemical-change/19-quantitative-aspects-of-chemical-change-01.cnxmlplus
+grade-10/19-quantitative-aspects-of-chemical-change/19-quantitative-aspects-of-chemical-change-06.cnxmlplus
+grade-11/04-intermolecular-forces/04-intermolecular-forces-02.cnxmlplus Get grade-11/04-intermolecular-forces/04-intermolecular-forces-02.cnxmlplus
+grade-10/05-the-periodic-table/05-the-periodic-table-01.cnxmlplus Get grade-10/05-the-periodic-table/05-the-periodic-table-01.cnxmlplus
+grade-10/22-mechanical-energy/22-mechanical-energy-01.cnxmlplus
+grade-10/24-units-used-in-the-book/24-units-used-in-the-book-01.cnxmlplus
+grade-12/02-organic-macromolecules/02-organic-macromolecules-01.cnxmlplus
+grade-12/05-the-chemical-industry/05-the-chemical-industry-02.cnxmlplus
+grade-12/08-work-energy-and-power/08-work-energy-and-power-03.cnxmlplus
+grade-12/10-colour/10-colour-06.cnxmlplus
+grade-12/11-2d-and-3d-wavefronts/11-2d-and-3d-wavefronts-08.cnxmlplus
+grade-12/12-wave-nature-of-matter/12-wave-nature-of-matter-01.cnxmlplus
+grade-11/13-types-of-reactions/13-types-of-reactions-01.cnxmlplus
+grade-11/14-lithosphere/14-lithosphere-01.cnxmlplus
