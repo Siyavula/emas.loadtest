@@ -3,11 +3,12 @@
 
 $Id: $
 """
+import cPickle
 import unittest
 from funkload.FunkLoadTestCase import FunkLoadTestCase
 from webunit.utility import Upload
 from funkload.utils import Data
-#from funkload.utils import xmlrpc_get_credential
+from funkload.utils import xmlrpc_get_credential
 
 class Practice(FunkLoadTestCase):
     """XXX
@@ -18,14 +19,15 @@ class Practice(FunkLoadTestCase):
     def setUp(self):
         """Setting up test."""
         self.logd("setUp")
+	self.answers = cPickle.load(
+	    open('monassis/oracular-answers.pickle','rb'))
         self.server_url = self.conf_get('main', 'url')
         # XXX here you can setup the credential access like this
-        # credential_host = self.conf_get('credential', 'host')
-        # credential_port = self.conf_getInt('credential', 'port')
-        # self.login, self.password = xmlrpc_get_credential(credential_host,
-        #                                                   credential_port,
-        # XXX replace with a valid group
-        #                                                   'members')
+        credential_host = self.conf_get('credential', 'host')
+        credential_port = self.conf_getInt('credential', 'port')
+        self.login, self.password = xmlrpc_get_credential(credential_host,
+                                                          credential_port,
+                                                          'funkloadgroup')
 
     def test_practice(self):
         # The description should be set in the configuration file
@@ -52,8 +54,8 @@ class Practice(FunkLoadTestCase):
             ['cookies_enabled', ''],
             ['login_name', ''],
             ['pwd_empty', '0'],
-            ['__ac_name', 'tester100'],
-            ['__ac_password', '12345'],
+            ['__ac_name', self.login],
+            ['__ac_password', self.password],
             ['submit', 'Sign in']],
             description="Post /login_form")
 
