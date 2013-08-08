@@ -24,7 +24,7 @@ class Practicedashboard(FunkLoadTestCase):
         credential_port = self.conf_getInt('credential', 'port')
         self.login, self.password = xmlrpc_get_credential(credential_host,
                                                           credential_port,
-                                                          'Member')
+                                                          'funkloadgroup')
 
     def test_PracticeDashboard(self):
         # The description should be set in the configuration file
