@@ -53,8 +53,8 @@ class AuthenticatedRead(FunkLoadTestCase):
         for path in open(self.paths_file).readlines():
             path = path.rstrip('\n')
             url = '/'.join([server_url, path])
-            print url
             self.get(url, description="Get " + path)
+            self.assert_('id="user-name"' in self.getBody(), "Username not found")
 
         # end of test -----------------------------------------------
 

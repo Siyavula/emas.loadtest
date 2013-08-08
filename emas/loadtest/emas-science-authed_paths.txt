@@ -1,8 +1,8 @@
 grade-12/01-organic-molecules/01-organic-molecules-07.cnxmlplus
 grade-10/19-quantitative-aspects-of-chemical-change/19-quantitative-aspects-of-chemical-change-01.cnxmlplus
 grade-10/19-quantitative-aspects-of-chemical-change/19-quantitative-aspects-of-chemical-change-06.cnxmlplus
-grade-11/04-intermolecular-forces/04-intermolecular-forces-02.cnxmlplus Get grade-11/04-intermolecular-forces/04-intermolecular-forces-02.cnxmlplus
-grade-10/05-the-periodic-table/05-the-periodic-table-01.cnxmlplus Get grade-10/05-the-periodic-table/05-the-periodic-table-01.cnxmlplus
+grade-11/04-intermolecular-forces/04-intermolecular-forces-02.cnxmlplus
+grade-10/05-the-periodic-table/05-the-periodic-table-01.cnxmlplus
 grade-10/22-mechanical-energy/22-mechanical-energy-01.cnxmlplus
 grade-10/24-units-used-in-the-book/24-units-used-in-the-book-01.cnxmlplus
 grade-12/02-organic-macromolecules/02-organic-macromolecules-01.cnxmlplus
