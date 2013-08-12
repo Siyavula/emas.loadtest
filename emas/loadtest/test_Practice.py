@@ -19,8 +19,8 @@ class Practice(FunkLoadTestCase):
     def setUp(self):
         """Setting up test."""
         self.logd("setUp")
-	self.answers = cPickle.load(
-	    open('monassis/oracular-answers.pickle','rb'))
+        self.answers = cPickle.load(
+            open('monassis/oracular-answers.pickle','rb'))
         self.server_url = self.conf_get('main', 'url')
         # XXX here you can setup the credential access like this
         credential_host = self.conf_get('credential', 'host')
@@ -42,7 +42,7 @@ class Practice(FunkLoadTestCase):
             description="Get /static/fonts/monts...FgeyaSgU71cLG0.woff")
         # /tmp/tmpCz5DHd_funkload/watch0090.request
         self.post(server_url + "/login_form", params=[
-            ['came_from', 'http://qap.everythingmaths.co.za'],
+            ['came_from', self.server_url],
             ['next', ''],
             ['ajax_load', ''],
             ['ajax_include_head', ''],
@@ -63,6 +63,7 @@ class Practice(FunkLoadTestCase):
         self.get(server_url + "/@@practice/dashboard",
             description="Get /@@practice/dashboard")
 
+        import pdb;pdb.set_trace()
         # /tmp/tmpCz5DHd_funkload/watch0139.request
         self.get(server_url + "/@@practice/select_chapter/105",
             description="Get /@@practice/select_chapter/105")
