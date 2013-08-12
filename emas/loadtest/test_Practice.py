@@ -63,7 +63,6 @@ class Practice(FunkLoadTestCase):
         self.get(server_url + "/@@practice/dashboard",
             description="Get /@@practice/dashboard")
 
-        import pdb;pdb.set_trace()
         # /tmp/tmpCz5DHd_funkload/watch0139.request
         self.get(server_url + "/@@practice/select_chapter/105",
             description="Get /@@practice/select_chapter/105")
