@@ -5,9 +5,10 @@ $Id: $
 """
 import cPickle
 import unittest
+from lxml import html
 from funkload.FunkLoadTestCase import FunkLoadTestCase
 from webunit.utility import Upload
-from funkload.utils import Data
+from funkload.utils import Data, extract_token
 from funkload.utils import xmlrpc_get_credential
 
 class Practice(FunkLoadTestCase):
@@ -60,12 +61,39 @@ class Practice(FunkLoadTestCase):
             description="Post /login_form")
 
         # /tmp/tmpCz5DHd_funkload/watch0101.request
-        self.get(server_url + "/@@practice/dashboard",
-            description="Get /@@practice/dashboard")
+        self.get(server_url + "/@@practice/grade-10",
+            description="Get /@@practice/grade-10")
 
         # /tmp/tmpCz5DHd_funkload/watch0139.request
-        self.get(server_url + "/@@practice/select_chapter/105",
-            description="Get /@@practice/select_chapter/105")
+        self.get(server_url + "/@@practice/select_chapter/5",
+            description="Get /@@practice/select_chapter/5")
+        self._accept_invalid_links = True
+        token = 'Random seed: </b>'
+        end = '</div>'
+        seed = int(extract_token(self.getBody(), token, end))
+        token = 'Template id: </b>'
+        template_id = int(extract_token(self.getBody(), token, end))
+        answers = self.answers[template_id][seed]
+        dom = html.fromstring(self.getBody())
+        for node in dom.xpath('//*[@class="answer-input"]'):
+            if (node.attrib.get('disabled') is None) and (node.attrib.get('readonly') is None):
+                questionNumber= int(node.attrib['name'][8:-1])
+                subQuestionIdx = questionNumber -1
+                subanswers = answers[subQuestionIdx]
+                postData = {}
+                for idx, answer in enumerate(subanswers):
+                    key = 'question%s%s' % (questionNumber, chr(ord('a')+idx))
+                    postData[key] = answer
+                self.post(server_url + "/@@practice/submit_response",
+                          params=postData,
+                          description="Post /@@practice/submit_response")
+                dom = html.fromstring(self.getBody())
+
+        postData = {'nextPage': 'Go to next question'}
+        self.post(server_url + "/@@practice/submit_response",
+                  params=postData,
+                  description="Post /@@practice/submit_response")
+
         # /tmp/tmpCz5DHd_funkload/watch0153.request
         self.get("http://cdn.mathjax.org/mathjax/latest/fonts/HTML-CSS/TeX/woff/MathJax_Size4-Regular.woff",
             description="Get /mathjax/latest/fon..._Size4-Regular.woff")
@@ -78,11 +106,7 @@ class Practice(FunkLoadTestCase):
         # /tmp/tmpCz5DHd_funkload/watch0156.request
         self.get("http://cdn.mathjax.org/mathjax/latest/fonts/HTML-CSS/TeX/woff/MathJax_Size1-Regular.woff",
             description="Get /mathjax/latest/fon..._Size1-Regular.woff")
-        # /tmp/tmpCz5DHd_funkload/watch0157.request
-        self.post(server_url + "/@@practice/submit_response", params=[
-            ['question1a', '333333'],
-            ['click1', 'Check answer']],
-            description="Post /@@practice/submit_response")
+
 	
         # end of test -----------------------------------------------
 
