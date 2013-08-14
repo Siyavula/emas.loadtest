@@ -27,6 +27,8 @@ setup(name='emas.loadtest',
           # -*- Extra requirements: -*-
           'collective.autopermission',
           'collective.testcaselayer',
+          'requests',
+	  'lxml',
       ],
       entry_points="""
       # -*- Entry points: -*-
