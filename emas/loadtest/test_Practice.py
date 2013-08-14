@@ -87,6 +87,7 @@ class Practice(FunkLoadTestCase):
                 self.post(server_url + "/@@practice/submit_response",
                           params=postData,
                           description="Post /@@practice/submit_response")
+                self.assert_('Correct!' in self.getBody(), "Answer incorrect.")
                 dom = html.fromstring(self.getBody())
 
         postData = {'nextPage': 'Go to next question'}
