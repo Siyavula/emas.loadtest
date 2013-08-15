@@ -95,20 +95,6 @@ class Practice(FunkLoadTestCase):
                   params=postData,
                   description="Post /@@practice/submit_response")
 
-        # /tmp/tmpCz5DHd_funkload/watch0153.request
-        self.get("http://cdn.mathjax.org/mathjax/latest/fonts/HTML-CSS/TeX/woff/MathJax_Size4-Regular.woff",
-            description="Get /mathjax/latest/fon..._Size4-Regular.woff")
-        # /tmp/tmpCz5DHd_funkload/watch0154.request
-        self.get("http://cdn.mathjax.org/mathjax/latest/fonts/HTML-CSS/TeX/woff/MathJax_Main-Regular.woff",
-            description="Get /mathjax/latest/fon...x_Main-Regular.woff")
-        # /tmp/tmpCz5DHd_funkload/watch0155.request
-        self.get("http://cdn.mathjax.org/mathjax/latest/fonts/HTML-CSS/TeX/woff/MathJax_Math-Italic.woff",
-            description="Get /mathjax/latest/fon...ax_Math-Italic.woff")
-        # /tmp/tmpCz5DHd_funkload/watch0156.request
-        self.get("http://cdn.mathjax.org/mathjax/latest/fonts/HTML-CSS/TeX/woff/MathJax_Size1-Regular.woff",
-            description="Get /mathjax/latest/fon..._Size1-Regular.woff")
-
-	
         # end of test -----------------------------------------------
 
     def tearDown(self):
