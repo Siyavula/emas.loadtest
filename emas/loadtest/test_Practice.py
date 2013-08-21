@@ -25,6 +25,7 @@ class Practice(FunkLoadTestCase):
         """Setting up test."""
         self.logd("setUp")
         self.server_url = self.conf_get('main', 'url')
+        self.answer_server_url = self.conf_get('main', 'answer_server_url')
         # XXX here you can setup the credential access like this
         credential_host = self.conf_get('credential', 'host')
         credential_port = self.conf_getInt('credential', 'port')
@@ -76,7 +77,9 @@ class Practice(FunkLoadTestCase):
             self.logd("Getting questions.")
             seed = int(extract_token(self.getBody(), rtoken, end))
             template_id = int(extract_token(self.getBody(), ttoken, end))
-            answers_url = 'http://localhost:8000/?templateId=%s&seed=%s' % (template_id, seed)
+            answers_url = '%s/?templateId=%s&seed=%s' % (self.answer_server_url,
+                                                         template_id,
+                                                         seed)
             response = requests.get(answers_url)
 
             answers = eval(response.text)
