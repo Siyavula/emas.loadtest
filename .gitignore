@@ -5,3 +5,5 @@
 .~lock.*
 Paste*
 *egg-info*
+*.pid
+*.pickle
