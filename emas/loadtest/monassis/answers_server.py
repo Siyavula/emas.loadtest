@@ -28,17 +28,14 @@ class AnswerRequestHandler(SimpleHTTPRequestHandler):
         if matches:
             sid = int(matches[0])
        
-        if not tid in self.answers:
+        if not tid in self.answers.keys():
             self.wfile.write('Could not find template:%s' % tid)
             return
-        template = self.answers[tid]
 
-        if not sid in self.answers:
+        try:
+            self.wfile.write(self.answers[tid][sid])
+        except IndexError:
             self.wfile.write('Could not find answers for :%s' % sid)
-            return
-        answers = template[sid]
-
-        self.wfile.write(answers)
 
 
 HandlerClass = AnswerRequestHandler
