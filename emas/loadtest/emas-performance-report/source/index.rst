@@ -53,7 +53,7 @@ Siyavula performance tuning report
     Siyavula Performance 4
 
         - Load generation server
-        - Host for the Funkload benchmark tests
+        - Host for the `Funkload`_ benchmark tests
 
     As load generating infrastructure we chose `Funkload`_, since it is written in
     Python, tests are very easy to record, customise and run and the reporting
@@ -65,9 +65,10 @@ Siyavula performance tuning report
     
     Reading all the possible URLs in the site authenticated was deemed
     impractical due to the amount of time potentially required to do one
-    Funkload cycle.  In order to decide which URLs to use for the authenticated
-    read tests we created a Funkload test that reads all the content
-    unauthenticated (results available here: `Science unauthed read`_).
+    `Funkload`_ cycle.  In order to decide which URLs to use for the authenticated
+    read tests we created a `Funkload`_ test that reads all the content
+    unauthenticated (results available here: `Science unauthed read`_).  This
+    test was run with only 1 user and 1 cycle.
 
     Unauthed read setup:
 
@@ -76,7 +77,7 @@ Siyavula performance tuning report
     - Target server: http://qap.everythingscience.co.za
     - Cycles of concurrent users: [1]
     - Cycle duration: 800s
-    - Apdex: 1.5
+    - `Apdex`_: 1.5
 
     From this list of URLs we chose the following to benchmark in our
     authenticated read:
@@ -100,14 +101,17 @@ Siyavula performance tuning report
     - grade-11/13-types-of-reactions/13-types-of-reactions-01.cnxmlplus
     - grade-11/14-lithosphere/14-lithosphere-01.cnxmlplus    
     
-    The criterium we used to chose the above URLs is simply the performance
+    The criterium we used to choose the above URLs is simply the performance
     in the unauthenticated reading tests.  The pages that are slow during
     unauthenticated reading will be even slower during authenticated reading.
     Since we are trying to establish a worst-case read scenario this seemed
     a pragmatic approach.
 
-    We also chose some URLs that seemed to be served quite fast.  This we did
-    to get some balance to the overall stats for the reading experience.
+    We also chose some URLs that seemed to serve quite fast.  This we did to get
+    some balance to the overall stats for the reading experience.
+
+    The resultant `Funkload`_ test was run with 4 test cycles ranging from 100
+    to 1000 concurrent users.
 
     Authenticated read setup:
 
@@ -116,11 +120,15 @@ Siyavula performance tuning report
     - Test: test_AuthenticatedRead.py AuthenticatedRead.test_AuthenticatedRead
     - Target server: http://qap.everythingscience.co.za
     - Cycles of concurrent users: [100, 250, 500, 750, 1000]
-    - Apdex: 1.5
+    - `Apdex`_: 1.5
 
 
 4. Authenticated read test results
 ==================================
+    
+    The initial test results look good, even though the total test cycle took
+    very long to complete.  This was expected since we test at high concurrency
+    levels.
 
     Raw results here: `Authenticated read`_
 
@@ -140,17 +148,17 @@ Siyavula performance tuning report
     implemented an 'oracle' for answers generated from the Monassis data.
     This 'oracle' we then wrapped in an HTTP server when we found that opening
     the pickle of all the saved answers to be a huge performance hit in our
-    Funkload tests.
+    `Funkload`_ tests.
 
     During the testing we also tested the practice proxy in the Plone
     application.  This was done in order to establish if any processing in this
     proxy is possibly more of a performance issue than processing in the
     external system.  Here are the `Practice proxy`_ results.  To test this we
-    recorded a Funkload test that logs in to the site and then navigates to a
+    recorded a `Funkload`_ test that logs in to the site and then navigates to a
     simple view in Monassis.  This view does no processing beyond returning
     basic headers and 'OK'.
 
-    For the full practise service test we recorded a Funkload test that logs in
+    For the full practise service test we recorded a `Funkload`_ test that logs in
     to the site, browses to the practise service and then does 10 questions.
     The answers to these questions are fetched from the 'oracle' HTTP server.
 
@@ -161,7 +169,7 @@ Siyavula performance tuning report
     - Test: test_Practice.py Practice.test_practice
     - Target server: http://qap.everythingmaths.co.za
     - Cycles of concurrent users: [100, 150, 200]
-    - Apdex: 1.5
+    - `Apdex`_: 1.5
 
 
 6. Results for testing practice service
@@ -169,11 +177,14 @@ Siyavula performance tuning report
 
     Raw results here: `Practise service test`_
 
+      
+
 
 7. Testing mobile reads
 =======================
 
     Raw results here: `Mobile test`_
+
 
 8. Results for testing mobile reads
 ===================================
@@ -182,6 +193,7 @@ Siyavula performance tuning report
 ==========================================
 
 
+.. _Apdex: http://apdex.org/
 .. _All test results: http://197.221.50.101/stats/
 .. _Science unauthed read: http://197.221.50.101/stats/test_WholeSite-20130726T155429/
 .. _Funkload: http://funkload.nuxeo.org
