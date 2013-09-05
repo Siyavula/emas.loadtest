@@ -121,16 +121,36 @@ Siyavula performance tuning report
     - Target server: http://qap.everythingscience.co.za
     - Cycles of concurrent users: [100, 250, 500, 750, 1000]
     - `Apdex`_: 1.5
+    
+    Each test cycle contains:
+
+    - 18 pages
+    - 59 links
+    - 99 images
+
+    The benchmark test as a whole (all cycles and users) contains:
+
+    - 381 tests
+    - 9701 pages
+    - 100343 requests
 
 
 4. Authenticated read test results
 ==================================
     
+    Raw results here: `Authenticated read`_
+
     The initial test results look good, even though the total test cycle took
     very long to complete.  This was expected since we test at high concurrency
-    levels.
+    levels.  
+    
+    The application kept on serving all pages up to a maximum of 1000 concurrent
+    users.  At that point however most pages (95%) take about 18.969 seconds to
+    serve.  The slowest response at 1000 concurrent users is 34.843 seconds to
+    server a specific page.
+    
+    Looking at the `slowest authed results`_ we can see that
 
-    Raw results here: `Authenticated read`_
 
     Login is slow
 
@@ -198,6 +218,7 @@ Siyavula performance tuning report
 .. _Science unauthed read: http://197.221.50.101/stats/test_WholeSite-20130726T155429/
 .. _Funkload: http://funkload.nuxeo.org
 .. _Authenticated read: http://197.221.50.101/stats/test_AuthenticatedRead-20130822T143507/
+.. _slowest authed results: http://197.221.50.101/stats/test_AuthenticatedRead-20130822T143507/#slowest-requests
 .. _Practise service test: http://197.221.50.101/stats/test_practice-20130823T121013/
 .. _Practice proxy: http://197.221.50.101/stats/test_practiceproxy-20130819T124350/
 .. _Mobile test: http://197.221.50.101/stats/
