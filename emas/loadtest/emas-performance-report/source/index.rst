@@ -173,6 +173,8 @@ Siyavula performance tuning report
 7. Testing mobile reads
 =======================
 
+    Raw results here: `Mobile test`_
+
 8. Results for testing mobile reads
 ===================================
 
@@ -180,8 +182,10 @@ Siyavula performance tuning report
 ==========================================
 
 
+.. _All test results: http://197.221.50.101/stats/
 .. _Science unauthed read: http://197.221.50.101/stats/test_WholeSite-20130726T155429/
 .. _Funkload: http://funkload.nuxeo.org
 .. _Authenticated read: http://197.221.50.101/stats/test_AuthenticatedRead-20130822T143507/
 .. _Practise service test: http://197.221.50.101/stats/test_practice-20130823T121013/
 .. _Practice proxy: http://197.221.50.101/stats/test_practiceproxy-20130819T124350/
+.. _Mobile test: http://197.221.50.101/stats/
