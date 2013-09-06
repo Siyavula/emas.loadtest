@@ -19,7 +19,14 @@ Introduction
     This document tries to summarise the data that was gathered, the conclusions
     that were reached and the remedial steps that were taken.
     
-    Each section has a link to the specific `Funkload bench reports`_.
+    Each section has a link to the specific `Funkload bench reports`_.  When
+    statistics from the `Funkload bench reports`_ are used in this document
+    we chose to use the 'P95' values.  They represent what happened 95% of the
+    time in the test.
+
+    The `Funkload bench reports`_ were configure not to follow external links,
+    since we are attempting to benchmark the EMAS software and hardware cluster
+    not external CDNs or external network access.
 
 
 1. Pre-test optimisation
@@ -119,8 +126,6 @@ Introduction
     The criterium we used to choose the above URLs is simply the performance
     in the unauthenticated reading tests.  The pages that are slow during
     unauthenticated reading will be even slower during authenticated reading.
-    Since we are trying to establish a worst-case read scenario this seemed
-    a pragmatic approach.
 
     We also chose some URLs that seemed to serve quite fast.  This we did to get
     some balance to the overall stats for the reading experience.
@@ -154,54 +159,124 @@ Introduction
 ==================================
     
     Funkload bench report here: `Authenticated read`_
+
+Page analysis
+-------------
+  
+Home page
++++++++++
+
+    The unauthenticated home page load at **100 concurrent users** looks like this:
     
-Pages served
-------------
-
-    The initial test results looked good, even though the total test cycle took
-    very long to complete.  This was expected since we test at high concurrency
-    levels.  The test cluster kept on serving all pages up to a maximum of **1000
-    concurrent users.**  At that point it can serve **18.969 pages per second
-    95% of the time.**  This means at a peak load of **1000** concurrent users
-    the above test cluster can serve:
-
-    18.969 * 60 * 60 = **67305.60 pages per hour**
-
-    This is significantly lower than our required serve rate of **~36 000 000**
-    pages per hour.
-
-    At lower concurrencies we see the following:
+    ====================================================================================================================    ============
+    URL                                                                                                                     Request time
+    ====================================================================================================================    ============
+    /                                                                                                                       1.337 s
+    /css?family=Montserrat                                                                                                  1.124 s
+    /                                                                                                                       1.245 s
+    /portal_css/Sunburst%20Theme/public-cachekey-4fff4ed932d766e26813993d85f43eea.css                                       1.120 s
+    /portal_css/Sunburst%20Theme/dropdown-menu-cachekey-18dee82342b75f2c7bc0fa7b017feb61.css                                1.119 s
+    /portal_css/Sunburst%20Theme/resourcetinymce.stylesheetstinymce-cachekey-ca7f99b34a27033d846be95c8de69be2.css           1.073 s
+    /portal_css/Sunburst%20Theme/resourceplone.app.dexterity.overlays-cachekey-7ac1852449e6cb2ff27111e1cd7c4665.css         1.226 s
+    /portal_css/Sunburst%20Theme/resourcecollective.topictreetopictree-cachekey-2a473052fae56de9ea0cbbec5dfaa63d.css        1.130 s
+    /portal_css/Sunburst%20Theme/resourcethemesapplestyle-cachekey-902306361fbd1b097cea265775a7f6da.css                     1.137 s
+    /portal_css/Sunburst%20Theme/themeemas.appcssstyles-cachekey-c58e347e4c0ca6ab98d3a4104c40af46.css                       1.177 s
+    /portal_css/Sunburst%20Theme/themeemas.themecssstyles-cachekey-987e0b9963b14f5de16733ce5a566073.css                     1.269 s
+    /portal_css/Sunburst%20Theme/ploneCustom-cachekey-74895962889ac3a836dba1b4b8323474.css                                  1.166 s
+    /portal_kss/Sunburst%20Theme/at-cachekey-9d4065eabe538900e9c3dd6fa55b6acc.kss                                           1.229 s
+    /favicon.ico                                                                                                            1.157 s
+    /touch_icon.png                                                                                                         1.045 s
+    /++theme++emas.theme/images/logo.png                                                                                    1.054 s
+    /++theme++emas.theme/images/howitworks.png                                                                              1.108 s
+    /++theme++emas.theme/images/graph.png                                                                                   1.179 s
+    /++theme++emas.theme/images/answer_correct.png                                                                          1.035 s
+    /++theme++emas.theme/images/answer_incorrect.png                                                                        1.161 s
+    /++theme++emas.theme/images/dashboard.png                                                                               1.106 s
+    /++theme++emas.theme/images/learnersdashboard.png                                                                       1.250 s
+    /++theme++emas.theme/images/teachersdashboard.png                                                                       1.145 s
+    /++theme++emas.theme/images/media.png                                                                                   1.176 s
+    /++theme++emas.theme/images/textbooks.png                                                                               1.167 s
+    /++theme++emas.theme/images/Logo_transparentBackground-tiny.png                                                         1.081 s
+    /++theme++emas.theme/images/shuttleworthfoundation.jpg                                                                  1.047 s
+    /++theme++emas.theme/images/psggroup.jpg                                                                                0.992 s
+    /++theme++emas.theme/images/FaceBook-icon-small.png                                                                     1.069 s
+    /++theme++emas.theme/images/Twitter-icon-small.png                                                                      1.019 s
+    /++theme++emas.theme/images/cc_by.png                                                                                   1.071 s
+    ====================================================================================================================    ============
+   
+    Thus we get a **total load time of 35.214 seconds**.  Bear in mind that this
+    is for an initial load.  On initial load all the CSS and javascript will be
+    fetched over the netword and cached by the browser.
     
-    =====================  ================  ========================
-    Concurrent users       Pages per second  Total pages per hour
-    =====================  ================  ========================
-             100                27.128           **68288.40** 
-             250                44.851           **161463.60** 
-             500                33.854           **121874.40** 
-             750                20.745           **74682.00** 
-    =====================  ================  ========================
-    
-    It is clear that even at the best serve rate of **44 pages per second** the
-    test cluster will still **not reach the goal of ~36M pages per hour.**
+    Subsequent unauthenticated loads will look like this:
 
-Response time per page
-----------------------
+    ====================================================================================================================    ============
+    URL                                                                                                                     Request time
+    ====================================================================================================================    ============
+    /                                                                                                                       1.337 s
+    /                                                                                                                       1.245 s
+    /touch_icon.png                                                                                                         1.045 s
+    /++theme++emas.theme/images/logo.png                                                                                    1.054 s
+    /++theme++emas.theme/images/howitworks.png                                                                              1.108 s
+    /++theme++emas.theme/images/graph.png                                                                                   1.179 s
+    /++theme++emas.theme/images/answer_correct.png                                                                          1.035 s
+    /++theme++emas.theme/images/answer_incorrect.png                                                                        1.161 s
+    /++theme++emas.theme/images/dashboard.png                                                                               1.106 s
+    /++theme++emas.theme/images/learnersdashboard.png                                                                       1.250 s
+    /++theme++emas.theme/images/teachersdashboard.png                                                                       1.145 s
+    /++theme++emas.theme/images/media.png                                                                                   1.176 s
+    /++theme++emas.theme/images/textbooks.png                                                                               1.167 s
+    /++theme++emas.theme/images/Logo_transparentBackground-tiny.png                                                         1.081 s
+    /++theme++emas.theme/images/shuttleworthfoundation.jpg                                                                  1.047 s
+    /++theme++emas.theme/images/psggroup.jpg                                                                                0.992 s
+    /++theme++emas.theme/images/FaceBook-icon-small.png                                                                     1.069 s
+    /++theme++emas.theme/images/Twitter-icon-small.png                                                                      1.019 s
+    /++theme++emas.theme/images/cc_by.png                                                                                   1.071 s
+    ====================================================================================================================    ============
 
-    ================    ===================     =========================
-    Concurrent users    Requests per second     Response time per request
-    ================    ===================     =========================
-          100               111.106                 1.150
-          250               105.456                 1.762
-          500               113.183                 2.913
-          750               113.700	                4.251
-          1000              114.017                 5.317	
-    ================    ===================     =========================
+Project serve rates
+```````````````````
 
-    The average response time per page is encouraging.  Even at the top
-    concurrency of 1000 the worst response time is 12.326 seconds.  Most of the
-    responses (95%) complete in less than 6 seconds though.  The current
-    test cluster is degrading slowly and does not come to a complete halt even
-    at the highest tested concurrency level.
+    Thus a load time of **21.287 seconds.**
+
+    Working with these 2 figures we can project the following:
+
+    Initial home pages per hour:
+    (60 / 35.214) * 60 = 102.232
+
+    Subsequent home pages per hour:
+    (60 / 21.287) * 60 = 169.117
+
+Content pages
++++++++++++++
+
+    Let's look at one of the `slow science pages`_ like we did with the home
+    page.
+
+    ===================================================================================    ============
+    URL                                                                                    Request time
+    ===================================================================================    ============
+    /grade-12/08-work-energy-and-power/08-work-energy-and-power-03.cnxmlplus               0.990 s
+    /grade-12/08-work-energy-and-power/08-work-energy-and-power-03.cnxmlplus/              1.086 s
+    /grade-12/08-work-energy-and-power/08-work-energy-and-power-02.cnxmlplus               4.221 s
+    /grade-12/08-work-energy-and-power/08-work-energy-and-power-04.cnxmlplus               1.842 s
+    /grade-12/08-work-energy-and-power/pspictures/f70fc7e8583786ef8c496e4861d8f2b7.png     1.382 s
+    /grade-12/08-work-energy-and-power/pspictures/24707967fddfb273f965a0cf7224ac0a.png     1.501 s
+    /grade-12/08-work-energy-and-power/pspictures/22fc66e880fffb15853e6873faa1aa2b.png     1.152 s
+    /grade-12/08-work-energy-and-power/++theme++emas.theme/images/cc_by.png                1.028 s
+    ===================================================================================    ============
+
+Project serve rates
+```````````````````
+
+    It is clear that the javascript and CSS is not fetched again.  Given the
+    above times we know that each page will take **13.202 seconds** to fecth at
+    a load of **100 concurrent users**.
+
+    This in turn means we can potentially serve:
+
+    (60 / 13.202) * 60 = **272.68 pages per hour.**
+
 
 Optimisations done
 ------------------
@@ -209,6 +284,9 @@ Optimisations done
     During the testing process we realised that some elements in the pages are
     causing sub-optimal caching in Varnish.  This is due to elements like
     username and personal links which are unique to each authenticated user.
+    These elements cause Varnish to view pages as different although very little
+    actually differ between them.
+
     We implemented an `Edge-side include`_ (ESI) for the personal toolbar which
     leads to Varnish caching most of the page and only fetching the ESI content.
 
@@ -252,8 +330,8 @@ Optimisations done
 Optimisations done
 ------------------
     
-    When we analysed the data from the practice service read test we realized
-    that the Plone login process takes quite a bit of time.  Upon further
+    When we analysed the data from the practice service test we realized that
+    the Plone login process takes quite a bit of time.  Upon further
     investigation we found that the user object was being update on each login.
     This is unnecessary given that we do not require the last login time.  We
     changed that specific method and removed all unnecessary changes to the 
@@ -291,3 +369,4 @@ Optimisations done
 .. _performance goals: https://docs.google.com/a/upfrontsystems.co.za/document/d/1GUjwcpHBpLILQozouukxVQBLB1-GQvdUa6UXfpv75-M/edit#
 .. _Funkload bench reports: http://197.221.50.101/stats/
 .. _Edge-side include: http://en.wikipedia.org/wiki/Edge_Side_Includes
+.. _slow science pages: http://197.221.50.101/stats/test_AuthenticatedRead-20130822T143507/#page-013-get-grade-12-08-work-energy-and-power-08-work-energy-and-power-03-cnxmlplus

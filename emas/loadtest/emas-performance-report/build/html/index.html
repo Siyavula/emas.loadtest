@@ -53,14 +53,23 @@
 <li><a class="reference internal" href="#an-overview-of-the-setup-we-benchmarked">2. An overview of the setup we benchmarked</a></li>
 <li><a class="reference internal" href="#testing-authenticated-reads">3. Testing authenticated reads</a></li>
 <li><a class="reference internal" href="#authenticated-read-test-results">4. Authenticated read test results</a><ul>
-<li><a class="reference internal" href="#pages-served">Pages served</a></li>
-<li><a class="reference internal" href="#response-time-per-page">Response time per page</a></li>
+<li><a class="reference internal" href="#page-analysis">Page analysis</a><ul>
+<li><a class="reference internal" href="#home-page">Home page</a><ul>
+<li><a class="reference internal" href="#project-serve-rates">Project serve rates</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#content-pages">Content pages</a><ul>
+<li><a class="reference internal" href="#id1">Project serve rates</a></li>
+</ul>
+</li>
+</ul>
+</li>
 <li><a class="reference internal" href="#optimisations-done">Optimisations done</a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#testing-practice-service">5. Testing practice service</a></li>
 <li><a class="reference internal" href="#results-for-testing-practice-service">6. Results for testing practice service</a><ul>
-<li><a class="reference internal" href="#id1">Optimisations done</a></li>
+<li><a class="reference internal" href="#id2">Optimisations done</a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#testing-mobile-reads">7. Testing mobile reads</a></li>
@@ -111,7 +120,13 @@ undertaken.  The results of these tests were used to do optimisation changes
 that were deemed necessary.</p>
 <p>This document tries to summarise the data that was gathered, the conclusions
 that were reached and the remedial steps that were taken.</p>
-<p>Each section has a link to the specific <a class="reference external" href="http://197.221.50.101/stats/">Funkload bench reports</a>.</p>
+<p>Each section has a link to the specific <a class="reference external" href="http://197.221.50.101/stats/">Funkload bench reports</a>.  When
+statistics from the <a class="reference external" href="http://197.221.50.101/stats/">Funkload bench reports</a> are used in this document
+we chose to use the &#8216;P95&#8217; values.  They represent what happened 95% of the
+time in the test.</p>
+<p>The <a class="reference external" href="http://197.221.50.101/stats/">Funkload bench reports</a> were configure not to follow external links,
+since we are attempting to benchmark the EMAS software and hardware cluster
+not external CDNs or external network access.</p>
 </div></blockquote>
 </div>
 <div class="section" id="pre-test-optimisation">
@@ -214,9 +229,7 @@ authenticated read test:</p>
 </ul>
 <p>The criterium we used to choose the above URLs is simply the performance
 in the unauthenticated reading tests.  The pages that are slow during
-unauthenticated reading will be even slower during authenticated reading.
-Since we are trying to establish a worst-case read scenario this seemed
-a pragmatic approach.</p>
+unauthenticated reading will be even slower during authenticated reading.</p>
 <p>We also chose some URLs that seemed to serve quite fast.  This we did to get
 some balance to the overall stats for the reading experience.</p>
 <p>The resultant <a class="reference external" href="http://funkload.nuxeo.org">Funkload</a> test was run with 4 test cycles ranging from 100
@@ -248,107 +261,271 @@ to 1000 concurrent users.</p>
 <h2>4. Authenticated read test results<a class="headerlink" href="#authenticated-read-test-results" title="Permalink to this headline">¶</a></h2>
 <blockquote>
 <div>Funkload bench report here: <a class="reference external" href="http://197.221.50.101/stats/test_AuthenticatedRead-20130822T143507/">Authenticated read</a></div></blockquote>
-<div class="section" id="pages-served">
-<h3>Pages served<a class="headerlink" href="#pages-served" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="page-analysis">
+<h3>Page analysis<a class="headerlink" href="#page-analysis" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="home-page">
+<h4>Home page<a class="headerlink" href="#home-page" title="Permalink to this headline">¶</a></h4>
 <blockquote>
-<div><p>The initial test results looked good, even though the total test cycle took
-very long to complete.  This was expected since we test at high concurrency
-levels.  The test cluster kept on serving all pages up to a maximum of <strong>1000
-concurrent users.</strong>  At that point it can serve <strong>18.969 pages per second
-95% of the time.</strong>  This means at a peak load of <strong>1000</strong> concurrent users
-the above test cluster can serve:</p>
-<p>18.969 * 60 * 60 = <strong>67305.60 pages per hour</strong></p>
-<p>This is significantly lower than our required serve rate of <strong>~36 000 000</strong>
-pages per hour.</p>
-<p>At lower concurrencies we see the following:</p>
+<div><p>The unauthenticated home page load at <strong>100 concurrent users</strong> looks like this:</p>
 <table border="1" class="docutils">
 <colgroup>
-<col width="34%" />
-<col width="26%" />
-<col width="39%" />
+<col width="91%" />
+<col width="9%" />
 </colgroup>
 <thead valign="bottom">
-<tr class="row-odd"><th class="head">Concurrent users</th>
-<th class="head">Pages per second</th>
-<th class="head">Total pages per hour</th>
+<tr class="row-odd"><th class="head">URL</th>
+<th class="head">Request time</th>
 </tr>
 </thead>
 <tbody valign="top">
-<tr class="row-even"><td>100</td>
-<td>27.128</td>
-<td><strong>68288.40</strong></td>
+<tr class="row-even"><td>/</td>
+<td>1.337 s</td>
 </tr>
-<tr class="row-odd"><td>250</td>
-<td>44.851</td>
-<td><strong>161463.60</strong></td>
+<tr class="row-odd"><td>/css?family=Montserrat</td>
+<td>1.124 s</td>
 </tr>
-<tr class="row-even"><td>500</td>
-<td>33.854</td>
-<td><strong>121874.40</strong></td>
+<tr class="row-even"><td>/</td>
+<td>1.245 s</td>
 </tr>
-<tr class="row-odd"><td>750</td>
-<td>20.745</td>
-<td><strong>74682.00</strong></td>
+<tr class="row-odd"><td>/portal_css/Sunburst%20Theme/public-cachekey-4fff4ed932d766e26813993d85f43eea.css</td>
+<td>1.120 s</td>
+</tr>
+<tr class="row-even"><td>/portal_css/Sunburst%20Theme/dropdown-menu-cachekey-18dee82342b75f2c7bc0fa7b017feb61.css</td>
+<td>1.119 s</td>
+</tr>
+<tr class="row-odd"><td>/portal_css/Sunburst%20Theme/resourcetinymce.stylesheetstinymce-cachekey-ca7f99b34a27033d846be95c8de69be2.css</td>
+<td>1.073 s</td>
+</tr>
+<tr class="row-even"><td>/portal_css/Sunburst%20Theme/resourceplone.app.dexterity.overlays-cachekey-7ac1852449e6cb2ff27111e1cd7c4665.css</td>
+<td>1.226 s</td>
+</tr>
+<tr class="row-odd"><td>/portal_css/Sunburst%20Theme/resourcecollective.topictreetopictree-cachekey-2a473052fae56de9ea0cbbec5dfaa63d.css</td>
+<td>1.130 s</td>
+</tr>
+<tr class="row-even"><td>/portal_css/Sunburst%20Theme/resourcethemesapplestyle-cachekey-902306361fbd1b097cea265775a7f6da.css</td>
+<td>1.137 s</td>
+</tr>
+<tr class="row-odd"><td>/portal_css/Sunburst%20Theme/themeemas.appcssstyles-cachekey-c58e347e4c0ca6ab98d3a4104c40af46.css</td>
+<td>1.177 s</td>
+</tr>
+<tr class="row-even"><td>/portal_css/Sunburst%20Theme/themeemas.themecssstyles-cachekey-987e0b9963b14f5de16733ce5a566073.css</td>
+<td>1.269 s</td>
+</tr>
+<tr class="row-odd"><td>/portal_css/Sunburst%20Theme/ploneCustom-cachekey-74895962889ac3a836dba1b4b8323474.css</td>
+<td>1.166 s</td>
+</tr>
+<tr class="row-even"><td>/portal_kss/Sunburst%20Theme/at-cachekey-9d4065eabe538900e9c3dd6fa55b6acc.kss</td>
+<td>1.229 s</td>
+</tr>
+<tr class="row-odd"><td>/favicon.ico</td>
+<td>1.157 s</td>
+</tr>
+<tr class="row-even"><td>/touch_icon.png</td>
+<td>1.045 s</td>
+</tr>
+<tr class="row-odd"><td>/++theme++emas.theme/images/logo.png</td>
+<td>1.054 s</td>
+</tr>
+<tr class="row-even"><td>/++theme++emas.theme/images/howitworks.png</td>
+<td>1.108 s</td>
+</tr>
+<tr class="row-odd"><td>/++theme++emas.theme/images/graph.png</td>
+<td>1.179 s</td>
+</tr>
+<tr class="row-even"><td>/++theme++emas.theme/images/answer_correct.png</td>
+<td>1.035 s</td>
+</tr>
+<tr class="row-odd"><td>/++theme++emas.theme/images/answer_incorrect.png</td>
+<td>1.161 s</td>
+</tr>
+<tr class="row-even"><td>/++theme++emas.theme/images/dashboard.png</td>
+<td>1.106 s</td>
+</tr>
+<tr class="row-odd"><td>/++theme++emas.theme/images/learnersdashboard.png</td>
+<td>1.250 s</td>
+</tr>
+<tr class="row-even"><td>/++theme++emas.theme/images/teachersdashboard.png</td>
+<td>1.145 s</td>
+</tr>
+<tr class="row-odd"><td>/++theme++emas.theme/images/media.png</td>
+<td>1.176 s</td>
+</tr>
+<tr class="row-even"><td>/++theme++emas.theme/images/textbooks.png</td>
+<td>1.167 s</td>
+</tr>
+<tr class="row-odd"><td>/++theme++emas.theme/images/Logo_transparentBackground-tiny.png</td>
+<td>1.081 s</td>
+</tr>
+<tr class="row-even"><td>/++theme++emas.theme/images/shuttleworthfoundation.jpg</td>
+<td>1.047 s</td>
+</tr>
+<tr class="row-odd"><td>/++theme++emas.theme/images/psggroup.jpg</td>
+<td>0.992 s</td>
+</tr>
+<tr class="row-even"><td>/++theme++emas.theme/images/FaceBook-icon-small.png</td>
+<td>1.069 s</td>
+</tr>
+<tr class="row-odd"><td>/++theme++emas.theme/images/Twitter-icon-small.png</td>
+<td>1.019 s</td>
+</tr>
+<tr class="row-even"><td>/++theme++emas.theme/images/cc_by.png</td>
+<td>1.071 s</td>
 </tr>
 </tbody>
 </table>
-<p>It is clear that even at the best serve rate of <strong>44 pages per second</strong> the
-test cluster will still <strong>not reach the goal of ~36M pages per hour.</strong></p>
+<p>Thus we get a <strong>total load time of 35.214 seconds</strong>.  Bear in mind that this
+is for an initial load.  On initial load all the CSS and javascript will be
+fetched over the netword and cached by the browser.</p>
+<p>Subsequent unauthenticated loads will look like this:</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="91%" />
+<col width="9%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">URL</th>
+<th class="head">Request time</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>/</td>
+<td>1.337 s</td>
+</tr>
+<tr class="row-odd"><td>/</td>
+<td>1.245 s</td>
+</tr>
+<tr class="row-even"><td>/touch_icon.png</td>
+<td>1.045 s</td>
+</tr>
+<tr class="row-odd"><td>/++theme++emas.theme/images/logo.png</td>
+<td>1.054 s</td>
+</tr>
+<tr class="row-even"><td>/++theme++emas.theme/images/howitworks.png</td>
+<td>1.108 s</td>
+</tr>
+<tr class="row-odd"><td>/++theme++emas.theme/images/graph.png</td>
+<td>1.179 s</td>
+</tr>
+<tr class="row-even"><td>/++theme++emas.theme/images/answer_correct.png</td>
+<td>1.035 s</td>
+</tr>
+<tr class="row-odd"><td>/++theme++emas.theme/images/answer_incorrect.png</td>
+<td>1.161 s</td>
+</tr>
+<tr class="row-even"><td>/++theme++emas.theme/images/dashboard.png</td>
+<td>1.106 s</td>
+</tr>
+<tr class="row-odd"><td>/++theme++emas.theme/images/learnersdashboard.png</td>
+<td>1.250 s</td>
+</tr>
+<tr class="row-even"><td>/++theme++emas.theme/images/teachersdashboard.png</td>
+<td>1.145 s</td>
+</tr>
+<tr class="row-odd"><td>/++theme++emas.theme/images/media.png</td>
+<td>1.176 s</td>
+</tr>
+<tr class="row-even"><td>/++theme++emas.theme/images/textbooks.png</td>
+<td>1.167 s</td>
+</tr>
+<tr class="row-odd"><td>/++theme++emas.theme/images/Logo_transparentBackground-tiny.png</td>
+<td>1.081 s</td>
+</tr>
+<tr class="row-even"><td>/++theme++emas.theme/images/shuttleworthfoundation.jpg</td>
+<td>1.047 s</td>
+</tr>
+<tr class="row-odd"><td>/++theme++emas.theme/images/psggroup.jpg</td>
+<td>0.992 s</td>
+</tr>
+<tr class="row-even"><td>/++theme++emas.theme/images/FaceBook-icon-small.png</td>
+<td>1.069 s</td>
+</tr>
+<tr class="row-odd"><td>/++theme++emas.theme/images/Twitter-icon-small.png</td>
+<td>1.019 s</td>
+</tr>
+<tr class="row-even"><td>/++theme++emas.theme/images/cc_by.png</td>
+<td>1.071 s</td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+<div class="section" id="project-serve-rates">
+<h5>Project serve rates<a class="headerlink" href="#project-serve-rates" title="Permalink to this headline">¶</a></h5>
+<blockquote>
+<div><p>Thus a load time of <strong>21.287 seconds.</strong></p>
+<p>Working with these 2 figures we can project the following:</p>
+<p>Initial home pages per hour:
+(60 / 35.214) * 60 = 102.232</p>
+<p>Subsequent home pages per hour:
+(60 / 21.287) * 60 = 169.117</p>
 </div></blockquote>
 </div>
-<div class="section" id="response-time-per-page">
-<h3>Response time per page<a class="headerlink" href="#response-time-per-page" title="Permalink to this headline">¶</a></h3>
+</div>
+<div class="section" id="content-pages">
+<h4>Content pages<a class="headerlink" href="#content-pages" title="Permalink to this headline">¶</a></h4>
 <blockquote>
-<div><table border="1" class="docutils">
+<div><p>Let&#8217;s look at one of the <a class="reference external" href="http://197.221.50.101/stats/test_AuthenticatedRead-20130822T143507/#page-013-get-grade-12-08-work-energy-and-power-08-work-energy-and-power-03-cnxmlplus">slow science pages</a> like we did with the home
+page.</p>
+<table border="1" class="docutils">
 <colgroup>
-<col width="27%" />
-<col width="32%" />
-<col width="42%" />
+<col width="87%" />
+<col width="13%" />
 </colgroup>
 <thead valign="bottom">
-<tr class="row-odd"><th class="head">Concurrent users</th>
-<th class="head">Requests per second</th>
-<th class="head">Response time per request</th>
+<tr class="row-odd"><th class="head">URL</th>
+<th class="head">Request time</th>
 </tr>
 </thead>
 <tbody valign="top">
-<tr class="row-even"><td>100</td>
-<td>111.106</td>
-<td>1.150</td>
+<tr class="row-even"><td>/grade-12/08-work-energy-and-power/08-work-energy-and-power-03.cnxmlplus</td>
+<td>0.990 s</td>
 </tr>
-<tr class="row-odd"><td>250</td>
-<td>105.456</td>
-<td>1.762</td>
+<tr class="row-odd"><td>/grade-12/08-work-energy-and-power/08-work-energy-and-power-03.cnxmlplus/</td>
+<td>1.086 s</td>
 </tr>
-<tr class="row-even"><td>500</td>
-<td>113.183</td>
-<td>2.913</td>
+<tr class="row-even"><td>/grade-12/08-work-energy-and-power/08-work-energy-and-power-02.cnxmlplus</td>
+<td>4.221 s</td>
 </tr>
-<tr class="row-odd"><td>750</td>
-<td>113.700</td>
-<td>4.251</td>
+<tr class="row-odd"><td>/grade-12/08-work-energy-and-power/08-work-energy-and-power-04.cnxmlplus</td>
+<td>1.842 s</td>
 </tr>
-<tr class="row-even"><td>1000</td>
-<td>114.017</td>
-<td>5.317</td>
+<tr class="row-even"><td>/grade-12/08-work-energy-and-power/pspictures/f70fc7e8583786ef8c496e4861d8f2b7.png</td>
+<td>1.382 s</td>
+</tr>
+<tr class="row-odd"><td>/grade-12/08-work-energy-and-power/pspictures/24707967fddfb273f965a0cf7224ac0a.png</td>
+<td>1.501 s</td>
+</tr>
+<tr class="row-even"><td>/grade-12/08-work-energy-and-power/pspictures/22fc66e880fffb15853e6873faa1aa2b.png</td>
+<td>1.152 s</td>
+</tr>
+<tr class="row-odd"><td>/grade-12/08-work-energy-and-power/++theme++emas.theme/images/cc_by.png</td>
+<td>1.028 s</td>
 </tr>
 </tbody>
 </table>
-<p>The average response time per page is encouraging.  Even at the top
-concurrency of 1000 the worst response time is 12.326 seconds.  Most of the
-responses (95%) complete in less than 6 seconds though.  The current
-test cluster is degrading slowly and does not come to a complete halt even
-at the highest tested concurrency level.</p>
 </div></blockquote>
+<div class="section" id="id1">
+<h5>Project serve rates<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h5>
+<blockquote>
+<div><p>It is clear that the javascript and CSS is not fetched again.  Given the
+above times we know that each page will take <strong>13.202 seconds</strong> to fecth at
+a load of <strong>100 concurrent users</strong>.</p>
+<p>This in turn means we can potentially serve:</p>
+<p>(60 / 13.202) * 60 = <strong>272.68 pages per hour.</strong></p>
+</div></blockquote>
+</div>
+</div>
 </div>
 <div class="section" id="optimisations-done">
 <h3>Optimisations done<a class="headerlink" href="#optimisations-done" title="Permalink to this headline">¶</a></h3>
 <blockquote>
-<div>During the testing process we realised that some elements in the pages are
+<div><p>During the testing process we realised that some elements in the pages are
 causing sub-optimal caching in Varnish.  This is due to elements like
 username and personal links which are unique to each authenticated user.
-We implemented an <a class="reference external" href="http://en.wikipedia.org/wiki/Edge_Side_Includes">Edge-side include</a> (ESI) for the personal toolbar which
-leads to Varnish caching most of the page and only fetching the ESI content.</div></blockquote>
+These elements cause Varnish to view pages as different although very little
+actually differ between them.</p>
+<p>We implemented an <a class="reference external" href="http://en.wikipedia.org/wiki/Edge_Side_Includes">Edge-side include</a> (ESI) for the personal toolbar which
+leads to Varnish caching most of the page and only fetching the ESI content.</p>
+</div></blockquote>
 </div>
 </div>
 <div class="section" id="testing-practice-service">
@@ -384,11 +561,11 @@ The answers to these questions are fetched from the &#8216;oracle&#8217; HTTP se
 <h2>6. Results for testing practice service<a class="headerlink" href="#results-for-testing-practice-service" title="Permalink to this headline">¶</a></h2>
 <blockquote>
 <div>Funkload bench report here: <a class="reference external" href="http://197.221.50.101/stats/test_practice-20130823T121013/">Practise service test</a></div></blockquote>
-<div class="section" id="id1">
-<h3>Optimisations done<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id2">
+<h3>Optimisations done<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h3>
 <blockquote>
-<div>When we analysed the data from the practice service read test we realized
-that the Plone login process takes quite a bit of time.  Upon further
+<div>When we analysed the data from the practice service test we realized that
+the Plone login process takes quite a bit of time.  Upon further
 investigation we found that the user object was being update on each login.
 This is unnecessary given that we do not require the last login time.  We
 changed that specific method and removed all unnecessary changes to the
