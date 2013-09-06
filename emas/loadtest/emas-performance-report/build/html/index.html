@@ -55,10 +55,14 @@
 <li><a class="reference internal" href="#authenticated-read-test-results">4. Authenticated read test results</a><ul>
 <li><a class="reference internal" href="#pages-served">Pages served</a></li>
 <li><a class="reference internal" href="#response-time-per-page">Response time per page</a></li>
+<li><a class="reference internal" href="#optimisations-done">Optimisations done</a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#testing-practice-service">5. Testing practice service</a></li>
-<li><a class="reference internal" href="#results-for-testing-practice-service">6. Results for testing practice service</a></li>
+<li><a class="reference internal" href="#results-for-testing-practice-service">6. Results for testing practice service</a><ul>
+<li><a class="reference internal" href="#id1">Optimisations done</a></li>
+</ul>
+</li>
 <li><a class="reference internal" href="#testing-mobile-reads">7. Testing mobile reads</a></li>
 <li><a class="reference internal" href="#results-for-testing-mobile-reads">8. Results for testing mobile reads</a><ul>
 <li><a class="reference internal" href="#level-1">1. level 1</a></li>
@@ -107,6 +111,7 @@ undertaken.  The results of these tests were used to do optimisation changes
 that were deemed necessary.</p>
 <p>This document tries to summarise the data that was gathered, the conclusions
 that were reached and the remedial steps that were taken.</p>
+<p>Each section has a link to the specific <a class="reference external" href="http://197.221.50.101/stats/">Funkload bench reports</a>.</p>
 </div></blockquote>
 </div>
 <div class="section" id="pre-test-optimisation">
@@ -242,7 +247,7 @@ to 1000 concurrent users.</p>
 <div class="section" id="authenticated-read-test-results">
 <h2>4. Authenticated read test results<a class="headerlink" href="#authenticated-read-test-results" title="Permalink to this headline">¶</a></h2>
 <blockquote>
-<div>Complete results here: <a class="reference external" href="http://197.221.50.101/stats/test_AuthenticatedRead-20130822T143507/">Authenticated read</a></div></blockquote>
+<div>Funkload bench report here: <a class="reference external" href="http://197.221.50.101/stats/test_AuthenticatedRead-20130822T143507/">Authenticated read</a></div></blockquote>
 <div class="section" id="pages-served">
 <h3>Pages served<a class="headerlink" href="#pages-served" title="Permalink to this headline">¶</a></h3>
 <blockquote>
@@ -334,10 +339,16 @@ concurrency of 1000 the worst response time is 12.326 seconds.  Most of the
 responses (95%) complete in less than 6 seconds though.  The current
 test cluster is degrading slowly and does not come to a complete halt even
 at the highest tested concurrency level.</p>
-<p>ESI for portal personal toolbar</p>
-<p>Point where service delivery degrades badly</p>
-<p>What we did about it</p>
 </div></blockquote>
+</div>
+<div class="section" id="optimisations-done">
+<h3>Optimisations done<a class="headerlink" href="#optimisations-done" title="Permalink to this headline">¶</a></h3>
+<blockquote>
+<div>During the testing process we realised that some elements in the pages are
+causing sub-optimal caching in Varnish.  This is due to elements like
+username and personal links which are unique to each authenticated user.
+We implemented an <a class="reference external" href="http://en.wikipedia.org/wiki/Edge_Side_Includes">Edge-side include</a> (ESI) for the personal toolbar which
+leads to Varnish caching most of the page and only fetching the ESI content.</div></blockquote>
 </div>
 </div>
 <div class="section" id="testing-practice-service">
@@ -372,12 +383,22 @@ The answers to these questions are fetched from the &#8216;oracle&#8217; HTTP se
 <div class="section" id="results-for-testing-practice-service">
 <h2>6. Results for testing practice service<a class="headerlink" href="#results-for-testing-practice-service" title="Permalink to this headline">¶</a></h2>
 <blockquote>
-<div>Complete results here: <a class="reference external" href="http://197.221.50.101/stats/test_practice-20130823T121013/">Practise service test</a></div></blockquote>
+<div>Funkload bench report here: <a class="reference external" href="http://197.221.50.101/stats/test_practice-20130823T121013/">Practise service test</a></div></blockquote>
+<div class="section" id="id1">
+<h3>Optimisations done<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h3>
+<blockquote>
+<div>When we analysed the data from the practice service read test we realized
+that the Plone login process takes quite a bit of time.  Upon further
+investigation we found that the user object was being update on each login.
+This is unnecessary given that we do not require the last login time.  We
+changed that specific method and removed all unnecessary changes to the
+user object.</div></blockquote>
+</div>
 </div>
 <div class="section" id="testing-mobile-reads">
 <h2>7. Testing mobile reads<a class="headerlink" href="#testing-mobile-reads" title="Permalink to this headline">¶</a></h2>
 <blockquote>
-<div>Complete results here: <a class="reference external" href="http://197.221.50.101/stats/">Mobile test</a></div></blockquote>
+<div>Funkload bench report here: <a class="reference external" href="http://197.221.50.101/stats/">Mobile test</a></div></blockquote>
 </div>
 <div class="section" id="results-for-testing-mobile-reads">
 <h2>8. Results for testing mobile reads<a class="headerlink" href="#results-for-testing-mobile-reads" title="Permalink to this headline">¶</a></h2>

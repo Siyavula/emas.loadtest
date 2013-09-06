@@ -18,6 +18,8 @@ Introduction
     
     This document tries to summarise the data that was gathered, the conclusions
     that were reached and the remedial steps that were taken.
+    
+    Each section has a link to the specific `Funkload bench reports`_.
 
 
 1. Pre-test optimisation
@@ -151,7 +153,7 @@ Introduction
 4. Authenticated read test results
 ==================================
     
-    Complete results here: `Authenticated read`_
+    Funkload bench report here: `Authenticated read`_
     
 Pages served
 ------------
@@ -200,12 +202,15 @@ Response time per page
     responses (95%) complete in less than 6 seconds though.  The current
     test cluster is degrading slowly and does not come to a complete halt even
     at the highest tested concurrency level.
+
+Optimisations done
+------------------
     
-    ESI for portal personal toolbar
-
-    Point where service delivery degrades badly
-
-    What we did about it
+    During the testing process we realised that some elements in the pages are
+    causing sub-optimal caching in Varnish.  This is due to elements like
+    username and personal links which are unique to each authenticated user.
+    We implemented an `Edge-side include`_ (ESI) for the personal toolbar which
+    leads to Varnish caching most of the page and only fetching the ESI content.
 
 
 5. Testing practice service
@@ -242,15 +247,23 @@ Response time per page
 6. Results for testing practice service
 =======================================
 
-    Complete results here: `Practise service test`_
+    Funkload bench report here: `Practise service test`_
 
-      
+Optimisations done
+------------------
+    
+    When we analysed the data from the practice service read test we realized
+    that the Plone login process takes quite a bit of time.  Upon further
+    investigation we found that the user object was being update on each login.
+    This is unnecessary given that we do not require the last login time.  We
+    changed that specific method and removed all unnecessary changes to the 
+    user object.
 
 
 7. Testing mobile reads
 =======================
 
-    Complete results here: `Mobile test`_
+    Funkload bench report here: `Mobile test`_
 
 
 8. Results for testing mobile reads
@@ -276,3 +289,5 @@ Response time per page
 .. _Practice proxy: http://197.221.50.101/stats/test_practiceproxy-20130819T124350/
 .. _Mobile test: http://197.221.50.101/stats/
 .. _performance goals: https://docs.google.com/a/upfrontsystems.co.za/document/d/1GUjwcpHBpLILQozouukxVQBLB1-GQvdUa6UXfpv75-M/edit#
+.. _Funkload bench reports: http://197.221.50.101/stats/
+.. _Edge-side include: http://en.wikipedia.org/wiki/Edge_Side_Includes
