@@ -8,6 +8,18 @@ Siyavula performance tuning report
 ==================================
 
 
+Introduction
+============
+    
+    In order to test the current configuration, hardware and software, against
+    the published `performance goals`_, a series of bencmark tests were 
+    undertaken.  The results of these tests were used to do optimisation changes
+    that were deemed necessary. 
+    
+    This document tries to summarise the data that was gathered, the conclusions
+    that were reached and the remedial steps that were taken.
+
+
 1. Pre-test optimisation
 ========================
     
@@ -27,7 +39,8 @@ Siyavula performance tuning report
 2. An overview of the setup we benchmarked
 ==========================================
 
-    Four distinct servers were used in the benchmarking process. They are:
+    Four distinct servers were used in the benchmarking process  Any further
+    mention of 'test cluster' in this document refers to the following setup:
 
     Siyavula Performance 1
         
@@ -79,8 +92,8 @@ Siyavula performance tuning report
     - Cycle duration: 800s
     - `Apdex`_: 1.5
 
-    From this list of URLs we chose the following to benchmark in our
-    authenticated read:
+    From this list of URLs we chose to benchmark the following in the 
+    authenticated read test:
 
     - /
     - /login
@@ -122,7 +135,7 @@ Siyavula performance tuning report
     - Cycles of concurrent users: [100, 250, 500, 750, 1000]
     - `Apdex`_: 1.5
     
-    Each test cycle contains:
+    The results of each test cycle contains:
 
     - 18 pages
     - 59 links
@@ -138,22 +151,56 @@ Siyavula performance tuning report
 4. Authenticated read test results
 ==================================
     
-    Raw results here: `Authenticated read`_
+    Complete results here: `Authenticated read`_
+    
+Pages served
+------------
 
-    The initial test results look good, even though the total test cycle took
+    The initial test results looked good, even though the total test cycle took
     very long to complete.  This was expected since we test at high concurrency
-    levels.  
+    levels.  The test cluster kept on serving all pages up to a maximum of **1000
+    concurrent users.**  At that point it can serve **18.969 pages per second
+    95% of the time.**  This means at a peak load of **1000** concurrent users
+    the above test cluster can serve:
+
+    18.969 * 60 * 60 = **67305.60 pages per hour**
+
+    This is significantly lower than our required serve rate of **~36 000 000**
+    pages per hour.
+
+    At lower concurrencies we see the following:
     
-    The application kept on serving all pages up to a maximum of 1000 concurrent
-    users.  At that point however most pages (95%) take about 18.969 seconds to
-    serve.  The slowest response at 1000 concurrent users is 34.843 seconds to
-    server a specific page.
+    =====================  ================  ========================
+    Concurrent users       Pages per second  Total pages per hour
+    =====================  ================  ========================
+             100                27.128           **68288.40** 
+             250                44.851           **161463.60** 
+             500                33.854           **121874.40** 
+             750                20.745           **74682.00** 
+    =====================  ================  ========================
     
-    Looking at the `slowest authed results`_ we can see that
+    It is clear that even at the best serve rate of **44 pages per second** the
+    test cluster will still **not reach the goal of ~36M pages per hour.**
 
+Response time per page
+----------------------
 
-    Login is slow
+    ================    ===================     =========================
+    Concurrent users    Requests per second     Response time per request
+    ================    ===================     =========================
+          100               111.106                 1.150
+          250               105.456                 1.762
+          500               113.183                 2.913
+          750               113.700	                4.251
+          1000              114.017                 5.317	
+    ================    ===================     =========================
 
+    The average response time per page is encouraging.  Even at the top
+    concurrency of 1000 the worst response time is 12.326 seconds.  Most of the
+    responses (95%) complete in less than 6 seconds though.  The current
+    test cluster is degrading slowly and does not come to a complete halt even
+    at the highest tested concurrency level.
+    
     ESI for portal personal toolbar
 
     Point where service delivery degrades badly
@@ -195,7 +242,7 @@ Siyavula performance tuning report
 6. Results for testing practice service
 =======================================
 
-    Raw results here: `Practise service test`_
+    Complete results here: `Practise service test`_
 
       
 
@@ -203,11 +250,17 @@ Siyavula performance tuning report
 7. Testing mobile reads
 =======================
 
-    Raw results here: `Mobile test`_
+    Complete results here: `Mobile test`_
 
 
 8. Results for testing mobile reads
 ===================================
+
+1. level 1
+----------
+
+2. Level 2
+----------
 
 9. Recommendation for scaling / Conclusion
 ==========================================
@@ -222,3 +275,4 @@ Siyavula performance tuning report
 .. _Practise service test: http://197.221.50.101/stats/test_practice-20130823T121013/
 .. _Practice proxy: http://197.221.50.101/stats/test_practiceproxy-20130819T124350/
 .. _Mobile test: http://197.221.50.101/stats/
+.. _performance goals: https://docs.google.com/a/upfrontsystems.co.za/document/d/1GUjwcpHBpLILQozouukxVQBLB1-GQvdUa6UXfpv75-M/edit#
