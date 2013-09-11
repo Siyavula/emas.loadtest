@@ -3,9 +3,9 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-==================================
+##################################
 Siyavula performance tuning report
-==================================
+##################################
 
 
 Introduction
@@ -164,7 +164,7 @@ Page analysis
 -------------
   
 Home page
-+++++++++
+^^^^^^^^^
 
     The unauthenticated home page load at **100 concurrent users** looks like this:
     
@@ -210,32 +210,32 @@ Home page
     
     Subsequent unauthenticated loads will look like this:
 
-    ====================================================================================================================    ============
-    URL                                                                                                                     Request time
-    ====================================================================================================================    ============
-    /                                                                                                                       1.337 s
-    /                                                                                                                       1.245 s
-    /touch_icon.png                                                                                                         1.045 s
-    /++theme++emas.theme/images/logo.png                                                                                    1.054 s
-    /++theme++emas.theme/images/howitworks.png                                                                              1.108 s
-    /++theme++emas.theme/images/graph.png                                                                                   1.179 s
-    /++theme++emas.theme/images/answer_correct.png                                                                          1.035 s
-    /++theme++emas.theme/images/answer_incorrect.png                                                                        1.161 s
-    /++theme++emas.theme/images/dashboard.png                                                                               1.106 s
-    /++theme++emas.theme/images/learnersdashboard.png                                                                       1.250 s
-    /++theme++emas.theme/images/teachersdashboard.png                                                                       1.145 s
-    /++theme++emas.theme/images/media.png                                                                                   1.176 s
-    /++theme++emas.theme/images/textbooks.png                                                                               1.167 s
-    /++theme++emas.theme/images/Logo_transparentBackground-tiny.png                                                         1.081 s
-    /++theme++emas.theme/images/shuttleworthfoundation.jpg                                                                  1.047 s
-    /++theme++emas.theme/images/psggroup.jpg                                                                                0.992 s
-    /++theme++emas.theme/images/FaceBook-icon-small.png                                                                     1.069 s
-    /++theme++emas.theme/images/Twitter-icon-small.png                                                                      1.019 s
-    /++theme++emas.theme/images/cc_by.png                                                                                   1.071 s
-    ====================================================================================================================    ============
+    =================================================================    ============
+    URL                                                                  Request time
+    =================================================================    ============
+    /                                                                    1.337 s
+    /                                                                    1.245 s
+    /touch_icon.png                                                      1.045 s
+    /++theme++emas.theme/images/logo.png                                 1.054 s
+    /++theme++emas.theme/images/howitworks.png                           1.108 s
+    /++theme++emas.theme/images/graph.png                                1.179 s
+    /++theme++emas.theme/images/answer_correct.png                       1.035 s
+    /++theme++emas.theme/images/answer_incorrect.png                     1.161 s
+    /++theme++emas.theme/images/dashboard.png                            1.106 s
+    /++theme++emas.theme/images/learnersdashboard.png                    1.250 s
+    /++theme++emas.theme/images/teachersdashboard.png                    1.145 s
+    /++theme++emas.theme/images/media.png                                1.176 s
+    /++theme++emas.theme/images/textbooks.png                            1.167 s
+    /++theme++emas.theme/images/Logo_transparentBackground-tiny.png      1.081 s
+    /++theme++emas.theme/images/shuttleworthfoundation.jpg               1.047 s
+    /++theme++emas.theme/images/psggroup.jpg                             0.992 s
+    /++theme++emas.theme/images/FaceBook-icon-small.png                  1.069 s
+    /++theme++emas.theme/images/Twitter-icon-small.png                   1.019 s
+    /++theme++emas.theme/images/cc_by.png                                1.071 s
+    =================================================================    ============
 
-Project serve rates
-```````````````````
+Projected serve rates
+"""""""""""""""""""""
 
     Thus a load time of **21.287 seconds.**
 
@@ -247,8 +247,19 @@ Project serve rates
     Subsequent home pages per hour:
     (60 / 21.287) * 60 = 169.117
 
+Higher concurrencies
+"""""""""""""""""""""
+    
+    250
+
+    500
+
+    750
+
+    1000
+
 Content pages
-+++++++++++++
+^^^^^^^^^^^^^
 
     Let's look at one of the `slow science pages`_ like we did with the home
     page.
@@ -266,8 +277,8 @@ Content pages
     /grade-12/08-work-energy-and-power/++theme++emas.theme/images/cc_by.png                1.028 s
     ===================================================================================    ============
 
-Project serve rates
-```````````````````
+Projected serve rates
+"""""""""""""""""""""
 
     It is clear that the javascript and CSS is not fetched again.  Given the
     above times we know that each page will take **13.202 seconds** to fecth at
@@ -277,6 +288,16 @@ Project serve rates
 
     (60 / 13.202) * 60 = **272.68 pages per hour.**
 
+Higher concurrencies
+"""""""""""""""""""""
+
+    250
+
+    500
+
+    750
+
+    1000
 
 Optimisations done
 ------------------
@@ -306,11 +327,12 @@ Optimisations done
     external system.  Here are the `Practice proxy`_ results.  To test this we
     recorded a `Funkload`_ test that logs in to the site and then navigates to a
     simple view in Monassis.  This view does no processing beyond returning
-    basic headers and 'OK'.
+    basic headers and the string literal 'OK'.
 
     For the full practise service test we recorded a `Funkload`_ test that logs in
     to the site, browses to the practise service and then does 10 questions.
-    The answers to these questions are fetched from the 'oracle' HTTP server.
+    The answers to these questions are fetched from the 'oracle' HTTP server.  
+    This test we then ran with user concurrencies of 100, 150 and 200.
 
     We used the following test configuration:
 
@@ -327,6 +349,57 @@ Optimisations done
 
     Funkload bench report here: `Practise service test`_
 
+Page analysis
+-------------
+  
+Dashboard
+^^^^^^^^^
+    
+    Authenticated read of the dashboard at 100 concurrent users:
+
+    =================================================       ============
+    URL                                                     Request time
+    =================================================       ============
+    /@@practice/grade-10                                    3.805 s
+    /@@practice/dashboard                                   5.386 s
+    /@@practice/static/practice.css                         4.291 s
+    /@@practice/static/practice-ie8.css                     3.457 s
+    /@@practice/static/jqplot/jquery.jqplot.min.css         1.873 s
+    /@@practice/static/help-icon-no-shadow-16.png           1.553 s
+    /@@practice/image/mastery_progress_3_115_0              1.421 s
+    /@@practice/image/mastery_progress_3_115_115            1.400 s
+    /@@practice/static/progress-up.png                      1.222 s
+    /@@practice/static/gold-star-16.png                     1.135 s
+    /@@practice/static/please_wait_24.gif                   0.875 s
+    /@@practice/static/tick.png                             1.096 s
+    /@@practice/static/gray-star-16.png                     0.819 s
+    /@@practice/image/mastery_progress_4_0_0                0.961 s
+    /@@practice/image/mastery_progress_3_0_0                0.906 s
+    /@@practice/image/mastery_progress_1_0_0                0.980 s
+    /@@practice/image/mastery_progress_2_0_0                0.912 s 
+    /@@practice/image/mastery_progress_2_120_0              0.924 s
+    /@@practice/image/mastery_progress_3_120_0              0.965 s
+    /@@practice/image/mastery_progress_3_111_0              1.063 s
+    /@@practice/image/mastery_progress_3_108_0              1.405 s
+    /++theme++emas.theme/images/copyright.png               1.623 s
+    /++theme++emas.theme/images/copyright.png               2.379 s
+    =================================================       ============
+
+Projected serve rates
+"""""""""""""""""""""
+
+    This gives us a  load time of **40.451 seconds per page at 100 
+    concurrent users.**  At this rate we can serve:
+
+    (60 / 40.451) * 60 = **88.99 pages per hour.**
+
+Higher concurrencies
+"""""""""""""""""""""
+    
+    100
+
+    200
+    
 Optimisations done
 ------------------
     
@@ -347,11 +420,35 @@ Optimisations done
 8. Results for testing mobile reads
 ===================================
 
-1. level 1
-----------
+Page analysis
+-------------
 
-2. Level 2
-----------
+Home page
+^^^^^^^^^
+
+Projected serve rates
+"""""""""""""""""""""
+
+Higher concurrencies
+"""""""""""""""""""""
+    
+    100
+
+    200
+
+Content pages
+^^^^^^^^^^^^^
+
+Projected serve rates
+"""""""""""""""""""""
+
+Higher concurrencies
+"""""""""""""""""""""
+    
+    100
+
+    200
+
 
 9. Recommendation for scaling / Conclusion
 ==========================================

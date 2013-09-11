@@ -55,11 +55,13 @@
 <li><a class="reference internal" href="#authenticated-read-test-results">4. Authenticated read test results</a><ul>
 <li><a class="reference internal" href="#page-analysis">Page analysis</a><ul>
 <li><a class="reference internal" href="#home-page">Home page</a><ul>
-<li><a class="reference internal" href="#project-serve-rates">Project serve rates</a></li>
+<li><a class="reference internal" href="#projected-serve-rates">Projected serve rates</a></li>
+<li><a class="reference internal" href="#higher-concurrencies">Higher concurrencies</a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#content-pages">Content pages</a><ul>
-<li><a class="reference internal" href="#id1">Project serve rates</a></li>
+<li><a class="reference internal" href="#id1">Projected serve rates</a></li>
+<li><a class="reference internal" href="#id2">Higher concurrencies</a></li>
 </ul>
 </li>
 </ul>
@@ -69,13 +71,32 @@
 </li>
 <li><a class="reference internal" href="#testing-practice-service">5. Testing practice service</a></li>
 <li><a class="reference internal" href="#results-for-testing-practice-service">6. Results for testing practice service</a><ul>
-<li><a class="reference internal" href="#id2">Optimisations done</a></li>
+<li><a class="reference internal" href="#id3">Page analysis</a><ul>
+<li><a class="reference internal" href="#dashboard">Dashboard</a><ul>
+<li><a class="reference internal" href="#id4">Projected serve rates</a></li>
+<li><a class="reference internal" href="#id5">Higher concurrencies</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#id6">Optimisations done</a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#testing-mobile-reads">7. Testing mobile reads</a></li>
 <li><a class="reference internal" href="#results-for-testing-mobile-reads">8. Results for testing mobile reads</a><ul>
-<li><a class="reference internal" href="#level-1">1. level 1</a></li>
-<li><a class="reference internal" href="#level-2">2. Level 2</a></li>
+<li><a class="reference internal" href="#id7">Page analysis</a><ul>
+<li><a class="reference internal" href="#id8">Home page</a><ul>
+<li><a class="reference internal" href="#id9">Projected serve rates</a></li>
+<li><a class="reference internal" href="#id10">Higher concurrencies</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#id11">Content pages</a><ul>
+<li><a class="reference internal" href="#id12">Projected serve rates</a></li>
+<li><a class="reference internal" href="#id13">Higher concurrencies</a></li>
+</ul>
+</li>
+</ul>
+</li>
 </ul>
 </li>
 <li><a class="reference internal" href="#recommendation-for-scaling-conclusion">9. Recommendation for scaling / Conclusion</a></li>
@@ -379,8 +400,8 @@ fetched over the netword and cached by the browser.</p>
 <p>Subsequent unauthenticated loads will look like this:</p>
 <table border="1" class="docutils">
 <colgroup>
-<col width="91%" />
-<col width="9%" />
+<col width="84%" />
+<col width="16%" />
 </colgroup>
 <thead valign="bottom">
 <tr class="row-odd"><th class="head">URL</th>
@@ -448,8 +469,8 @@ fetched over the netword and cached by the browser.</p>
 </tbody>
 </table>
 </div></blockquote>
-<div class="section" id="project-serve-rates">
-<h5>Project serve rates<a class="headerlink" href="#project-serve-rates" title="Permalink to this headline">¶</a></h5>
+<div class="section" id="projected-serve-rates">
+<h5>Projected serve rates<a class="headerlink" href="#projected-serve-rates" title="Permalink to this headline">¶</a></h5>
 <blockquote>
 <div><p>Thus a load time of <strong>21.287 seconds.</strong></p>
 <p>Working with these 2 figures we can project the following:</p>
@@ -457,6 +478,15 @@ fetched over the netword and cached by the browser.</p>
 (60 / 35.214) * 60 = 102.232</p>
 <p>Subsequent home pages per hour:
 (60 / 21.287) * 60 = 169.117</p>
+</div></blockquote>
+</div>
+<div class="section" id="higher-concurrencies">
+<h5>Higher concurrencies<a class="headerlink" href="#higher-concurrencies" title="Permalink to this headline">¶</a></h5>
+<blockquote>
+<div><p>250</p>
+<p>500</p>
+<p>750</p>
+<p>1000</p>
 </div></blockquote>
 </div>
 </div>
@@ -504,13 +534,22 @@ page.</p>
 </table>
 </div></blockquote>
 <div class="section" id="id1">
-<h5>Project serve rates<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h5>
+<h5>Projected serve rates<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h5>
 <blockquote>
 <div><p>It is clear that the javascript and CSS is not fetched again.  Given the
 above times we know that each page will take <strong>13.202 seconds</strong> to fecth at
 a load of <strong>100 concurrent users</strong>.</p>
 <p>This in turn means we can potentially serve:</p>
 <p>(60 / 13.202) * 60 = <strong>272.68 pages per hour.</strong></p>
+</div></blockquote>
+</div>
+<div class="section" id="id2">
+<h5>Higher concurrencies<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h5>
+<blockquote>
+<div><p>250</p>
+<p>500</p>
+<p>750</p>
+<p>1000</p>
 </div></blockquote>
 </div>
 </div>
@@ -542,10 +581,11 @@ proxy is possibly more of a performance issue than processing in the
 external system.  Here are the <a class="reference external" href="http://197.221.50.101/stats/test_practiceproxy-20130819T124350/">Practice proxy</a> results.  To test this we
 recorded a <a class="reference external" href="http://funkload.nuxeo.org">Funkload</a> test that logs in to the site and then navigates to a
 simple view in Monassis.  This view does no processing beyond returning
-basic headers and &#8216;OK&#8217;.</p>
+basic headers and the string literal &#8216;OK&#8217;.</p>
 <p>For the full practise service test we recorded a <a class="reference external" href="http://funkload.nuxeo.org">Funkload</a> test that logs in
 to the site, browses to the practise service and then does 10 questions.
-The answers to these questions are fetched from the &#8216;oracle&#8217; HTTP server.</p>
+The answers to these questions are fetched from the &#8216;oracle&#8217; HTTP server.
+This test we then ran with user concurrencies of 100, 150 and 200.</p>
 <p>We used the following test configuration:</p>
 <ul class="simple">
 <li>Launched: 2013-08-23 12:10:13</li>
@@ -561,8 +601,111 @@ The answers to these questions are fetched from the &#8216;oracle&#8217; HTTP se
 <h2>6. Results for testing practice service<a class="headerlink" href="#results-for-testing-practice-service" title="Permalink to this headline">¶</a></h2>
 <blockquote>
 <div>Funkload bench report here: <a class="reference external" href="http://197.221.50.101/stats/test_practice-20130823T121013/">Practise service test</a></div></blockquote>
-<div class="section" id="id2">
-<h3>Optimisations done<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id3">
+<h3>Page analysis<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="dashboard">
+<h4>Dashboard<a class="headerlink" href="#dashboard" title="Permalink to this headline">¶</a></h4>
+<blockquote>
+<div><p>Authenticated read of the dashboard at 100 concurrent users:</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="80%" />
+<col width="20%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">URL</th>
+<th class="head">Request time</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>/&#64;&#64;practice/grade-10</td>
+<td>3.805 s</td>
+</tr>
+<tr class="row-odd"><td>/&#64;&#64;practice/dashboard</td>
+<td>5.386 s</td>
+</tr>
+<tr class="row-even"><td>/&#64;&#64;practice/static/practice.css</td>
+<td>4.291 s</td>
+</tr>
+<tr class="row-odd"><td>/&#64;&#64;practice/static/practice-ie8.css</td>
+<td>3.457 s</td>
+</tr>
+<tr class="row-even"><td>/&#64;&#64;practice/static/jqplot/jquery.jqplot.min.css</td>
+<td>1.873 s</td>
+</tr>
+<tr class="row-odd"><td>/&#64;&#64;practice/static/help-icon-no-shadow-16.png</td>
+<td>1.553 s</td>
+</tr>
+<tr class="row-even"><td>/&#64;&#64;practice/image/mastery_progress_3_115_0</td>
+<td>1.421 s</td>
+</tr>
+<tr class="row-odd"><td>/&#64;&#64;practice/image/mastery_progress_3_115_115</td>
+<td>1.400 s</td>
+</tr>
+<tr class="row-even"><td>/&#64;&#64;practice/static/progress-up.png</td>
+<td>1.222 s</td>
+</tr>
+<tr class="row-odd"><td>/&#64;&#64;practice/static/gold-star-16.png</td>
+<td>1.135 s</td>
+</tr>
+<tr class="row-even"><td>/&#64;&#64;practice/static/please_wait_24.gif</td>
+<td>0.875 s</td>
+</tr>
+<tr class="row-odd"><td>/&#64;&#64;practice/static/tick.png</td>
+<td>1.096 s</td>
+</tr>
+<tr class="row-even"><td>/&#64;&#64;practice/static/gray-star-16.png</td>
+<td>0.819 s</td>
+</tr>
+<tr class="row-odd"><td>/&#64;&#64;practice/image/mastery_progress_4_0_0</td>
+<td>0.961 s</td>
+</tr>
+<tr class="row-even"><td>/&#64;&#64;practice/image/mastery_progress_3_0_0</td>
+<td>0.906 s</td>
+</tr>
+<tr class="row-odd"><td>/&#64;&#64;practice/image/mastery_progress_1_0_0</td>
+<td>0.980 s</td>
+</tr>
+<tr class="row-even"><td>/&#64;&#64;practice/image/mastery_progress_2_0_0</td>
+<td>0.912 s</td>
+</tr>
+<tr class="row-odd"><td>/&#64;&#64;practice/image/mastery_progress_2_120_0</td>
+<td>0.924 s</td>
+</tr>
+<tr class="row-even"><td>/&#64;&#64;practice/image/mastery_progress_3_120_0</td>
+<td>0.965 s</td>
+</tr>
+<tr class="row-odd"><td>/&#64;&#64;practice/image/mastery_progress_3_111_0</td>
+<td>1.063 s</td>
+</tr>
+<tr class="row-even"><td>/&#64;&#64;practice/image/mastery_progress_3_108_0</td>
+<td>1.405 s</td>
+</tr>
+<tr class="row-odd"><td>/++theme++emas.theme/images/copyright.png</td>
+<td>1.623 s</td>
+</tr>
+<tr class="row-even"><td>/++theme++emas.theme/images/copyright.png</td>
+<td>2.379 s</td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+<div class="section" id="id4">
+<h5>Projected serve rates<a class="headerlink" href="#id4" title="Permalink to this headline">¶</a></h5>
+<blockquote>
+<div>(60 / n) * 60 = <strong>???.?? pages per hour.</strong></div></blockquote>
+</div>
+<div class="section" id="id5">
+<h5>Higher concurrencies<a class="headerlink" href="#id5" title="Permalink to this headline">¶</a></h5>
+<blockquote>
+<div><p>100</p>
+<p>200</p>
+</div></blockquote>
+</div>
+</div>
+</div>
+<div class="section" id="id6">
+<h3>Optimisations done<a class="headerlink" href="#id6" title="Permalink to this headline">¶</a></h3>
 <blockquote>
 <div>When we analysed the data from the practice service test we realized that
 the Plone login process takes quite a bit of time.  Upon further
@@ -579,11 +722,34 @@ user object.</div></blockquote>
 </div>
 <div class="section" id="results-for-testing-mobile-reads">
 <h2>8. Results for testing mobile reads<a class="headerlink" href="#results-for-testing-mobile-reads" title="Permalink to this headline">¶</a></h2>
-<div class="section" id="level-1">
-<h3>1. level 1<a class="headerlink" href="#level-1" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id7">
+<h3>Page analysis<a class="headerlink" href="#id7" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id8">
+<h4>Home page<a class="headerlink" href="#id8" title="Permalink to this headline">¶</a></h4>
+<div class="section" id="id9">
+<h5>Projected serve rates<a class="headerlink" href="#id9" title="Permalink to this headline">¶</a></h5>
 </div>
-<div class="section" id="level-2">
-<h3>2. Level 2<a class="headerlink" href="#level-2" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id10">
+<h5>Higher concurrencies<a class="headerlink" href="#id10" title="Permalink to this headline">¶</a></h5>
+<blockquote>
+<div><p>100</p>
+<p>200</p>
+</div></blockquote>
+</div>
+</div>
+<div class="section" id="id11">
+<h4>Content pages<a class="headerlink" href="#id11" title="Permalink to this headline">¶</a></h4>
+<div class="section" id="id12">
+<h5>Projected serve rates<a class="headerlink" href="#id12" title="Permalink to this headline">¶</a></h5>
+</div>
+<div class="section" id="id13">
+<h5>Higher concurrencies<a class="headerlink" href="#id13" title="Permalink to this headline">¶</a></h5>
+<blockquote>
+<div><p>100</p>
+<p>200</p>
+</div></blockquote>
+</div>
+</div>
 </div>
 </div>
 <div class="section" id="recommendation-for-scaling-conclusion">
