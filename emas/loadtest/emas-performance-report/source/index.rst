@@ -1,0 +1,372 @@
+.. EMAS Performance Tuning Report documentation master file, created by
+   sphinx-quickstart on Wed Sep  4 10:29:43 2013.
+   You can adapt this file completely to your liking, but it should at least
+   contain the root `toctree` directive.
+
+==================================
+Siyavula performance tuning report
+==================================
+
+
+Introduction
+============
+    
+    In order to test the current configuration, hardware and software, against
+    the published `performance goals`_, a series of bencmark tests were 
+    undertaken.  The results of these tests were used to do optimisation changes
+    that were deemed necessary. 
+    
+    This document tries to summarise the data that was gathered, the conclusions
+    that were reached and the remedial steps that were taken.
+    
+    Each section has a link to the specific `Funkload bench reports`_.  When
+    statistics from the `Funkload bench reports`_ are used in this document
+    we chose to use the 'P95' values.  They represent what happened 95% of the
+    time in the test.
+
+    The `Funkload bench reports`_ were configure not to follow external links,
+    since we are attempting to benchmark the EMAS software and hardware cluster
+    not external CDNs or external network access.
+
+
+1. Pre-test optimisation
+========================
+    
+    We started the optimisation process by identifying those folders that have
+    too many objects.  During this investigation we found that MemberServices 
+    and Orders are potential problems.
+
+    As a first-pass optimisation MemberServices were moved to a PostgreSQL
+    implementation and completely removed from the ZODB.  
+    
+    Orders, on the other hand, were not moved out of the ZODB, since the volumes
+    involved and the amount of times each Order is accessed are well within the
+    ZODB's capacity to handle.  In order to stop bloating of the portal
+    catalogue we did move orders to their own smaller catalogue though.
+
+
+2. An overview of the setup we benchmarked
+==========================================
+
+    Four distinct servers were used in the benchmarking process  Any further
+    mention of 'test cluster' in this document refers to the following setup:
+
+    Siyavula Performance 1
+        
+        - Varnish caching proxy
+        - HAProxy load balancing server
+
+    Siyavula Performance 2
+
+        - 4 EMAS application server instances
+        - 1 ZEO server with Zope Replication Service
+        - 1 Redis analytics queue
+        - 1 PostgreSQL cluster (initial primary database server)
+        - 4 Monassis instances
+
+    Siyavula Performance 3
+
+        - 4 EMAS application server instances
+        - 1 ZEO server with Zope Replication Service
+        - 1 Redis analytics queue
+        - 1 PostgreSQL cluster (initial secondary database server)
+        - 4 Monassis instances
+
+    Siyavula Performance 4
+
+        - Load generation server
+        - Host for the `Funkload`_ benchmark tests
+
+    As load generating infrastructure we chose `Funkload`_, since it is written in
+    Python, tests are very easy to record, customise and run and the reporting
+    functions are excellent.
+
+
+3. Testing authenticated reads
+==============================
+    
+    Reading all the possible URLs in the site authenticated was deemed
+    impractical due to the amount of time potentially required to do one
+    `Funkload`_ cycle.  In order to decide which URLs to use for the authenticated
+    read tests we created a `Funkload`_ test that reads all the content
+    unauthenticated (results available here: `Science unauthed read`_).  This
+    test was run with only 1 user and 1 cycle.
+
+    Unauthed read setup:
+
+    - Launched: 2013-07-26 15:54:29
+    - Test: test_wholesite.py WholeSite.test_WholeSite
+    - Target server: http://qap.everythingscience.co.za
+    - Cycles of concurrent users: [1]
+    - Cycle duration: 800s
+    - `Apdex`_: 1.5
+
+    From this list of URLs we chose to benchmark the following in the 
+    authenticated read test:
+
+    - /
+    - /login
+    - /login_form
+    - grade-12/01-organic-molecules/01-organic-molecules-07.cnxmlplus
+    - grade-10/19-quantitative-aspects-of-chemical-change/19-quantitative-aspects-of-chemical-change-01.cnxmlplus
+    - grade-10/19-quantitative-aspects-of-chemical-change/19-quantitative-aspects-of-chemical-change-06.cnxmlplus
+    - grade-11/04-intermolecular-forces/04-intermolecular-forces-02.cnxmlplus Get grade-11/04-intermolecular-forces/04-intermolecular-forces-02.cnxmlplus
+    - grade-10/05-the-periodic-table/05-the-periodic-table-01.cnxmlplus Get grade-10/05-the-periodic-table/05-the-periodic-table-01.cnxmlplus
+    - grade-10/22-mechanical-energy/22-mechanical-energy-01.cnxmlplus
+    - grade-10/24-units-used-in-the-book/24-units-used-in-the-book-01.cnxmlplus
+    - grade-12/02-organic-macromolecules/02-organic-macromolecules-01.cnxmlplus
+    - grade-12/05-the-chemical-industry/05-the-chemical-industry-02.cnxmlplus
+    - grade-12/08-work-energy-and-power/08-work-energy-and-power-03.cnxmlplus
+    - grade-12/10-colour/10-colour-06.cnxmlplus
+    - grade-12/11-2d-and-3d-wavefronts/11-2d-and-3d-wavefronts-08.cnxmlplus
+    - grade-12/12-wave-nature-of-matter/12-wave-nature-of-matter-01.cnxmlplus
+    - grade-11/13-types-of-reactions/13-types-of-reactions-01.cnxmlplus
+    - grade-11/14-lithosphere/14-lithosphere-01.cnxmlplus    
+    
+    The criterium we used to choose the above URLs is simply the performance
+    in the unauthenticated reading tests.  The pages that are slow during
+    unauthenticated reading will be even slower during authenticated reading.
+
+    We also chose some URLs that seemed to serve quite fast.  This we did to get
+    some balance to the overall stats for the reading experience.
+
+    The resultant `Funkload`_ test was run with 4 test cycles ranging from 100
+    to 1000 concurrent users.
+
+    Authenticated read setup:
+
+    - Launched: 2013-08-22 14:35:07
+    - From: siyavulap04
+    - Test: test_AuthenticatedRead.py AuthenticatedRead.test_AuthenticatedRead
+    - Target server: http://qap.everythingscience.co.za
+    - Cycles of concurrent users: [100, 250, 500, 750, 1000]
+    - `Apdex`_: 1.5
+    
+    The results of each test cycle contains:
+
+    - 18 pages
+    - 59 links
+    - 99 images
+
+    The benchmark test as a whole (all cycles and users) contains:
+
+    - 381 tests
+    - 9701 pages
+    - 100343 requests
+
+
+4. Authenticated read test results
+==================================
+    
+    Funkload bench report here: `Authenticated read`_
+
+Page analysis
+-------------
+  
+Home page
++++++++++
+
+    The unauthenticated home page load at **100 concurrent users** looks like this:
+    
+    ====================================================================================================================    ============
+    URL                                                                                                                     Request time
+    ====================================================================================================================    ============
+    /                                                                                                                       1.337 s
+    /css?family=Montserrat                                                                                                  1.124 s
+    /                                                                                                                       1.245 s
+    /portal_css/Sunburst%20Theme/public-cachekey-4fff4ed932d766e26813993d85f43eea.css                                       1.120 s
+    /portal_css/Sunburst%20Theme/dropdown-menu-cachekey-18dee82342b75f2c7bc0fa7b017feb61.css                                1.119 s
+    /portal_css/Sunburst%20Theme/resourcetinymce.stylesheetstinymce-cachekey-ca7f99b34a27033d846be95c8de69be2.css           1.073 s
+    /portal_css/Sunburst%20Theme/resourceplone.app.dexterity.overlays-cachekey-7ac1852449e6cb2ff27111e1cd7c4665.css         1.226 s
+    /portal_css/Sunburst%20Theme/resourcecollective.topictreetopictree-cachekey-2a473052fae56de9ea0cbbec5dfaa63d.css        1.130 s
+    /portal_css/Sunburst%20Theme/resourcethemesapplestyle-cachekey-902306361fbd1b097cea265775a7f6da.css                     1.137 s
+    /portal_css/Sunburst%20Theme/themeemas.appcssstyles-cachekey-c58e347e4c0ca6ab98d3a4104c40af46.css                       1.177 s
+    /portal_css/Sunburst%20Theme/themeemas.themecssstyles-cachekey-987e0b9963b14f5de16733ce5a566073.css                     1.269 s
+    /portal_css/Sunburst%20Theme/ploneCustom-cachekey-74895962889ac3a836dba1b4b8323474.css                                  1.166 s
+    /portal_kss/Sunburst%20Theme/at-cachekey-9d4065eabe538900e9c3dd6fa55b6acc.kss                                           1.229 s
+    /favicon.ico                                                                                                            1.157 s
+    /touch_icon.png                                                                                                         1.045 s
+    /++theme++emas.theme/images/logo.png                                                                                    1.054 s
+    /++theme++emas.theme/images/howitworks.png                                                                              1.108 s
+    /++theme++emas.theme/images/graph.png                                                                                   1.179 s
+    /++theme++emas.theme/images/answer_correct.png                                                                          1.035 s
+    /++theme++emas.theme/images/answer_incorrect.png                                                                        1.161 s
+    /++theme++emas.theme/images/dashboard.png                                                                               1.106 s
+    /++theme++emas.theme/images/learnersdashboard.png                                                                       1.250 s
+    /++theme++emas.theme/images/teachersdashboard.png                                                                       1.145 s
+    /++theme++emas.theme/images/media.png                                                                                   1.176 s
+    /++theme++emas.theme/images/textbooks.png                                                                               1.167 s
+    /++theme++emas.theme/images/Logo_transparentBackground-tiny.png                                                         1.081 s
+    /++theme++emas.theme/images/shuttleworthfoundation.jpg                                                                  1.047 s
+    /++theme++emas.theme/images/psggroup.jpg                                                                                0.992 s
+    /++theme++emas.theme/images/FaceBook-icon-small.png                                                                     1.069 s
+    /++theme++emas.theme/images/Twitter-icon-small.png                                                                      1.019 s
+    /++theme++emas.theme/images/cc_by.png                                                                                   1.071 s
+    ====================================================================================================================    ============
+   
+    Thus we get a **total load time of 35.214 seconds**.  Bear in mind that this
+    is for an initial load.  On initial load all the CSS and javascript will be
+    fetched over the netword and cached by the browser.
+    
+    Subsequent unauthenticated loads will look like this:
+
+    ====================================================================================================================    ============
+    URL                                                                                                                     Request time
+    ====================================================================================================================    ============
+    /                                                                                                                       1.337 s
+    /                                                                                                                       1.245 s
+    /touch_icon.png                                                                                                         1.045 s
+    /++theme++emas.theme/images/logo.png                                                                                    1.054 s
+    /++theme++emas.theme/images/howitworks.png                                                                              1.108 s
+    /++theme++emas.theme/images/graph.png                                                                                   1.179 s
+    /++theme++emas.theme/images/answer_correct.png                                                                          1.035 s
+    /++theme++emas.theme/images/answer_incorrect.png                                                                        1.161 s
+    /++theme++emas.theme/images/dashboard.png                                                                               1.106 s
+    /++theme++emas.theme/images/learnersdashboard.png                                                                       1.250 s
+    /++theme++emas.theme/images/teachersdashboard.png                                                                       1.145 s
+    /++theme++emas.theme/images/media.png                                                                                   1.176 s
+    /++theme++emas.theme/images/textbooks.png                                                                               1.167 s
+    /++theme++emas.theme/images/Logo_transparentBackground-tiny.png                                                         1.081 s
+    /++theme++emas.theme/images/shuttleworthfoundation.jpg                                                                  1.047 s
+    /++theme++emas.theme/images/psggroup.jpg                                                                                0.992 s
+    /++theme++emas.theme/images/FaceBook-icon-small.png                                                                     1.069 s
+    /++theme++emas.theme/images/Twitter-icon-small.png                                                                      1.019 s
+    /++theme++emas.theme/images/cc_by.png                                                                                   1.071 s
+    ====================================================================================================================    ============
+
+Project serve rates
+```````````````````
+
+    Thus a load time of **21.287 seconds.**
+
+    Working with these 2 figures we can project the following:
+
+    Initial home pages per hour:
+    (60 / 35.214) * 60 = 102.232
+
+    Subsequent home pages per hour:
+    (60 / 21.287) * 60 = 169.117
+
+Content pages
++++++++++++++
+
+    Let's look at one of the `slow science pages`_ like we did with the home
+    page.
+
+    ===================================================================================    ============
+    URL                                                                                    Request time
+    ===================================================================================    ============
+    /grade-12/08-work-energy-and-power/08-work-energy-and-power-03.cnxmlplus               0.990 s
+    /grade-12/08-work-energy-and-power/08-work-energy-and-power-03.cnxmlplus/              1.086 s
+    /grade-12/08-work-energy-and-power/08-work-energy-and-power-02.cnxmlplus               4.221 s
+    /grade-12/08-work-energy-and-power/08-work-energy-and-power-04.cnxmlplus               1.842 s
+    /grade-12/08-work-energy-and-power/pspictures/f70fc7e8583786ef8c496e4861d8f2b7.png     1.382 s
+    /grade-12/08-work-energy-and-power/pspictures/24707967fddfb273f965a0cf7224ac0a.png     1.501 s
+    /grade-12/08-work-energy-and-power/pspictures/22fc66e880fffb15853e6873faa1aa2b.png     1.152 s
+    /grade-12/08-work-energy-and-power/++theme++emas.theme/images/cc_by.png                1.028 s
+    ===================================================================================    ============
+
+Project serve rates
+```````````````````
+
+    It is clear that the javascript and CSS is not fetched again.  Given the
+    above times we know that each page will take **13.202 seconds** to fecth at
+    a load of **100 concurrent users**.
+
+    This in turn means we can potentially serve:
+
+    (60 / 13.202) * 60 = **272.68 pages per hour.**
+
+
+Optimisations done
+------------------
+    
+    During the testing process we realised that some elements in the pages are
+    causing sub-optimal caching in Varnish.  This is due to elements like
+    username and personal links which are unique to each authenticated user.
+    These elements cause Varnish to view pages as different although very little
+    actually differ between them.
+
+    We implemented an `Edge-side include`_ (ESI) for the personal toolbar which
+    leads to Varnish caching most of the page and only fetching the ESI content.
+
+
+5. Testing practice service
+===========================
+
+    In order to test the Intelligent Practise service fully, Carl Scheffler
+    implemented an 'oracle' for answers generated from the Monassis data.
+    This 'oracle' we then wrapped in an HTTP server when we found that opening
+    the pickle of all the saved answers to be a huge performance hit in our
+    `Funkload`_ tests.
+
+    During the testing we also tested the practice proxy in the Plone
+    application.  This was done in order to establish if any processing in this
+    proxy is possibly more of a performance issue than processing in the
+    external system.  Here are the `Practice proxy`_ results.  To test this we
+    recorded a `Funkload`_ test that logs in to the site and then navigates to a
+    simple view in Monassis.  This view does no processing beyond returning
+    basic headers and 'OK'.
+
+    For the full practise service test we recorded a `Funkload`_ test that logs in
+    to the site, browses to the practise service and then does 10 questions.
+    The answers to these questions are fetched from the 'oracle' HTTP server.
+
+    We used the following test configuration:
+
+    - Launched: 2013-08-23 12:10:13
+    - From: siyavulap04
+    - Test: test_Practice.py Practice.test_practice
+    - Target server: http://qap.everythingmaths.co.za
+    - Cycles of concurrent users: [100, 150, 200]
+    - `Apdex`_: 1.5
+
+
+6. Results for testing practice service
+=======================================
+
+    Funkload bench report here: `Practise service test`_
+
+Optimisations done
+------------------
+    
+    When we analysed the data from the practice service test we realized that
+    the Plone login process takes quite a bit of time.  Upon further
+    investigation we found that the user object was being update on each login.
+    This is unnecessary given that we do not require the last login time.  We
+    changed that specific method and removed all unnecessary changes to the 
+    user object.
+
+
+7. Testing mobile reads
+=======================
+
+    Funkload bench report here: `Mobile test`_
+
+
+8. Results for testing mobile reads
+===================================
+
+1. level 1
+----------
+
+2. Level 2
+----------
+
+9. Recommendation for scaling / Conclusion
+==========================================
+
+
+.. _Apdex: http://apdex.org/
+.. _All test results: http://197.221.50.101/stats/
+.. _Science unauthed read: http://197.221.50.101/stats/test_WholeSite-20130726T155429/
+.. _Funkload: http://funkload.nuxeo.org
+.. _Authenticated read: http://197.221.50.101/stats/test_AuthenticatedRead-20130822T143507/
+.. _slowest authed results: http://197.221.50.101/stats/test_AuthenticatedRead-20130822T143507/#slowest-requests
+.. _Practise service test: http://197.221.50.101/stats/test_practice-20130823T121013/
+.. _Practice proxy: http://197.221.50.101/stats/test_practiceproxy-20130819T124350/
+.. _Mobile test: http://197.221.50.101/stats/
+.. _performance goals: https://docs.google.com/a/upfrontsystems.co.za/document/d/1GUjwcpHBpLILQozouukxVQBLB1-GQvdUa6UXfpv75-M/edit#
+.. _Funkload bench reports: http://197.221.50.101/stats/
+.. _Edge-side include: http://en.wikipedia.org/wiki/Edge_Side_Includes
+.. _slow science pages: http://197.221.50.101/stats/test_AuthenticatedRead-20130822T143507/#page-013-get-grade-12-08-work-energy-and-power-08-work-energy-and-power-03-cnxmlplus

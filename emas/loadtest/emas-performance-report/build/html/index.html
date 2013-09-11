@@ -1,0 +1,614 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Siyavula performance tuning report &mdash; EMAS Performance Tuning Report 1.0 documentation</title>
+    
+    <link rel="stylesheet" href="_static/upfrontsystems.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="EMAS Performance Tuning Report 1.0 documentation" href="#" /> 
+  </head>
+  <body>
+<div id="portal-header">
+    <a href="index.html" id="portal-logo">
+        <img class="logo" src="_static/headlogo.png" alt="Logo"/>
+    </a>
+</div>
+
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li><a href="#">EMAS Performance Tuning Report 1.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="#">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Siyavula performance tuning report</a><ul>
+<li><a class="reference internal" href="#introduction">Introduction</a></li>
+<li><a class="reference internal" href="#pre-test-optimisation">1. Pre-test optimisation</a></li>
+<li><a class="reference internal" href="#an-overview-of-the-setup-we-benchmarked">2. An overview of the setup we benchmarked</a></li>
+<li><a class="reference internal" href="#testing-authenticated-reads">3. Testing authenticated reads</a></li>
+<li><a class="reference internal" href="#authenticated-read-test-results">4. Authenticated read test results</a><ul>
+<li><a class="reference internal" href="#page-analysis">Page analysis</a><ul>
+<li><a class="reference internal" href="#home-page">Home page</a><ul>
+<li><a class="reference internal" href="#project-serve-rates">Project serve rates</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#content-pages">Content pages</a><ul>
+<li><a class="reference internal" href="#id1">Project serve rates</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#optimisations-done">Optimisations done</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#testing-practice-service">5. Testing practice service</a></li>
+<li><a class="reference internal" href="#results-for-testing-practice-service">6. Results for testing practice service</a><ul>
+<li><a class="reference internal" href="#id2">Optimisations done</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#testing-mobile-reads">7. Testing mobile reads</a></li>
+<li><a class="reference internal" href="#results-for-testing-mobile-reads">8. Results for testing mobile reads</a><ul>
+<li><a class="reference internal" href="#level-1">1. level 1</a></li>
+<li><a class="reference internal" href="#level-2">2. Level 2</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#recommendation-for-scaling-conclusion">9. Recommendation for scaling / Conclusion</a></li>
+</ul>
+</li>
+</ul>
+
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/index.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="siyavula-performance-tuning-report">
+<h1>Siyavula performance tuning report<a class="headerlink" href="#siyavula-performance-tuning-report" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="introduction">
+<h2>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h2>
+<blockquote>
+<div><p>In order to test the current configuration, hardware and software, against
+the published <a class="reference external" href="https://docs.google.com/a/upfrontsystems.co.za/document/d/1GUjwcpHBpLILQozouukxVQBLB1-GQvdUa6UXfpv75-M/edit#">performance goals</a>, a series of bencmark tests were
+undertaken.  The results of these tests were used to do optimisation changes
+that were deemed necessary.</p>
+<p>This document tries to summarise the data that was gathered, the conclusions
+that were reached and the remedial steps that were taken.</p>
+<p>Each section has a link to the specific <a class="reference external" href="http://197.221.50.101/stats/">Funkload bench reports</a>.  When
+statistics from the <a class="reference external" href="http://197.221.50.101/stats/">Funkload bench reports</a> are used in this document
+we chose to use the &#8216;P95&#8217; values.  They represent what happened 95% of the
+time in the test.</p>
+<p>The <a class="reference external" href="http://197.221.50.101/stats/">Funkload bench reports</a> were configure not to follow external links,
+since we are attempting to benchmark the EMAS software and hardware cluster
+not external CDNs or external network access.</p>
+</div></blockquote>
+</div>
+<div class="section" id="pre-test-optimisation">
+<h2>1. Pre-test optimisation<a class="headerlink" href="#pre-test-optimisation" title="Permalink to this headline">¶</a></h2>
+<blockquote>
+<div><p>We started the optimisation process by identifying those folders that have
+too many objects.  During this investigation we found that MemberServices
+and Orders are potential problems.</p>
+<p>As a first-pass optimisation MemberServices were moved to a PostgreSQL
+implementation and completely removed from the ZODB.</p>
+<p>Orders, on the other hand, were not moved out of the ZODB, since the volumes
+involved and the amount of times each Order is accessed are well within the
+ZODB&#8217;s capacity to handle.  In order to stop bloating of the portal
+catalogue we did move orders to their own smaller catalogue though.</p>
+</div></blockquote>
+</div>
+<div class="section" id="an-overview-of-the-setup-we-benchmarked">
+<h2>2. An overview of the setup we benchmarked<a class="headerlink" href="#an-overview-of-the-setup-we-benchmarked" title="Permalink to this headline">¶</a></h2>
+<blockquote>
+<div><p>Four distinct servers were used in the benchmarking process  Any further
+mention of &#8216;test cluster&#8217; in this document refers to the following setup:</p>
+<p>Siyavula Performance 1</p>
+<blockquote>
+<div><ul class="simple">
+<li>Varnish caching proxy</li>
+<li>HAProxy load balancing server</li>
+</ul>
+</div></blockquote>
+<p>Siyavula Performance 2</p>
+<blockquote>
+<div><ul class="simple">
+<li>4 EMAS application server instances</li>
+<li>1 ZEO server with Zope Replication Service</li>
+<li>1 Redis analytics queue</li>
+<li>1 PostgreSQL cluster (initial primary database server)</li>
+<li>4 Monassis instances</li>
+</ul>
+</div></blockquote>
+<p>Siyavula Performance 3</p>
+<blockquote>
+<div><ul class="simple">
+<li>4 EMAS application server instances</li>
+<li>1 ZEO server with Zope Replication Service</li>
+<li>1 Redis analytics queue</li>
+<li>1 PostgreSQL cluster (initial secondary database server)</li>
+<li>4 Monassis instances</li>
+</ul>
+</div></blockquote>
+<p>Siyavula Performance 4</p>
+<blockquote>
+<div><ul class="simple">
+<li>Load generation server</li>
+<li>Host for the <a class="reference external" href="http://funkload.nuxeo.org">Funkload</a> benchmark tests</li>
+</ul>
+</div></blockquote>
+<p>As load generating infrastructure we chose <a class="reference external" href="http://funkload.nuxeo.org">Funkload</a>, since it is written in
+Python, tests are very easy to record, customise and run and the reporting
+functions are excellent.</p>
+</div></blockquote>
+</div>
+<div class="section" id="testing-authenticated-reads">
+<h2>3. Testing authenticated reads<a class="headerlink" href="#testing-authenticated-reads" title="Permalink to this headline">¶</a></h2>
+<blockquote>
+<div><p>Reading all the possible URLs in the site authenticated was deemed
+impractical due to the amount of time potentially required to do one
+<a class="reference external" href="http://funkload.nuxeo.org">Funkload</a> cycle.  In order to decide which URLs to use for the authenticated
+read tests we created a <a class="reference external" href="http://funkload.nuxeo.org">Funkload</a> test that reads all the content
+unauthenticated (results available here: <a class="reference external" href="http://197.221.50.101/stats/test_WholeSite-20130726T155429/">Science unauthed read</a>).  This
+test was run with only 1 user and 1 cycle.</p>
+<p>Unauthed read setup:</p>
+<ul class="simple">
+<li>Launched: 2013-07-26 15:54:29</li>
+<li>Test: test_wholesite.py WholeSite.test_WholeSite</li>
+<li>Target server: <a class="reference external" href="http://qap.everythingscience.co.za">http://qap.everythingscience.co.za</a></li>
+<li>Cycles of concurrent users: [1]</li>
+<li>Cycle duration: 800s</li>
+<li><a class="reference external" href="http://apdex.org/">Apdex</a>: 1.5</li>
+</ul>
+<p>From this list of URLs we chose to benchmark the following in the
+authenticated read test:</p>
+<ul class="simple">
+<li>/</li>
+<li>/login</li>
+<li>/login_form</li>
+<li>grade-12/01-organic-molecules/01-organic-molecules-07.cnxmlplus</li>
+<li>grade-10/19-quantitative-aspects-of-chemical-change/19-quantitative-aspects-of-chemical-change-01.cnxmlplus</li>
+<li>grade-10/19-quantitative-aspects-of-chemical-change/19-quantitative-aspects-of-chemical-change-06.cnxmlplus</li>
+<li>grade-11/04-intermolecular-forces/04-intermolecular-forces-02.cnxmlplus Get grade-11/04-intermolecular-forces/04-intermolecular-forces-02.cnxmlplus</li>
+<li>grade-10/05-the-periodic-table/05-the-periodic-table-01.cnxmlplus Get grade-10/05-the-periodic-table/05-the-periodic-table-01.cnxmlplus</li>
+<li>grade-10/22-mechanical-energy/22-mechanical-energy-01.cnxmlplus</li>
+<li>grade-10/24-units-used-in-the-book/24-units-used-in-the-book-01.cnxmlplus</li>
+<li>grade-12/02-organic-macromolecules/02-organic-macromolecules-01.cnxmlplus</li>
+<li>grade-12/05-the-chemical-industry/05-the-chemical-industry-02.cnxmlplus</li>
+<li>grade-12/08-work-energy-and-power/08-work-energy-and-power-03.cnxmlplus</li>
+<li>grade-12/10-colour/10-colour-06.cnxmlplus</li>
+<li>grade-12/11-2d-and-3d-wavefronts/11-2d-and-3d-wavefronts-08.cnxmlplus</li>
+<li>grade-12/12-wave-nature-of-matter/12-wave-nature-of-matter-01.cnxmlplus</li>
+<li>grade-11/13-types-of-reactions/13-types-of-reactions-01.cnxmlplus</li>
+<li>grade-11/14-lithosphere/14-lithosphere-01.cnxmlplus</li>
+</ul>
+<p>The criterium we used to choose the above URLs is simply the performance
+in the unauthenticated reading tests.  The pages that are slow during
+unauthenticated reading will be even slower during authenticated reading.</p>
+<p>We also chose some URLs that seemed to serve quite fast.  This we did to get
+some balance to the overall stats for the reading experience.</p>
+<p>The resultant <a class="reference external" href="http://funkload.nuxeo.org">Funkload</a> test was run with 4 test cycles ranging from 100
+to 1000 concurrent users.</p>
+<p>Authenticated read setup:</p>
+<ul class="simple">
+<li>Launched: 2013-08-22 14:35:07</li>
+<li>From: siyavulap04</li>
+<li>Test: test_AuthenticatedRead.py AuthenticatedRead.test_AuthenticatedRead</li>
+<li>Target server: <a class="reference external" href="http://qap.everythingscience.co.za">http://qap.everythingscience.co.za</a></li>
+<li>Cycles of concurrent users: [100, 250, 500, 750, 1000]</li>
+<li><a class="reference external" href="http://apdex.org/">Apdex</a>: 1.5</li>
+</ul>
+<p>The results of each test cycle contains:</p>
+<ul class="simple">
+<li>18 pages</li>
+<li>59 links</li>
+<li>99 images</li>
+</ul>
+<p>The benchmark test as a whole (all cycles and users) contains:</p>
+<ul class="simple">
+<li>381 tests</li>
+<li>9701 pages</li>
+<li>100343 requests</li>
+</ul>
+</div></blockquote>
+</div>
+<div class="section" id="authenticated-read-test-results">
+<h2>4. Authenticated read test results<a class="headerlink" href="#authenticated-read-test-results" title="Permalink to this headline">¶</a></h2>
+<blockquote>
+<div>Funkload bench report here: <a class="reference external" href="http://197.221.50.101/stats/test_AuthenticatedRead-20130822T143507/">Authenticated read</a></div></blockquote>
+<div class="section" id="page-analysis">
+<h3>Page analysis<a class="headerlink" href="#page-analysis" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="home-page">
+<h4>Home page<a class="headerlink" href="#home-page" title="Permalink to this headline">¶</a></h4>
+<blockquote>
+<div><p>The unauthenticated home page load at <strong>100 concurrent users</strong> looks like this:</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="91%" />
+<col width="9%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">URL</th>
+<th class="head">Request time</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>/</td>
+<td>1.337 s</td>
+</tr>
+<tr class="row-odd"><td>/css?family=Montserrat</td>
+<td>1.124 s</td>
+</tr>
+<tr class="row-even"><td>/</td>
+<td>1.245 s</td>
+</tr>
+<tr class="row-odd"><td>/portal_css/Sunburst%20Theme/public-cachekey-4fff4ed932d766e26813993d85f43eea.css</td>
+<td>1.120 s</td>
+</tr>
+<tr class="row-even"><td>/portal_css/Sunburst%20Theme/dropdown-menu-cachekey-18dee82342b75f2c7bc0fa7b017feb61.css</td>
+<td>1.119 s</td>
+</tr>
+<tr class="row-odd"><td>/portal_css/Sunburst%20Theme/resourcetinymce.stylesheetstinymce-cachekey-ca7f99b34a27033d846be95c8de69be2.css</td>
+<td>1.073 s</td>
+</tr>
+<tr class="row-even"><td>/portal_css/Sunburst%20Theme/resourceplone.app.dexterity.overlays-cachekey-7ac1852449e6cb2ff27111e1cd7c4665.css</td>
+<td>1.226 s</td>
+</tr>
+<tr class="row-odd"><td>/portal_css/Sunburst%20Theme/resourcecollective.topictreetopictree-cachekey-2a473052fae56de9ea0cbbec5dfaa63d.css</td>
+<td>1.130 s</td>
+</tr>
+<tr class="row-even"><td>/portal_css/Sunburst%20Theme/resourcethemesapplestyle-cachekey-902306361fbd1b097cea265775a7f6da.css</td>
+<td>1.137 s</td>
+</tr>
+<tr class="row-odd"><td>/portal_css/Sunburst%20Theme/themeemas.appcssstyles-cachekey-c58e347e4c0ca6ab98d3a4104c40af46.css</td>
+<td>1.177 s</td>
+</tr>
+<tr class="row-even"><td>/portal_css/Sunburst%20Theme/themeemas.themecssstyles-cachekey-987e0b9963b14f5de16733ce5a566073.css</td>
+<td>1.269 s</td>
+</tr>
+<tr class="row-odd"><td>/portal_css/Sunburst%20Theme/ploneCustom-cachekey-74895962889ac3a836dba1b4b8323474.css</td>
+<td>1.166 s</td>
+</tr>
+<tr class="row-even"><td>/portal_kss/Sunburst%20Theme/at-cachekey-9d4065eabe538900e9c3dd6fa55b6acc.kss</td>
+<td>1.229 s</td>
+</tr>
+<tr class="row-odd"><td>/favicon.ico</td>
+<td>1.157 s</td>
+</tr>
+<tr class="row-even"><td>/touch_icon.png</td>
+<td>1.045 s</td>
+</tr>
+<tr class="row-odd"><td>/++theme++emas.theme/images/logo.png</td>
+<td>1.054 s</td>
+</tr>
+<tr class="row-even"><td>/++theme++emas.theme/images/howitworks.png</td>
+<td>1.108 s</td>
+</tr>
+<tr class="row-odd"><td>/++theme++emas.theme/images/graph.png</td>
+<td>1.179 s</td>
+</tr>
+<tr class="row-even"><td>/++theme++emas.theme/images/answer_correct.png</td>
+<td>1.035 s</td>
+</tr>
+<tr class="row-odd"><td>/++theme++emas.theme/images/answer_incorrect.png</td>
+<td>1.161 s</td>
+</tr>
+<tr class="row-even"><td>/++theme++emas.theme/images/dashboard.png</td>
+<td>1.106 s</td>
+</tr>
+<tr class="row-odd"><td>/++theme++emas.theme/images/learnersdashboard.png</td>
+<td>1.250 s</td>
+</tr>
+<tr class="row-even"><td>/++theme++emas.theme/images/teachersdashboard.png</td>
+<td>1.145 s</td>
+</tr>
+<tr class="row-odd"><td>/++theme++emas.theme/images/media.png</td>
+<td>1.176 s</td>
+</tr>
+<tr class="row-even"><td>/++theme++emas.theme/images/textbooks.png</td>
+<td>1.167 s</td>
+</tr>
+<tr class="row-odd"><td>/++theme++emas.theme/images/Logo_transparentBackground-tiny.png</td>
+<td>1.081 s</td>
+</tr>
+<tr class="row-even"><td>/++theme++emas.theme/images/shuttleworthfoundation.jpg</td>
+<td>1.047 s</td>
+</tr>
+<tr class="row-odd"><td>/++theme++emas.theme/images/psggroup.jpg</td>
+<td>0.992 s</td>
+</tr>
+<tr class="row-even"><td>/++theme++emas.theme/images/FaceBook-icon-small.png</td>
+<td>1.069 s</td>
+</tr>
+<tr class="row-odd"><td>/++theme++emas.theme/images/Twitter-icon-small.png</td>
+<td>1.019 s</td>
+</tr>
+<tr class="row-even"><td>/++theme++emas.theme/images/cc_by.png</td>
+<td>1.071 s</td>
+</tr>
+</tbody>
+</table>
+<p>Thus we get a <strong>total load time of 35.214 seconds</strong>.  Bear in mind that this
+is for an initial load.  On initial load all the CSS and javascript will be
+fetched over the netword and cached by the browser.</p>
+<p>Subsequent unauthenticated loads will look like this:</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="91%" />
+<col width="9%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">URL</th>
+<th class="head">Request time</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>/</td>
+<td>1.337 s</td>
+</tr>
+<tr class="row-odd"><td>/</td>
+<td>1.245 s</td>
+</tr>
+<tr class="row-even"><td>/touch_icon.png</td>
+<td>1.045 s</td>
+</tr>
+<tr class="row-odd"><td>/++theme++emas.theme/images/logo.png</td>
+<td>1.054 s</td>
+</tr>
+<tr class="row-even"><td>/++theme++emas.theme/images/howitworks.png</td>
+<td>1.108 s</td>
+</tr>
+<tr class="row-odd"><td>/++theme++emas.theme/images/graph.png</td>
+<td>1.179 s</td>
+</tr>
+<tr class="row-even"><td>/++theme++emas.theme/images/answer_correct.png</td>
+<td>1.035 s</td>
+</tr>
+<tr class="row-odd"><td>/++theme++emas.theme/images/answer_incorrect.png</td>
+<td>1.161 s</td>
+</tr>
+<tr class="row-even"><td>/++theme++emas.theme/images/dashboard.png</td>
+<td>1.106 s</td>
+</tr>
+<tr class="row-odd"><td>/++theme++emas.theme/images/learnersdashboard.png</td>
+<td>1.250 s</td>
+</tr>
+<tr class="row-even"><td>/++theme++emas.theme/images/teachersdashboard.png</td>
+<td>1.145 s</td>
+</tr>
+<tr class="row-odd"><td>/++theme++emas.theme/images/media.png</td>
+<td>1.176 s</td>
+</tr>
+<tr class="row-even"><td>/++theme++emas.theme/images/textbooks.png</td>
+<td>1.167 s</td>
+</tr>
+<tr class="row-odd"><td>/++theme++emas.theme/images/Logo_transparentBackground-tiny.png</td>
+<td>1.081 s</td>
+</tr>
+<tr class="row-even"><td>/++theme++emas.theme/images/shuttleworthfoundation.jpg</td>
+<td>1.047 s</td>
+</tr>
+<tr class="row-odd"><td>/++theme++emas.theme/images/psggroup.jpg</td>
+<td>0.992 s</td>
+</tr>
+<tr class="row-even"><td>/++theme++emas.theme/images/FaceBook-icon-small.png</td>
+<td>1.069 s</td>
+</tr>
+<tr class="row-odd"><td>/++theme++emas.theme/images/Twitter-icon-small.png</td>
+<td>1.019 s</td>
+</tr>
+<tr class="row-even"><td>/++theme++emas.theme/images/cc_by.png</td>
+<td>1.071 s</td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+<div class="section" id="project-serve-rates">
+<h5>Project serve rates<a class="headerlink" href="#project-serve-rates" title="Permalink to this headline">¶</a></h5>
+<blockquote>
+<div><p>Thus a load time of <strong>21.287 seconds.</strong></p>
+<p>Working with these 2 figures we can project the following:</p>
+<p>Initial home pages per hour:
+(60 / 35.214) * 60 = 102.232</p>
+<p>Subsequent home pages per hour:
+(60 / 21.287) * 60 = 169.117</p>
+</div></blockquote>
+</div>
+</div>
+<div class="section" id="content-pages">
+<h4>Content pages<a class="headerlink" href="#content-pages" title="Permalink to this headline">¶</a></h4>
+<blockquote>
+<div><p>Let&#8217;s look at one of the <a class="reference external" href="http://197.221.50.101/stats/test_AuthenticatedRead-20130822T143507/#page-013-get-grade-12-08-work-energy-and-power-08-work-energy-and-power-03-cnxmlplus">slow science pages</a> like we did with the home
+page.</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="87%" />
+<col width="13%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">URL</th>
+<th class="head">Request time</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>/grade-12/08-work-energy-and-power/08-work-energy-and-power-03.cnxmlplus</td>
+<td>0.990 s</td>
+</tr>
+<tr class="row-odd"><td>/grade-12/08-work-energy-and-power/08-work-energy-and-power-03.cnxmlplus/</td>
+<td>1.086 s</td>
+</tr>
+<tr class="row-even"><td>/grade-12/08-work-energy-and-power/08-work-energy-and-power-02.cnxmlplus</td>
+<td>4.221 s</td>
+</tr>
+<tr class="row-odd"><td>/grade-12/08-work-energy-and-power/08-work-energy-and-power-04.cnxmlplus</td>
+<td>1.842 s</td>
+</tr>
+<tr class="row-even"><td>/grade-12/08-work-energy-and-power/pspictures/f70fc7e8583786ef8c496e4861d8f2b7.png</td>
+<td>1.382 s</td>
+</tr>
+<tr class="row-odd"><td>/grade-12/08-work-energy-and-power/pspictures/24707967fddfb273f965a0cf7224ac0a.png</td>
+<td>1.501 s</td>
+</tr>
+<tr class="row-even"><td>/grade-12/08-work-energy-and-power/pspictures/22fc66e880fffb15853e6873faa1aa2b.png</td>
+<td>1.152 s</td>
+</tr>
+<tr class="row-odd"><td>/grade-12/08-work-energy-and-power/++theme++emas.theme/images/cc_by.png</td>
+<td>1.028 s</td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+<div class="section" id="id1">
+<h5>Project serve rates<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h5>
+<blockquote>
+<div><p>It is clear that the javascript and CSS is not fetched again.  Given the
+above times we know that each page will take <strong>13.202 seconds</strong> to fecth at
+a load of <strong>100 concurrent users</strong>.</p>
+<p>This in turn means we can potentially serve:</p>
+<p>(60 / 13.202) * 60 = <strong>272.68 pages per hour.</strong></p>
+</div></blockquote>
+</div>
+</div>
+</div>
+<div class="section" id="optimisations-done">
+<h3>Optimisations done<a class="headerlink" href="#optimisations-done" title="Permalink to this headline">¶</a></h3>
+<blockquote>
+<div><p>During the testing process we realised that some elements in the pages are
+causing sub-optimal caching in Varnish.  This is due to elements like
+username and personal links which are unique to each authenticated user.
+These elements cause Varnish to view pages as different although very little
+actually differ between them.</p>
+<p>We implemented an <a class="reference external" href="http://en.wikipedia.org/wiki/Edge_Side_Includes">Edge-side include</a> (ESI) for the personal toolbar which
+leads to Varnish caching most of the page and only fetching the ESI content.</p>
+</div></blockquote>
+</div>
+</div>
+<div class="section" id="testing-practice-service">
+<h2>5. Testing practice service<a class="headerlink" href="#testing-practice-service" title="Permalink to this headline">¶</a></h2>
+<blockquote>
+<div><p>In order to test the Intelligent Practise service fully, Carl Scheffler
+implemented an &#8216;oracle&#8217; for answers generated from the Monassis data.
+This &#8216;oracle&#8217; we then wrapped in an HTTP server when we found that opening
+the pickle of all the saved answers to be a huge performance hit in our
+<a class="reference external" href="http://funkload.nuxeo.org">Funkload</a> tests.</p>
+<p>During the testing we also tested the practice proxy in the Plone
+application.  This was done in order to establish if any processing in this
+proxy is possibly more of a performance issue than processing in the
+external system.  Here are the <a class="reference external" href="http://197.221.50.101/stats/test_practiceproxy-20130819T124350/">Practice proxy</a> results.  To test this we
+recorded a <a class="reference external" href="http://funkload.nuxeo.org">Funkload</a> test that logs in to the site and then navigates to a
+simple view in Monassis.  This view does no processing beyond returning
+basic headers and &#8216;OK&#8217;.</p>
+<p>For the full practise service test we recorded a <a class="reference external" href="http://funkload.nuxeo.org">Funkload</a> test that logs in
+to the site, browses to the practise service and then does 10 questions.
+The answers to these questions are fetched from the &#8216;oracle&#8217; HTTP server.</p>
+<p>We used the following test configuration:</p>
+<ul class="simple">
+<li>Launched: 2013-08-23 12:10:13</li>
+<li>From: siyavulap04</li>
+<li>Test: test_Practice.py Practice.test_practice</li>
+<li>Target server: <a class="reference external" href="http://qap.everythingmaths.co.za">http://qap.everythingmaths.co.za</a></li>
+<li>Cycles of concurrent users: [100, 150, 200]</li>
+<li><a class="reference external" href="http://apdex.org/">Apdex</a>: 1.5</li>
+</ul>
+</div></blockquote>
+</div>
+<div class="section" id="results-for-testing-practice-service">
+<h2>6. Results for testing practice service<a class="headerlink" href="#results-for-testing-practice-service" title="Permalink to this headline">¶</a></h2>
+<blockquote>
+<div>Funkload bench report here: <a class="reference external" href="http://197.221.50.101/stats/test_practice-20130823T121013/">Practise service test</a></div></blockquote>
+<div class="section" id="id2">
+<h3>Optimisations done<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h3>
+<blockquote>
+<div>When we analysed the data from the practice service test we realized that
+the Plone login process takes quite a bit of time.  Upon further
+investigation we found that the user object was being update on each login.
+This is unnecessary given that we do not require the last login time.  We
+changed that specific method and removed all unnecessary changes to the
+user object.</div></blockquote>
+</div>
+</div>
+<div class="section" id="testing-mobile-reads">
+<h2>7. Testing mobile reads<a class="headerlink" href="#testing-mobile-reads" title="Permalink to this headline">¶</a></h2>
+<blockquote>
+<div>Funkload bench report here: <a class="reference external" href="http://197.221.50.101/stats/">Mobile test</a></div></blockquote>
+</div>
+<div class="section" id="results-for-testing-mobile-reads">
+<h2>8. Results for testing mobile reads<a class="headerlink" href="#results-for-testing-mobile-reads" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="level-1">
+<h3>1. level 1<a class="headerlink" href="#level-1" title="Permalink to this headline">¶</a></h3>
+</div>
+<div class="section" id="level-2">
+<h3>2. Level 2<a class="headerlink" href="#level-2" title="Permalink to this headline">¶</a></h3>
+</div>
+</div>
+<div class="section" id="recommendation-for-scaling-conclusion">
+<h2>9. Recommendation for scaling / Conclusion<a class="headerlink" href="#recommendation-for-scaling-conclusion" title="Permalink to this headline">¶</a></h2>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li><a href="#">EMAS Performance Tuning Report 1.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2013, Upfront Systems.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>
