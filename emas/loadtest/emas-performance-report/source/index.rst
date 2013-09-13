@@ -420,7 +420,7 @@ Optimisations done
 8. Results for testing mobile reads
 ===================================
 
-Page analysis
+page analysis
 -------------
 
 Home page
@@ -450,7 +450,20 @@ Higher concurrencies
     200
 
 
-9. Recommendation for scaling / Conclusion
+9. Testing Varnish and network setup
+====================================
+
+    We used `Apache Benchmark`_ to test Varnish and network throughput from
+    our load generating server and the Varnish/ HAProxy server.  This was done
+    with a script that starts off with 1 user and 10 requests all the way up to
+    1000 concurrent users and 1000000 requests.
+
+
+10. Results of Varnish and network setup testing
+================================================
+
+
+Recommendation for scaling / Conclusion
 ==========================================
 
 
@@ -467,3 +480,4 @@ Higher concurrencies
 .. _Funkload bench reports: http://197.221.50.101/stats/
 .. _Edge-side include: http://en.wikipedia.org/wiki/Edge_Side_Includes
 .. _slow science pages: http://197.221.50.101/stats/test_AuthenticatedRead-20130822T143507/#page-013-get-grade-12-08-work-energy-and-power-08-work-energy-and-power-03-cnxmlplus
+.. _Apache Benchmark: https://httpd.apache.org/docs/2.2/programs/ab.html

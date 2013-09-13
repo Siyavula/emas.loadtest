@@ -1,5 +1,4 @@
 
-
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
@@ -15,7 +14,7 @@
     
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '',
+        URL_ROOT:    './',
         VERSION:     '1.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
@@ -84,7 +83,7 @@
 </li>
 <li><a class="reference internal" href="#testing-mobile-reads">7. Testing mobile reads</a></li>
 <li><a class="reference internal" href="#results-for-testing-mobile-reads">8. Results for testing mobile reads</a><ul>
-<li><a class="reference internal" href="#id7">Page analysis</a><ul>
+<li><a class="reference internal" href="#id7">page analysis</a><ul>
 <li><a class="reference internal" href="#id8">Home page</a><ul>
 <li><a class="reference internal" href="#id9">Projected serve rates</a></li>
 <li><a class="reference internal" href="#id10">Higher concurrencies</a></li>
@@ -99,7 +98,9 @@
 </li>
 </ul>
 </li>
-<li><a class="reference internal" href="#recommendation-for-scaling-conclusion">9. Recommendation for scaling / Conclusion</a></li>
+<li><a class="reference internal" href="#testing-varnish-and-network-setup">9. Testing Varnish and network setup</a></li>
+<li><a class="reference internal" href="#results-of-varnish-and-network-setup-testing">10. Results of Varnish and network setup testing</a></li>
+<li><a class="reference internal" href="#recommendation-for-scaling-conclusion">Recommendation for scaling / Conclusion</a></li>
 </ul>
 </li>
 </ul>
@@ -693,7 +694,10 @@ This test we then ran with user concurrencies of 100, 150 and 200.</p>
 <div class="section" id="id4">
 <h5>Projected serve rates<a class="headerlink" href="#id4" title="Permalink to this headline">¶</a></h5>
 <blockquote>
-<div>(60 / n) * 60 = <strong>???.?? pages per hour.</strong></div></blockquote>
+<div><p>This gives us a  load time of <strong>40.451 seconds per page at 100
+concurrent users.</strong>  At this rate we can serve:</p>
+<p>(60 / 40.451) * 60 = <strong>88.99 pages per hour.</strong></p>
+</div></blockquote>
 </div>
 <div class="section" id="id5">
 <h5>Higher concurrencies<a class="headerlink" href="#id5" title="Permalink to this headline">¶</a></h5>
@@ -723,7 +727,7 @@ user object.</div></blockquote>
 <div class="section" id="results-for-testing-mobile-reads">
 <h2>8. Results for testing mobile reads<a class="headerlink" href="#results-for-testing-mobile-reads" title="Permalink to this headline">¶</a></h2>
 <div class="section" id="id7">
-<h3>Page analysis<a class="headerlink" href="#id7" title="Permalink to this headline">¶</a></h3>
+<h3>page analysis<a class="headerlink" href="#id7" title="Permalink to this headline">¶</a></h3>
 <div class="section" id="id8">
 <h4>Home page<a class="headerlink" href="#id8" title="Permalink to this headline">¶</a></h4>
 <div class="section" id="id9">
@@ -752,8 +756,19 @@ user object.</div></blockquote>
 </div>
 </div>
 </div>
+<div class="section" id="testing-varnish-and-network-setup">
+<h2>9. Testing Varnish and network setup<a class="headerlink" href="#testing-varnish-and-network-setup" title="Permalink to this headline">¶</a></h2>
+<blockquote>
+<div>We used <a class="reference external" href="https://httpd.apache.org/docs/2.2/programs/ab.html">Apache Benchmark</a> to test Varnish and network throughput from
+our load generating server and the Varnish/ HAProxy server.  This was done
+with a script that starts off with 1 user and 10 requests all the way up to
+1000 concurrent users and 1000000 requests.</div></blockquote>
+</div>
+<div class="section" id="results-of-varnish-and-network-setup-testing">
+<h2>10. Results of Varnish and network setup testing<a class="headerlink" href="#results-of-varnish-and-network-setup-testing" title="Permalink to this headline">¶</a></h2>
+</div>
 <div class="section" id="recommendation-for-scaling-conclusion">
-<h2>9. Recommendation for scaling / Conclusion<a class="headerlink" href="#recommendation-for-scaling-conclusion" title="Permalink to this headline">¶</a></h2>
+<h2>Recommendation for scaling / Conclusion<a class="headerlink" href="#recommendation-for-scaling-conclusion" title="Permalink to this headline">¶</a></h2>
 </div>
 </div>
 
@@ -774,7 +789,7 @@ user object.</div></blockquote>
     </div>
     <div class="footer">
         &copy; Copyright 2013, Upfront Systems.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2b1.
     </div>
   </body>
 </html>
