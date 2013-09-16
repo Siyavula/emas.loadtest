@@ -486,10 +486,6 @@ Higher concurrencies
     1000000             4828.27           242.91
     =================   ==============    ===============
 
-    Both SP1 and SP4 show relatively linear changes in performance.  The important
-    thing is the marked difference in the amount of requests per second between
-    the 2 servers.
-
 10 concurrent users
 -------------------
 
@@ -531,6 +527,14 @@ Higher concurrencies
     
     (1) An entry of 'no data' indicates that the test cycle could not complete
     successfully and therefore `Apache Bench`_ did not record the statistics.
+
+    Both SP1 and SP4 show relatively linear changes in performance.  The important
+    thing is the marked difference in the amount of requests per second between
+    the 2 servers.  After more investigation we found that the back-end network
+    between the servers in the cluster is not running at its full capacity.  This
+    has been changed and a second set of tests will be run to validate the
+    assumption that network throughput is responsible for the difference in 
+    performance between the 2 mentioned servers.
 
 
 Recommendation for scaling / Conclusion
