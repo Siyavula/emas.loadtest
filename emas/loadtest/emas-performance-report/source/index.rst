@@ -450,17 +450,17 @@ Higher concurrencies
     200
 
 
-9. Testing Varnish and network setup
-====================================
+9. Testing Varnish
+==================
 
-    We used `Apache Benchmark`_ to test Varnish and network throughput from
-    our load generating server and the Varnish/ HAProxy server.  This was done
-    with a script that starts off with 1 user and 10 requests all the way up to
-    1000 concurrent users and 1000000 requests.
+    We used `Apache Benchmark`_ to test Varnish from our load generating server
+    and the Varnish/ HAProxy server.  This was done with a script that starts
+    off with 1 user and 10 requests all the way up to 1000 concurrent users and
+    1000000 requests.
 
 
-10. Results of Varnish and network setup testing
-================================================
+10. Results of Varnish
+======================
 
 
 Recommendation for scaling / Conclusion
