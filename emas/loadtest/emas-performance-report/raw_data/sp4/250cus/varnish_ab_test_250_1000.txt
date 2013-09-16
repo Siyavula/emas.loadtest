@@ -1,0 +1,43 @@
+This is ApacheBench, Version 2.3 <$Revision: 655654 $>
+Copyright 1996 Adam Twiss, Zeus Technology Ltd, http://www.zeustech.net/
+Licensed to The Apache Software Foundation, http://www.apache.org/
+
+Benchmarking qap.everythingscience.co.za (be patient)
+
+
+Server Software:        Zope/(2.13.15,
+Server Hostname:        qap.everythingscience.co.za
+Server Port:            80
+
+Document Path:          /portal_css/Sunburst%20Theme/public-cachekey-4fff4ed932d766e26813993d85f43eea.css
+Document Length:        31966 bytes
+
+Concurrency Level:      250
+Time taken for tests:   2.800 seconds
+Complete requests:      1000
+Failed requests:        0
+Write errors:           0
+Total transferred:      32552000 bytes
+HTML transferred:       31966000 bytes
+Requests per second:    357.18 [#/sec] (mean)
+Time per request:       699.925 [ms] (mean)
+Time per request:       2.800 [ms] (mean, across all concurrent requests)
+Transfer rate:          11354.45 [Kbytes/sec] received
+
+Connection Times (ms)
+              min  mean[+/-sd] median   max
+Connect:        3  163 100.8    187     297
+Processing:   100  471 193.0    449    1317
+Waiting:        3  234 197.6    191    1125
+Total:        108  634 190.3    695    1320
+
+Percentage of the requests served within a certain time (ms)
+  50%    695
+  66%    698
+  75%    698
+  80%    698
+  90%    700
+  95%    704
+  98%   1292
+  99%   1306
+ 100%   1320 (longest request)
