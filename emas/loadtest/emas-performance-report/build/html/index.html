@@ -1,4 +1,5 @@
 
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
@@ -14,7 +15,7 @@
     
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    './',
+        URL_ROOT:    '',
         VERSION:     '1.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
@@ -98,8 +99,14 @@
 </li>
 </ul>
 </li>
-<li><a class="reference internal" href="#testing-varnish-and-network-setup">9. Testing Varnish and network setup</a></li>
-<li><a class="reference internal" href="#results-of-varnish-and-network-setup-testing">10. Results of Varnish and network setup testing</a></li>
+<li><a class="reference internal" href="#testing-varnish">9. Testing Varnish</a></li>
+<li><a class="reference internal" href="#results-of-varnish">10. Results of Varnish</a><ul>
+<li><a class="reference internal" href="#user">1 user</a></li>
+<li><a class="reference internal" href="#concurrent-users">10 concurrent users</a></li>
+<li><a class="reference internal" href="#id14">100 concurrent users</a></li>
+<li><a class="reference internal" href="#id15">1000 concurrent users</a></li>
+</ul>
+</li>
 <li><a class="reference internal" href="#recommendation-for-scaling-conclusion">Recommendation for scaling / Conclusion</a></li>
 </ul>
 </li>
@@ -170,14 +177,14 @@ catalogue we did move orders to their own smaller catalogue though.</p>
 <blockquote>
 <div><p>Four distinct servers were used in the benchmarking process  Any further
 mention of &#8216;test cluster&#8217; in this document refers to the following setup:</p>
-<p>Siyavula Performance 1</p>
+<p>Siyavula Performance 1 (aka. sp1)</p>
 <blockquote>
 <div><ul class="simple">
 <li>Varnish caching proxy</li>
 <li>HAProxy load balancing server</li>
 </ul>
 </div></blockquote>
-<p>Siyavula Performance 2</p>
+<p>Siyavula Performance 2 (aka. sp2)</p>
 <blockquote>
 <div><ul class="simple">
 <li>4 EMAS application server instances</li>
@@ -187,7 +194,7 @@ mention of &#8216;test cluster&#8217; in this document refers to the following s
 <li>4 Monassis instances</li>
 </ul>
 </div></blockquote>
-<p>Siyavula Performance 3</p>
+<p>Siyavula Performance 3 (aka. sp3)</p>
 <blockquote>
 <div><ul class="simple">
 <li>4 EMAS application server instances</li>
@@ -197,7 +204,7 @@ mention of &#8216;test cluster&#8217; in this document refers to the following s
 <li>4 Monassis instances</li>
 </ul>
 </div></blockquote>
-<p>Siyavula Performance 4</p>
+<p>Siyavula Performance 4 (aka. sp4)</p>
 <blockquote>
 <div><ul class="simple">
 <li>Load generation server</li>
@@ -756,16 +763,191 @@ user object.</div></blockquote>
 </div>
 </div>
 </div>
-<div class="section" id="testing-varnish-and-network-setup">
-<h2>9. Testing Varnish and network setup<a class="headerlink" href="#testing-varnish-and-network-setup" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="testing-varnish">
+<h2>9. Testing Varnish<a class="headerlink" href="#testing-varnish" title="Permalink to this headline">¶</a></h2>
 <blockquote>
-<div>We used <a class="reference external" href="https://httpd.apache.org/docs/2.2/programs/ab.html">Apache Benchmark</a> to test Varnish and network throughput from
-our load generating server and the Varnish/ HAProxy server.  This was done
-with a script that starts off with 1 user and 10 requests all the way up to
-1000 concurrent users and 1000000 requests.</div></blockquote>
+<div><p>As background to this test consider the following.  The application servers
+sp2 and sp3 are connected via a non-routable private subnet in the 10.0.0.*
+range. In the current cluster setup they are accessed over this private
+subnet via the HAProxy and Varnish servers on sp1.  This means any latency
+or throughput issues on the subnet will adversly affect the total
+scalability.</p>
+<p>Varnish serves all our cachable resources (CSS, javascript, images, etc.).
+In order to understand the total scalability we decided to checked Varnish&#8217;s
+scalability in our current cluster setup.</p>
+<p>We used <a class="reference external" href="https://httpd.apache.org/docs/2.2/programs/ab.html">Apache Benchmark</a> to test Varnish from our load generating server
+and the Varnish/ HAProxy server.  This was done with a script that starts
+off with 1 user and 10 requests all the way up to 1000 concurrent users and
+1000000 requests.</p>
+</div></blockquote>
 </div>
-<div class="section" id="results-of-varnish-and-network-setup-testing">
-<h2>10. Results of Varnish and network setup testing<a class="headerlink" href="#results-of-varnish-and-network-setup-testing" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="results-of-varnish">
+<h2>10. Results of Varnish<a class="headerlink" href="#results-of-varnish" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="user">
+<h3>1 user<a class="headerlink" href="#user" title="Permalink to this headline">¶</a></h3>
+<blockquote>
+<div><table border="1" class="docutils">
+<colgroup>
+<col width="37%" />
+<col width="30%" />
+<col width="33%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Complete requests</th>
+<th class="head">SP1 requests/s</th>
+<th class="head">SP4 requests/s</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>100</td>
+<td>3799.39</td>
+<td>242.94</td>
+</tr>
+<tr class="row-odd"><td>1000</td>
+<td>4672.11</td>
+<td>242.47</td>
+</tr>
+<tr class="row-even"><td>10000</td>
+<td>4271.39</td>
+<td>242.78</td>
+</tr>
+<tr class="row-odd"><td>100000</td>
+<td>4457.42</td>
+<td>243.10</td>
+</tr>
+<tr class="row-even"><td>1000000</td>
+<td>4828.27</td>
+<td>242.91</td>
+</tr>
+</tbody>
+</table>
+<p>Both SP1 and SP4 show relatively linear changes in performance.  The important
+thing is the marked difference in the amount of requests per second between
+the 2 servers.</p>
+</div></blockquote>
+</div>
+<div class="section" id="concurrent-users">
+<h3>10 concurrent users<a class="headerlink" href="#concurrent-users" title="Permalink to this headline">¶</a></h3>
+<blockquote>
+<div><table border="1" class="docutils">
+<colgroup>
+<col width="37%" />
+<col width="30%" />
+<col width="33%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Complete requests</th>
+<th class="head">SP1 requests/s</th>
+<th class="head">SP4 requests/s</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>100</td>
+<td>11041.18</td>
+<td>356.05</td>
+</tr>
+<tr class="row-odd"><td>1000</td>
+<td>20597.32</td>
+<td>356.20</td>
+</tr>
+<tr class="row-even"><td>10000</td>
+<td>21980.24</td>
+<td>358.07</td>
+</tr>
+<tr class="row-odd"><td>100000</td>
+<td>18690.17</td>
+<td>358.09</td>
+</tr>
+<tr class="row-even"><td>1000000</td>
+<td>20729.00</td>
+<td>358.04</td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+</div>
+<div class="section" id="id14">
+<h3>100 concurrent users<a class="headerlink" href="#id14" title="Permalink to this headline">¶</a></h3>
+<blockquote>
+<div><table border="1" class="docutils">
+<colgroup>
+<col width="37%" />
+<col width="30%" />
+<col width="33%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Complete requests</th>
+<th class="head">SP1 requests/s</th>
+<th class="head">SP4 requests/s</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>100</td>
+<td>9004.95</td>
+<td>242.86</td>
+</tr>
+<tr class="row-odd"><td>1000</td>
+<td>17513.13</td>
+<td>357.70</td>
+</tr>
+<tr class="row-even"><td>10000</td>
+<td>18031.14</td>
+<td>358.10</td>
+</tr>
+<tr class="row-odd"><td>100000</td>
+<td>18753.04</td>
+<td>358.13</td>
+</tr>
+<tr class="row-even"><td>1000000</td>
+<td>18552.96</td>
+<td>358.13</td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+</div>
+<div class="section" id="id15">
+<h3>1000 concurrent users<a class="headerlink" href="#id15" title="Permalink to this headline">¶</a></h3>
+<blockquote>
+<div><table border="1" class="docutils">
+<colgroup>
+<col width="37%" />
+<col width="30%" />
+<col width="33%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Complete requests</th>
+<th class="head">SP1 requests/s</th>
+<th class="head">SP4 requests/s</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>100</td>
+<td>no data (1)</td>
+<td>no data</td>
+</tr>
+<tr class="row-odd"><td>1000</td>
+<td>10249.79</td>
+<td>129.72</td>
+</tr>
+<tr class="row-even"><td>10000</td>
+<td>12786.09</td>
+<td>no data</td>
+</tr>
+<tr class="row-odd"><td>100000</td>
+<td>15860.49</td>
+<td>no data</td>
+</tr>
+<tr class="row-even"><td>1000000</td>
+<td>16436.69</td>
+<td>no data</td>
+</tr>
+</tbody>
+</table>
+<p>(1) An entry of &#8216;no data&#8217; indicates that the test cycle could not complete
+successfully and therefore <a href="#id16"><span class="problematic" id="id17">`Apache Bench`_</span></a> did not record the statistics.</p>
+</div></blockquote>
+</div>
 </div>
 <div class="section" id="recommendation-for-scaling-conclusion">
 <h2>Recommendation for scaling / Conclusion<a class="headerlink" href="#recommendation-for-scaling-conclusion" title="Permalink to this headline">¶</a></h2>
@@ -789,7 +971,7 @@ with a script that starts off with 1 user and 10 requests all the way up to
     </div>
     <div class="footer">
         &copy; Copyright 2013, Upfront Systems.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2b1.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
     </div>
   </body>
 </html>

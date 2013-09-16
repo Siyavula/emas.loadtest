@@ -51,12 +51,12 @@ Introduction
     Four distinct servers were used in the benchmarking process  Any further
     mention of 'test cluster' in this document refers to the following setup:
 
-    Siyavula Performance 1
+    Siyavula Performance 1 (aka. sp1)
         
         - Varnish caching proxy
         - HAProxy load balancing server
 
-    Siyavula Performance 2
+    Siyavula Performance 2 (aka. sp2)
 
         - 4 EMAS application server instances
         - 1 ZEO server with Zope Replication Service
@@ -64,7 +64,7 @@ Introduction
         - 1 PostgreSQL cluster (initial primary database server)
         - 4 Monassis instances
 
-    Siyavula Performance 3
+    Siyavula Performance 3 (aka. sp3)
 
         - 4 EMAS application server instances
         - 1 ZEO server with Zope Replication Service
@@ -72,7 +72,7 @@ Introduction
         - 1 PostgreSQL cluster (initial secondary database server)
         - 4 Monassis instances
 
-    Siyavula Performance 4
+    Siyavula Performance 4 (aka. sp4)
 
         - Load generation server
         - Host for the `Funkload`_ benchmark tests
@@ -452,6 +452,17 @@ Higher concurrencies
 
 9. Testing Varnish
 ==================
+    
+    As background to this test consider the following.  The application servers
+    sp2 and sp3 are connected via a non-routable private subnet in the 10.0.0.*
+    range. In the current cluster setup they are accessed over this private
+    subnet via the HAProxy and Varnish servers on sp1.  This means any latency 
+    or throughput issues on the subnet will adversly affect the total 
+    scalability.
+
+    Varnish serves all our cachable resources (CSS, javascript, images, etc.).  
+    In order to understand the total scalability we decided to checked Varnish's 
+    scalability in our current cluster setup.
 
     We used `Apache Benchmark`_ to test Varnish from our load generating server
     and the Varnish/ HAProxy server.  This was done with a script that starts
@@ -461,6 +472,65 @@ Higher concurrencies
 
 10. Results of Varnish
 ======================
+
+1 user
+------
+
+    =================   ==============    ===============
+    Complete requests   SP1 requests/s    SP4 requests/s
+    =================   ==============    ===============
+    100                 3799.39           242.94
+    1000                4672.11           242.47  
+    10000               4271.39           242.78
+    100000              4457.42           243.10
+    1000000             4828.27           242.91
+    =================   ==============    ===============
+
+    Both SP1 and SP4 show relatively linear changes in performance.  The important
+    thing is the marked difference in the amount of requests per second between
+    the 2 servers.
+
+10 concurrent users
+-------------------
+
+    =================   ==============    ===============
+    Complete requests   SP1 requests/s    SP4 requests/s
+    =================   ==============    ===============
+    100                 11041.18          356.05 
+    1000                20597.32          356.20
+    10000               21980.24          358.07
+    100000              18690.17          358.09
+    1000000             20729.00          358.04
+    =================   ==============    ===============
+
+100 concurrent users
+--------------------
+
+    =================   ==============    ===============
+    Complete requests   SP1 requests/s    SP4 requests/s
+    =================   ==============    ===============
+    100                 9004.95           242.86 
+    1000                17513.13          357.70
+    10000               18031.14          358.10
+    100000              18753.04          358.13
+    1000000             18552.96          358.13
+    =================   ==============    ===============
+
+1000 concurrent users
+---------------------
+
+    =================   ==============    ===============
+    Complete requests   SP1 requests/s    SP4 requests/s
+    =================   ==============    ===============
+    100                 no data (1)       no data
+    1000                10249.79          129.72
+    10000               12786.09          no data
+    100000              15860.49          no data
+    1000000             16436.69          no data
+    =================   ==============    ===============
+    
+    (1) An entry of 'no data' indicates that the test cycle could not complete
+    successfully and therefore `Apache Bench`_ did not record the statistics.
 
 
 Recommendation for scaling / Conclusion
