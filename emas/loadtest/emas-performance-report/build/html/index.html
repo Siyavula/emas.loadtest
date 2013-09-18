@@ -1,5 +1,4 @@
 
-
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
@@ -15,7 +14,7 @@
     
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '',
+        URL_ROOT:    './',
         VERSION:     '1.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
@@ -60,8 +59,8 @@
 </ul>
 </li>
 <li><a class="reference internal" href="#content-pages">Content pages</a><ul>
-<li><a class="reference internal" href="#id1">Projected serve rates</a></li>
-<li><a class="reference internal" href="#id2">Higher concurrencies</a></li>
+<li><a class="reference internal" href="#id2">Projected serve rates</a></li>
+<li><a class="reference internal" href="#id3">Higher concurrencies</a></li>
 </ul>
 </li>
 </ul>
@@ -71,30 +70,27 @@
 </li>
 <li><a class="reference internal" href="#testing-practice-service">5. Testing practice service</a></li>
 <li><a class="reference internal" href="#results-for-testing-practice-service">6. Results for testing practice service</a><ul>
-<li><a class="reference internal" href="#id3">Page analysis</a><ul>
+<li><a class="reference internal" href="#id4">Page analysis</a><ul>
 <li><a class="reference internal" href="#dashboard">Dashboard</a><ul>
-<li><a class="reference internal" href="#id4">Projected serve rates</a></li>
-<li><a class="reference internal" href="#id5">Higher concurrencies</a></li>
+<li><a class="reference internal" href="#id5">Projected serve rates</a></li>
+<li><a class="reference internal" href="#id6">Higher concurrencies</a></li>
 </ul>
 </li>
 </ul>
 </li>
-<li><a class="reference internal" href="#id6">Optimisations done</a></li>
+<li><a class="reference internal" href="#id7">Optimisations done</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#testing-mobile-reads">7. Testing mobile reads</a></li>
-<li><a class="reference internal" href="#results-for-testing-mobile-reads">8. Results for testing mobile reads</a><ul>
-<li><a class="reference internal" href="#id7">page analysis</a><ul>
-<li><a class="reference internal" href="#id8">Home page</a><ul>
-<li><a class="reference internal" href="#id9">Projected serve rates</a></li>
+<li><a class="reference internal" href="#testing-mobile-authenticated-reads">7. Testing mobile authenticated reads</a></li>
+<li><a class="reference internal" href="#results-for-testing-mobile-authenticated-reads">8. Results for testing mobile authenticated reads</a><ul>
+<li><a class="reference internal" href="#id8">Page analysis</a><ul>
+<li><a class="reference internal" href="#id9">Home page</a></li>
 <li><a class="reference internal" href="#id10">Higher concurrencies</a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#id11">Content pages</a><ul>
 <li><a class="reference internal" href="#id12">Projected serve rates</a></li>
 <li><a class="reference internal" href="#id13">Higher concurrencies</a></li>
-</ul>
-</li>
 </ul>
 </li>
 </ul>
@@ -144,9 +140,8 @@
 <h2>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h2>
 <blockquote>
 <div><p>In order to test the current configuration, hardware and software, against
-the published <a class="reference external" href="https://docs.google.com/a/upfrontsystems.co.za/document/d/1GUjwcpHBpLILQozouukxVQBLB1-GQvdUa6UXfpv75-M/edit#">performance goals</a>, a series of bencmark tests were
-undertaken.  The results of these tests were used to do optimisation changes
-that were deemed necessary.</p>
+the published <a class="reference external" href="https://docs.google.com/a/upfrontsystems.co.za/document/d/1GUjwcpHBpLILQozouukxVQBLB1-GQvdUa6UXfpv75-M/edit#">performance goals</a>, a series of benchmark tests were
+undertaken.  The results of these tests were used to do optimisation changes.</p>
 <p>This document tries to summarise the data that was gathered, the conclusions
 that were reached and the remedial steps that were taken.</p>
 <p>Each section has a link to the specific <a class="reference external" href="http://197.221.50.101/stats/">Funkload bench reports</a>.  When
@@ -175,16 +170,16 @@ catalogue we did move orders to their own smaller catalogue though.</p>
 <div class="section" id="an-overview-of-the-setup-we-benchmarked">
 <h2>2. An overview of the setup we benchmarked<a class="headerlink" href="#an-overview-of-the-setup-we-benchmarked" title="Permalink to this headline">¶</a></h2>
 <blockquote>
-<div><p>Four distinct servers were used in the benchmarking process  Any further
+<div><p>Four distinct servers were used in the benchmarking process.  Any further
 mention of &#8216;test cluster&#8217; in this document refers to the following setup:</p>
-<p>Siyavula Performance 1 (aka. sp1)</p>
+<p>Siyavula Performance 1 (aka. SP1)</p>
 <blockquote>
 <div><ul class="simple">
 <li>Varnish caching proxy</li>
 <li>HAProxy load balancing server</li>
 </ul>
 </div></blockquote>
-<p>Siyavula Performance 2 (aka. sp2)</p>
+<p>Siyavula Performance 2 (aka. SP2)</p>
 <blockquote>
 <div><ul class="simple">
 <li>4 EMAS application server instances</li>
@@ -194,7 +189,7 @@ mention of &#8216;test cluster&#8217; in this document refers to the following s
 <li>4 Monassis instances</li>
 </ul>
 </div></blockquote>
-<p>Siyavula Performance 3 (aka. sp3)</p>
+<p>Siyavula Performance 3 (aka. SP3)</p>
 <blockquote>
 <div><ul class="simple">
 <li>4 EMAS application server instances</li>
@@ -217,15 +212,15 @@ functions are excellent.</p>
 </div></blockquote>
 </div>
 <div class="section" id="testing-authenticated-reads">
-<h2>3. Testing authenticated reads<a class="headerlink" href="#testing-authenticated-reads" title="Permalink to this headline">¶</a></h2>
+<span id="id1"></span><h2>3. Testing authenticated reads<a class="headerlink" href="#testing-authenticated-reads" title="Permalink to this headline">¶</a></h2>
 <blockquote>
 <div><p>Reading all the possible URLs in the site authenticated was deemed
 impractical due to the amount of time potentially required to do one
 <a class="reference external" href="http://funkload.nuxeo.org">Funkload</a> cycle.  In order to decide which URLs to use for the authenticated
 read tests we created a <a class="reference external" href="http://funkload.nuxeo.org">Funkload</a> test that reads all the content
-unauthenticated (results available here: <a class="reference external" href="http://197.221.50.101/stats/test_WholeSite-20130726T155429/">Science unauthed read</a>).  This
+unauthenticated (results available here: <a class="reference external" href="http://197.221.50.101/stats/test_WholeSite-20130726T155429/">Science unauthenticated read</a>).  This
 test was run with only 1 user and 1 cycle.</p>
-<p>Unauthed read setup:</p>
+<p>Unauthenticated read setup:</p>
 <ul class="simple">
 <li>Launched: 2013-07-26 15:54:29</li>
 <li>Test: test_wholesite.py WholeSite.test_WholeSite</li>
@@ -405,7 +400,7 @@ to 1000 concurrent users.</p>
 <p>Thus we get a <strong>total load time of 35.214 seconds</strong>.  Bear in mind that this
 is for an initial load.  On initial load all the CSS and javascript will be
 fetched over the netword and cached by the browser.</p>
-<p>Subsequent unauthenticated loads will look like this:</p>
+<p>Subsequent unauthenticated loads look like this:</p>
 <table border="1" class="docutils">
 <colgroup>
 <col width="84%" />
@@ -476,25 +471,329 @@ fetched over the netword and cached by the browser.</p>
 </tr>
 </tbody>
 </table>
+<p>Thus a load time of <strong>21.287 seconds.</strong></p>
 </div></blockquote>
 <div class="section" id="projected-serve-rates">
 <h5>Projected serve rates<a class="headerlink" href="#projected-serve-rates" title="Permalink to this headline">¶</a></h5>
 <blockquote>
-<div><p>Thus a load time of <strong>21.287 seconds.</strong></p>
-<p>Working with these 2 figures we can project the following:</p>
+<div><p>Working with these 2 figures we can project the following:</p>
 <p>Initial home pages per hour:
-(60 / 35.214) * 60 = 102.232</p>
+(60 / 35.214) * 60 = <strong>102.232</strong></p>
 <p>Subsequent home pages per hour:
-(60 / 21.287) * 60 = 169.117</p>
+(60 / 21.287) * 60 = <strong>169.117</strong></p>
 </div></blockquote>
 </div>
 <div class="section" id="higher-concurrencies">
 <h5>Higher concurrencies<a class="headerlink" href="#higher-concurrencies" title="Permalink to this headline">¶</a></h5>
+<p>250 concurrent users</p>
 <blockquote>
-<div><p>250</p>
-<p>500</p>
-<p>750</p>
-<p>1000</p>
+<div><table border="1" class="docutils">
+<colgroup>
+<col width="84%" />
+<col width="16%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">URL</th>
+<th class="head">Request time</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>/</td>
+<td>1.969 s</td>
+</tr>
+<tr class="row-odd"><td>/</td>
+<td>2.200 s</td>
+</tr>
+<tr class="row-even"><td>/touch_icon.png</td>
+<td>1.755 s</td>
+</tr>
+<tr class="row-odd"><td>/++theme++emas.theme/images/logo.png</td>
+<td>1.542 s</td>
+</tr>
+<tr class="row-even"><td>/++theme++emas.theme/images/howitworks.png</td>
+<td>1.409 s</td>
+</tr>
+<tr class="row-odd"><td>/++theme++emas.theme/images/graph.png</td>
+<td>1.510 s</td>
+</tr>
+<tr class="row-even"><td>/++theme++emas.theme/images/answer_correct.png</td>
+<td>1.573 s</td>
+</tr>
+<tr class="row-odd"><td>/++theme++emas.theme/images/answer_incorrect.png</td>
+<td>1.884 s</td>
+</tr>
+<tr class="row-even"><td>/++theme++emas.theme/images/dashboard.png</td>
+<td>1.512 s</td>
+</tr>
+<tr class="row-odd"><td>/++theme++emas.theme/images/learnersdashboard.png</td>
+<td>1.536 s</td>
+</tr>
+<tr class="row-even"><td>/++theme++emas.theme/images/teachersdashboard.png</td>
+<td>1.453 s</td>
+</tr>
+<tr class="row-odd"><td>/++theme++emas.theme/images/media.png</td>
+<td>1.689 s</td>
+</tr>
+<tr class="row-even"><td>/++theme++emas.theme/images/textbooks.png</td>
+<td>1.592 s</td>
+</tr>
+<tr class="row-odd"><td>/++theme++emas.theme/images/Logo_transparentBackground-tiny.png</td>
+<td>1.603 s</td>
+</tr>
+<tr class="row-even"><td>/++theme++emas.theme/images/shuttleworthfoundation.jpg</td>
+<td>1.595 s</td>
+</tr>
+<tr class="row-odd"><td>/++theme++emas.theme/images/psggroup.jpg</td>
+<td>1.601 s</td>
+</tr>
+<tr class="row-even"><td>/++theme++emas.theme/images/FaceBook-icon-small.png</td>
+<td>1.511 s</td>
+</tr>
+<tr class="row-odd"><td>/++theme++emas.theme/images/Twitter-icon-small.png</td>
+<td>1.584 s</td>
+</tr>
+<tr class="row-even"><td>/++theme++emas.theme/images/cc_by.png</td>
+<td>1.434 s</td>
+</tr>
+</tbody>
+</table>
+<p>Load time per page:</p>
+<p><strong>30.952 seconds</strong></p>
+<p>Projected serve rate:</p>
+<p>(60 / 30.952) * 60 = <strong>116.30 pages per hour.</strong></p>
+</div></blockquote>
+<p>500 concurrent users</p>
+<blockquote>
+<div><table border="1" class="docutils">
+<colgroup>
+<col width="84%" />
+<col width="16%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">URL</th>
+<th class="head">Request time</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>/</td>
+<td>6.978 s</td>
+</tr>
+<tr class="row-odd"><td>/</td>
+<td>3.301 s</td>
+</tr>
+<tr class="row-even"><td>/touch_icon.png</td>
+<td>6.399 s</td>
+</tr>
+<tr class="row-odd"><td>/++theme++emas.theme/images/logo.png</td>
+<td>3.583 s</td>
+</tr>
+<tr class="row-even"><td>/++theme++emas.theme/images/howitworks.png</td>
+<td>4.255 s</td>
+</tr>
+<tr class="row-odd"><td>/++theme++emas.theme/images/graph.png</td>
+<td>2.345 s</td>
+</tr>
+<tr class="row-even"><td>/++theme++emas.theme/images/answer_correct.png</td>
+<td>2.344 s</td>
+</tr>
+<tr class="row-odd"><td>/++theme++emas.theme/images/answer_incorrect.png</td>
+<td>3.769 s</td>
+</tr>
+<tr class="row-even"><td>/++theme++emas.theme/images/dashboard.png</td>
+<td>5.999 s</td>
+</tr>
+<tr class="row-odd"><td>/++theme++emas.theme/images/learnersdashboard.png</td>
+<td>3.485 s</td>
+</tr>
+<tr class="row-even"><td>/++theme++emas.theme/images/teachersdashboard.png</td>
+<td>2.750 s</td>
+</tr>
+<tr class="row-odd"><td>/++theme++emas.theme/images/media.png</td>
+<td>1.944 s</td>
+</tr>
+<tr class="row-even"><td>/++theme++emas.theme/images/textbooks.png</td>
+<td>2.506 s</td>
+</tr>
+<tr class="row-odd"><td>/++theme++emas.theme/images/Logo_transparentBackground-tiny.png</td>
+<td>2.848 s</td>
+</tr>
+<tr class="row-even"><td>/++theme++emas.theme/images/shuttleworthfoundation.jpg</td>
+<td>3.320 s</td>
+</tr>
+<tr class="row-odd"><td>/++theme++emas.theme/images/psggroup.jpg</td>
+<td>2.667 s</td>
+</tr>
+<tr class="row-even"><td>/++theme++emas.theme/images/FaceBook-icon-small.png</td>
+<td>1.665 s</td>
+</tr>
+<tr class="row-odd"><td>/++theme++emas.theme/images/Twitter-icon-small.png</td>
+<td>2.019 s</td>
+</tr>
+<tr class="row-even"><td>/++theme++emas.theme/images/cc_by.png</td>
+<td>2.423 s</td>
+</tr>
+</tbody>
+</table>
+<p>Load time per page:</p>
+<p><strong>64.6 seconds</strong></p>
+<p>Projected serve rate:</p>
+<p>(60 / 64.6) * 60 = <strong>55.72 pages per hour.</strong></p>
+</div></blockquote>
+<p>750 concurrent users</p>
+<blockquote>
+<div><table border="1" class="docutils">
+<colgroup>
+<col width="84%" />
+<col width="16%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">URL</th>
+<th class="head">Request time</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>/</td>
+<td>6.107 s</td>
+</tr>
+<tr class="row-odd"><td>/</td>
+<td>7.159 s</td>
+</tr>
+<tr class="row-even"><td>/touch_icon.png</td>
+<td>2.978 s</td>
+</tr>
+<tr class="row-odd"><td>/++theme++emas.theme/images/logo.png</td>
+<td>5.180 s</td>
+</tr>
+<tr class="row-even"><td>/++theme++emas.theme/images/howitworks.png</td>
+<td>5.429 s</td>
+</tr>
+<tr class="row-odd"><td>/++theme++emas.theme/images/graph.png</td>
+<td>5.712 s</td>
+</tr>
+<tr class="row-even"><td>/++theme++emas.theme/images/answer_correct.png</td>
+<td>5.406 s</td>
+</tr>
+<tr class="row-odd"><td>/++theme++emas.theme/images/answer_incorrect.png</td>
+<td>3.615 s</td>
+</tr>
+<tr class="row-even"><td>/++theme++emas.theme/images/dashboard.png</td>
+<td>6.164 s</td>
+</tr>
+<tr class="row-odd"><td>/++theme++emas.theme/images/learnersdashboard.png</td>
+<td>4.241 s</td>
+</tr>
+<tr class="row-even"><td>/++theme++emas.theme/images/teachersdashboard.png</td>
+<td>2.094 s</td>
+</tr>
+<tr class="row-odd"><td>/++theme++emas.theme/images/media.png</td>
+<td>2.532 s</td>
+</tr>
+<tr class="row-even"><td>/++theme++emas.theme/images/textbooks.png</td>
+<td>5.995 s</td>
+</tr>
+<tr class="row-odd"><td>/++theme++emas.theme/images/Logo_transparentBackground-tiny.png</td>
+<td>3.456 s</td>
+</tr>
+<tr class="row-even"><td>/++theme++emas.theme/images/shuttleworthfoundation.jpg</td>
+<td>2.977 s</td>
+</tr>
+<tr class="row-odd"><td>/++theme++emas.theme/images/psggroup.jpg</td>
+<td>2.973 s</td>
+</tr>
+<tr class="row-even"><td>/++theme++emas.theme/images/FaceBook-icon-small.png</td>
+<td>3.509 s</td>
+</tr>
+<tr class="row-odd"><td>/++theme++emas.theme/images/Twitter-icon-small.png</td>
+<td>3.960 s</td>
+</tr>
+<tr class="row-even"><td>/++theme++emas.theme/images/cc_by.png</td>
+<td>1.655 s</td>
+</tr>
+</tbody>
+</table>
+<p>Load time per page:</p>
+<p><strong>81.142 seconds</strong></p>
+<p>Projected serve rate:</p>
+<p>(60 / 81.142) * 60 = <strong>44.36 pages per hour.</strong></p>
+</div></blockquote>
+<p>1000 concurrent users</p>
+<blockquote>
+<div><table border="1" class="docutils">
+<colgroup>
+<col width="84%" />
+<col width="16%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">URL</th>
+<th class="head">Request time</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>/</td>
+<td>7.710 s</td>
+</tr>
+<tr class="row-odd"><td>/</td>
+<td>1.807 s</td>
+</tr>
+<tr class="row-even"><td>/touch_icon.png</td>
+<td>2.185 s</td>
+</tr>
+<tr class="row-odd"><td>/++theme++emas.theme/images/logo.png</td>
+<td>2.001 s</td>
+</tr>
+<tr class="row-even"><td>/++theme++emas.theme/images/howitworks.png</td>
+<td>4.991 s</td>
+</tr>
+<tr class="row-odd"><td>/++theme++emas.theme/images/graph.png</td>
+<td>2.312 s</td>
+</tr>
+<tr class="row-even"><td>/++theme++emas.theme/images/answer_correct.png</td>
+<td>4.129 s</td>
+</tr>
+<tr class="row-odd"><td>/++theme++emas.theme/images/answer_incorrect.png</td>
+<td>7.016 s</td>
+</tr>
+<tr class="row-even"><td>/++theme++emas.theme/images/dashboard.png</td>
+<td>3.769 s</td>
+</tr>
+<tr class="row-odd"><td>/++theme++emas.theme/images/learnersdashboard.png</td>
+<td>2.536 s</td>
+</tr>
+<tr class="row-even"><td>/++theme++emas.theme/images/teachersdashboard.png</td>
+<td>2.102 s</td>
+</tr>
+<tr class="row-odd"><td>/++theme++emas.theme/images/media.png</td>
+<td>4.330 s</td>
+</tr>
+<tr class="row-even"><td>/++theme++emas.theme/images/textbooks.png</td>
+<td>6.296 s</td>
+</tr>
+<tr class="row-odd"><td>/++theme++emas.theme/images/Logo_transparentBackground-tiny.png</td>
+<td>3.881 s</td>
+</tr>
+<tr class="row-even"><td>/++theme++emas.theme/images/shuttleworthfoundation.jpg</td>
+<td>6.484 s</td>
+</tr>
+<tr class="row-odd"><td>/++theme++emas.theme/images/psggroup.jpg</td>
+<td>2.454 s</td>
+</tr>
+<tr class="row-even"><td>/++theme++emas.theme/images/FaceBook-icon-small.png</td>
+<td>2.743 s</td>
+</tr>
+<tr class="row-odd"><td>/++theme++emas.theme/images/Twitter-icon-small.png</td>
+<td>5.625 s</td>
+</tr>
+<tr class="row-even"><td>/++theme++emas.theme/images/cc_by.png</td>
+<td>6.470 s</td>
+</tr>
+</tbody>
+</table>
+<p>Load time per page:</p>
+<p><strong>78.841 seconds</strong></p>
+<p>Projected serve rate:</p>
+<p>(60 / 78.841) * 60 = <strong>45.66 pages per hour.</strong></p>
+<p>It is quite clear that as the concurrency rises the cluster serves less-
+and-less pages per second, but never completely stops working.</p>
 </div></blockquote>
 </div>
 </div>
@@ -541,23 +840,185 @@ page.</p>
 </tbody>
 </table>
 </div></blockquote>
-<div class="section" id="id1">
-<h5>Projected serve rates<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h5>
+<div class="section" id="id2">
+<h5>Projected serve rates<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h5>
 <blockquote>
 <div><p>It is clear that the javascript and CSS is not fetched again.  Given the
-above times we know that each page will take <strong>13.202 seconds</strong> to fecth at
+above times we know that each page will take <strong>13.202 seconds</strong> to fetch at
 a load of <strong>100 concurrent users</strong>.</p>
 <p>This in turn means we can potentially serve:</p>
 <p>(60 / 13.202) * 60 = <strong>272.68 pages per hour.</strong></p>
 </div></blockquote>
 </div>
-<div class="section" id="id2">
-<h5>Higher concurrencies<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h5>
+<div class="section" id="id3">
+<h5>Higher concurrencies<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h5>
+<p>250 concurrent users</p>
 <blockquote>
-<div><p>250</p>
-<p>500</p>
-<p>750</p>
-<p>1000</p>
+<div><table border="1" class="docutils">
+<colgroup>
+<col width="87%" />
+<col width="13%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">URL</th>
+<th class="head">Request time</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>/grade-12/08-work-energy-and-power/08-work-energy-and-power-03.cnxmlplus</td>
+<td>1.659 s</td>
+</tr>
+<tr class="row-odd"><td>/grade-12/08-work-energy-and-power/08-work-energy-and-power-03.cnxmlplus/</td>
+<td>1.500 s</td>
+</tr>
+<tr class="row-even"><td>/grade-12/08-work-energy-and-power/08-work-energy-and-power-02.cnxmlplus</td>
+<td>1.658 s</td>
+</tr>
+<tr class="row-odd"><td>/grade-12/08-work-energy-and-power/08-work-energy-and-power-04.cnxmlplus</td>
+<td>1.853 s</td>
+</tr>
+<tr class="row-even"><td>/grade-12/08-work-energy-and-power/pspictures/f70fc7e8583786ef8c496e4861d8f2b7.png</td>
+<td>1.875 s</td>
+</tr>
+<tr class="row-odd"><td>/grade-12/08-work-energy-and-power/pspictures/24707967fddfb273f965a0cf7224ac0a.png</td>
+<td>1.809 s</td>
+</tr>
+<tr class="row-even"><td>/grade-12/08-work-energy-and-power/pspictures/22fc66e880fffb15853e6873faa1aa2b.png</td>
+<td>1.896 s</td>
+</tr>
+<tr class="row-odd"><td>/grade-12/08-work-energy-and-power/++theme++emas.theme/images/cc_by.png</td>
+<td>1.624 s</td>
+</tr>
+</tbody>
+</table>
+<p>Page load time: <strong>12.25 seconds</strong></p>
+<p>(60 / 12.25) * 60 = <strong>293.87 pages per hour.</strong></p>
+</div></blockquote>
+<p>500 concurrent users</p>
+<blockquote>
+<div><table border="1" class="docutils">
+<colgroup>
+<col width="87%" />
+<col width="13%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">URL</th>
+<th class="head">Request time</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>/grade-12/08-work-energy-and-power/08-work-energy-and-power-03.cnxmlplus</td>
+<td>2.010 s</td>
+</tr>
+<tr class="row-odd"><td>/grade-12/08-work-energy-and-power/08-work-energy-and-power-03.cnxmlplus/</td>
+<td>6.123 s</td>
+</tr>
+<tr class="row-even"><td>/grade-12/08-work-energy-and-power/08-work-energy-and-power-02.cnxmlplus</td>
+<td>1.787 s</td>
+</tr>
+<tr class="row-odd"><td>/grade-12/08-work-energy-and-power/08-work-energy-and-power-04.cnxmlplus</td>
+<td>1.891 s</td>
+</tr>
+<tr class="row-even"><td>/grade-12/08-work-energy-and-power/pspictures/f70fc7e8583786ef8c496e4861d8f2b7.png</td>
+<td>2.944 s</td>
+</tr>
+<tr class="row-odd"><td>/grade-12/08-work-energy-and-power/pspictures/24707967fddfb273f965a0cf7224ac0a.png</td>
+<td>6.484 s</td>
+</tr>
+<tr class="row-even"><td>/grade-12/08-work-energy-and-power/pspictures/22fc66e880fffb15853e6873faa1aa2b.png</td>
+<td>2.117 s</td>
+</tr>
+<tr class="row-odd"><td>/grade-12/08-work-energy-and-power/++theme++emas.theme/images/cc_by.png</td>
+<td>5.994 s</td>
+</tr>
+</tbody>
+</table>
+<p>Page load time: <strong>29.35 seconds</strong></p>
+<p>(60 / 29.35) * 60 = <strong>122.65 pages per hour.</strong></p>
+</div></blockquote>
+<p>750 concurrent users</p>
+<blockquote>
+<div><table border="1" class="docutils">
+<colgroup>
+<col width="87%" />
+<col width="13%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">URL</th>
+<th class="head">Request time</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>/grade-12/08-work-energy-and-power/08-work-energy-and-power-03.cnxmlplus</td>
+<td>1.569 s</td>
+</tr>
+<tr class="row-odd"><td>/grade-12/08-work-energy-and-power/08-work-energy-and-power-03.cnxmlplus/</td>
+<td>6.385 s</td>
+</tr>
+<tr class="row-even"><td>/grade-12/08-work-energy-and-power/08-work-energy-and-power-02.cnxmlplus</td>
+<td>4.795 s</td>
+</tr>
+<tr class="row-odd"><td>/grade-12/08-work-energy-and-power/08-work-energy-and-power-04.cnxmlplus</td>
+<td>5.794 s</td>
+</tr>
+<tr class="row-even"><td>/grade-12/08-work-energy-and-power/pspictures/f70fc7e8583786ef8c496e4861d8f2b7.png</td>
+<td>4.397 s</td>
+</tr>
+<tr class="row-odd"><td>/grade-12/08-work-energy-and-power/pspictures/24707967fddfb273f965a0cf7224ac0a.png</td>
+<td>5.453 s</td>
+</tr>
+<tr class="row-even"><td>/grade-12/08-work-energy-and-power/pspictures/22fc66e880fffb15853e6873faa1aa2b.png</td>
+<td>2.007 s</td>
+</tr>
+<tr class="row-odd"><td>/grade-12/08-work-energy-and-power/++theme++emas.theme/images/cc_by.png</td>
+<td>4.610 s</td>
+</tr>
+</tbody>
+</table>
+<p>Page load time: <strong>35.01 seconds</strong></p>
+<p>(60 / 35.01) * 60 = <strong>102.82 pages per hour.</strong></p>
+</div></blockquote>
+<p>1000 concurrent users</p>
+<blockquote>
+<div><table border="1" class="docutils">
+<colgroup>
+<col width="87%" />
+<col width="13%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">URL</th>
+<th class="head">Request time</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>/grade-12/08-work-energy-and-power/08-work-energy-and-power-03.cnxmlplus</td>
+<td>3.421 s</td>
+</tr>
+<tr class="row-odd"><td>/grade-12/08-work-energy-and-power/08-work-energy-and-power-03.cnxmlplus/</td>
+<td>1.985 s</td>
+</tr>
+<tr class="row-even"><td>/grade-12/08-work-energy-and-power/08-work-energy-and-power-02.cnxmlplus</td>
+<td>1.886 s</td>
+</tr>
+<tr class="row-odd"><td>/grade-12/08-work-energy-and-power/08-work-energy-and-power-04.cnxmlplus</td>
+<td>3.537 s</td>
+</tr>
+<tr class="row-even"><td>/grade-12/08-work-energy-and-power/pspictures/f70fc7e8583786ef8c496e4861d8f2b7.png</td>
+<td>7.234 s</td>
+</tr>
+<tr class="row-odd"><td>/grade-12/08-work-energy-and-power/pspictures/24707967fddfb273f965a0cf7224ac0a.png</td>
+<td>6.397 s</td>
+</tr>
+<tr class="row-even"><td>/grade-12/08-work-energy-and-power/pspictures/22fc66e880fffb15853e6873faa1aa2b.png</td>
+<td>6.973 s</td>
+</tr>
+<tr class="row-odd"><td>/grade-12/08-work-energy-and-power/++theme++emas.theme/images/cc_by.png</td>
+<td>3.309 s</td>
+</tr>
+</tbody>
+</table>
+<p>Page load time: <strong>34.742 seconds</strong></p>
+<p>(60 / 34.742) * 60 = <strong>103.62 pages per hour.</strong></p>
 </div></blockquote>
 </div>
 </div>
@@ -609,8 +1070,8 @@ This test we then ran with user concurrencies of 100, 150 and 200.</p>
 <h2>6. Results for testing practice service<a class="headerlink" href="#results-for-testing-practice-service" title="Permalink to this headline">¶</a></h2>
 <blockquote>
 <div>Funkload bench report here: <a class="reference external" href="http://197.221.50.101/stats/test_practice-20130823T121013/">Practise service test</a></div></blockquote>
-<div class="section" id="id3">
-<h3>Page analysis<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id4">
+<h3>Page analysis<a class="headerlink" href="#id4" title="Permalink to this headline">¶</a></h3>
 <div class="section" id="dashboard">
 <h4>Dashboard<a class="headerlink" href="#dashboard" title="Permalink to this headline">¶</a></h4>
 <blockquote>
@@ -698,68 +1159,785 @@ This test we then ran with user concurrencies of 100, 150 and 200.</p>
 </tbody>
 </table>
 </div></blockquote>
-<div class="section" id="id4">
-<h5>Projected serve rates<a class="headerlink" href="#id4" title="Permalink to this headline">¶</a></h5>
+<div class="section" id="id5">
+<h5>Projected serve rates<a class="headerlink" href="#id5" title="Permalink to this headline">¶</a></h5>
 <blockquote>
 <div><p>This gives us a  load time of <strong>40.451 seconds per page at 100
-concurrent users.</strong>  At this rate we can serve:</p>
+concurrent users.</strong></p>
+<p>At this rate we can serve:</p>
 <p>(60 / 40.451) * 60 = <strong>88.99 pages per hour.</strong></p>
 </div></blockquote>
 </div>
-<div class="section" id="id5">
-<h5>Higher concurrencies<a class="headerlink" href="#id5" title="Permalink to this headline">¶</a></h5>
+<div class="section" id="id6">
+<h5>Higher concurrencies<a class="headerlink" href="#id6" title="Permalink to this headline">¶</a></h5>
+<p>150 concurrent users</p>
 <blockquote>
-<div><p>100</p>
-<p>200</p>
+<div><table border="1" class="docutils">
+<colgroup>
+<col width="80%" />
+<col width="20%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">URL</th>
+<th class="head">Request time</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>/&#64;&#64;practice/grade-10</td>
+<td>2.502 s</td>
+</tr>
+<tr class="row-odd"><td>/&#64;&#64;practice/dashboard</td>
+<td>4.077 s</td>
+</tr>
+<tr class="row-even"><td>/&#64;&#64;practice/static/practice.css</td>
+<td>2.601 s</td>
+</tr>
+<tr class="row-odd"><td>/&#64;&#64;practice/static/practice-ie8.css</td>
+<td>2.439 s</td>
+</tr>
+<tr class="row-even"><td>/&#64;&#64;practice/static/jqplot/jquery.jqplot.min.css</td>
+<td>2.383 s</td>
+</tr>
+<tr class="row-odd"><td>/&#64;&#64;practice/static/help-icon-no-shadow-16.png</td>
+<td>2.432 s</td>
+</tr>
+<tr class="row-even"><td>/&#64;&#64;practice/image/mastery_progress_3_115_0</td>
+<td>2.282 s</td>
+</tr>
+<tr class="row-odd"><td>/&#64;&#64;practice/image/mastery_progress_3_115_115</td>
+<td>2.516 s</td>
+</tr>
+<tr class="row-even"><td>/&#64;&#64;practice/static/progress-up.png</td>
+<td>2.334 s</td>
+</tr>
+<tr class="row-odd"><td>/&#64;&#64;practice/static/gold-star-16.png</td>
+<td>2.420 s</td>
+</tr>
+<tr class="row-even"><td>/&#64;&#64;practice/static/please_wait_24.gif</td>
+<td>2.432 s</td>
+</tr>
+<tr class="row-odd"><td>/&#64;&#64;practice/static/tick.png</td>
+<td>2.380 s</td>
+</tr>
+<tr class="row-even"><td>/&#64;&#64;practice/static/gray-star-16.png</td>
+<td>2.377 s</td>
+</tr>
+<tr class="row-odd"><td>/&#64;&#64;practice/image/mastery_progress_4_0_0</td>
+<td>2.309 s</td>
+</tr>
+<tr class="row-even"><td>/&#64;&#64;practice/image/mastery_progress_3_0_0</td>
+<td>2.305 s</td>
+</tr>
+<tr class="row-odd"><td>/&#64;&#64;practice/image/mastery_progress_1_0_0</td>
+<td>2.411 s</td>
+</tr>
+<tr class="row-even"><td>/&#64;&#64;practice/image/mastery_progress_2_0_0</td>
+<td>2.417 s</td>
+</tr>
+<tr class="row-odd"><td>/&#64;&#64;practice/image/mastery_progress_2_120_0</td>
+<td>2.469 s</td>
+</tr>
+<tr class="row-even"><td>/&#64;&#64;practice/image/mastery_progress_3_120_0</td>
+<td>2.406 s</td>
+</tr>
+<tr class="row-odd"><td>/&#64;&#64;practice/image/mastery_progress_3_111_0</td>
+<td>2.538 s</td>
+</tr>
+<tr class="row-even"><td>/&#64;&#64;practice/image/mastery_progress_3_108_0</td>
+<td>5.071 s</td>
+</tr>
+<tr class="row-odd"><td>/++theme++emas.theme/images/copyright.png</td>
+<td>5.021 s</td>
+</tr>
+<tr class="row-even"><td>/++theme++emas.theme/images/copyright.png</td>
+<td>2.467 s</td>
+</tr>
+</tbody>
+</table>
+<p>Page load time: <strong>62.589 seconds</strong></p>
+<p>(60 / 62.589) * 60 = <strong>57.51 pages per hour.</strong></p>
+</div></blockquote>
+<p>200 concurrent users</p>
+<blockquote>
+<div><table border="1" class="docutils">
+<colgroup>
+<col width="80%" />
+<col width="20%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">URL</th>
+<th class="head">Request time</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>/&#64;&#64;practice/grade-10</td>
+<td>4.775 s</td>
+</tr>
+<tr class="row-odd"><td>/&#64;&#64;practice/dashboard</td>
+<td>8.039 s</td>
+</tr>
+<tr class="row-even"><td>/&#64;&#64;practice/static/practice.css</td>
+<td>5.130 s</td>
+</tr>
+<tr class="row-odd"><td>/&#64;&#64;practice/static/practice-ie8.css</td>
+<td>4.949 s</td>
+</tr>
+<tr class="row-even"><td>/&#64;&#64;practice/static/jqplot/jquery.jqplot.min.css</td>
+<td>4.692 s</td>
+</tr>
+<tr class="row-odd"><td>/&#64;&#64;practice/static/help-icon-no-shadow-16.png</td>
+<td>4.743 s</td>
+</tr>
+<tr class="row-even"><td>/&#64;&#64;practice/image/mastery_progress_3_115_0</td>
+<td>5.308 s</td>
+</tr>
+<tr class="row-odd"><td>/&#64;&#64;practice/image/mastery_progress_3_115_115</td>
+<td>4.980 s</td>
+</tr>
+<tr class="row-even"><td>/&#64;&#64;practice/static/progress-up.png</td>
+<td>4.621 s</td>
+</tr>
+<tr class="row-odd"><td>/&#64;&#64;practice/static/gold-star-16.png</td>
+<td>4.873 s</td>
+</tr>
+<tr class="row-even"><td>/&#64;&#64;practice/static/please_wait_24.gif</td>
+<td>4.716 s</td>
+</tr>
+<tr class="row-odd"><td>/&#64;&#64;practice/static/tick.png</td>
+<td>4.512 s</td>
+</tr>
+<tr class="row-even"><td>/&#64;&#64;practice/static/gray-star-16.png</td>
+<td>4.862 s</td>
+</tr>
+<tr class="row-odd"><td>/&#64;&#64;practice/image/mastery_progress_4_0_0</td>
+<td>4.720 s</td>
+</tr>
+<tr class="row-even"><td>/&#64;&#64;practice/image/mastery_progress_3_0_0</td>
+<td>4.853 s</td>
+</tr>
+<tr class="row-odd"><td>/&#64;&#64;practice/image/mastery_progress_1_0_0</td>
+<td>4.706 s</td>
+</tr>
+<tr class="row-even"><td>/&#64;&#64;practice/image/mastery_progress_2_0_0</td>
+<td>4.683 s</td>
+</tr>
+<tr class="row-odd"><td>/&#64;&#64;practice/image/mastery_progress_2_120_0</td>
+<td>4.644 s</td>
+</tr>
+<tr class="row-even"><td>/&#64;&#64;practice/image/mastery_progress_3_120_0</td>
+<td>4.723 s</td>
+</tr>
+<tr class="row-odd"><td>/&#64;&#64;practice/image/mastery_progress_3_111_0</td>
+<td>4.871 s</td>
+</tr>
+<tr class="row-even"><td>/&#64;&#64;practice/image/mastery_progress_3_108_0</td>
+<td>4.543 s</td>
+</tr>
+<tr class="row-odd"><td>/++theme++emas.theme/images/copyright.png</td>
+<td>0.307 s</td>
+</tr>
+<tr class="row-even"><td>/++theme++emas.theme/images/copyright.png</td>
+<td>0.000 s</td>
+</tr>
+</tbody>
+</table>
+<p>Page load time: <strong>104.25 seconds</strong></p>
+<p>(60 / 104.25) * 60 = <strong>34.532 pages per hour.</strong></p>
 </div></blockquote>
 </div>
 </div>
 </div>
-<div class="section" id="id6">
-<h3>Optimisations done<a class="headerlink" href="#id6" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id7">
+<h3>Optimisations done<a class="headerlink" href="#id7" title="Permalink to this headline">¶</a></h3>
 <blockquote>
 <div>When we analysed the data from the practice service test we realized that
 the Plone login process takes quite a bit of time.  Upon further
-investigation we found that the user object was being update on each login.
+investigation we found that the user object is updated on each login.
 This is unnecessary given that we do not require the last login time.  We
 changed that specific method and removed all unnecessary changes to the
 user object.</div></blockquote>
 </div>
 </div>
-<div class="section" id="testing-mobile-reads">
-<h2>7. Testing mobile reads<a class="headerlink" href="#testing-mobile-reads" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="testing-mobile-authenticated-reads">
+<h2>7. Testing mobile authenticated reads<a class="headerlink" href="#testing-mobile-authenticated-reads" title="Permalink to this headline">¶</a></h2>
 <blockquote>
-<div>Funkload bench report here: <a class="reference external" href="http://197.221.50.101/stats/">Mobile test</a></div></blockquote>
+<div><p>Funkload bench report here: <a class="reference external" href="http://197.221.50.101/stats/">Mobile test</a></p>
+<p>We used exactly the same set of pages for the mobile authenticated read tests
+as those in <a class="reference internal" href="#testing-authenticated-reads"><em>3. Testing authenticated reads</em></a> above.  The tests were run in
+2 batches.  The only things different between the 2 batches are the number
+of cycles and concurrencies in those cycles.</p>
+<p>First batch:</p>
+<blockquote>
+<div><p>Test setup:</p>
+<ul class="simple">
+<li>Launched: 2013-09-16 18:35:06</li>
+<li>Test: test_AuthenticatedMobileRead.py AuthenticatedMobileRead.test_AuthenticatedMobileRead</li>
+<li>Target server: <a class="reference external" href="http://m.qap.everythingscience.co.za">http://m.qap.everythingscience.co.za</a></li>
+<li>Cycles of concurrent users: <strong>[100, 250, 500]</strong></li>
+<li>Cycle duration: 180s</li>
+<li><a class="reference external" href="http://apdex.org/">Apdex</a>: 1.5</li>
+</ul>
+<p>The results of each test cycle contains:</p>
+<ul class="simple">
+<li>18 pages</li>
+<li>6 links</li>
+<li>588 images</li>
+</ul>
+<p>The benchmark test as a whole (all cycles and users) contains:</p>
+<ul class="simple">
+<li>19 tests</li>
+<li>1485 pages</li>
+<li>76088 requests</li>
+</ul>
+</div></blockquote>
+<p>Second batch:</p>
+<blockquote>
+<div><p>Test setup:</p>
+<ul class="simple">
+<li>Launched: 2013-09-16 19:38:36</li>
+<li>Test: test_AuthenticatedMobileRead.py AuthenticatedMobileRead.test_AuthenticatedMobileRead</li>
+<li>Target server: <a class="reference external" href="http://m.qap.everythingscience.co.za">http://m.qap.everythingscience.co.za</a></li>
+<li>Cycles of concurrent users: <strong>[750, 1000]</strong></li>
+<li>Cycle duration: 180s</li>
+<li><a class="reference external" href="http://apdex.org/">Apdex</a>: 1.5</li>
+</ul>
+<p>The results of each test cycle contains:</p>
+<ul class="simple">
+<li>18 page(s)</li>
+<li>6 link(s)</li>
+<li>588 image(s)</li>
+</ul>
+<p>The benchmark test as a whole (all cycles and users) contains:</p>
+<ul class="simple">
+<li>18 tests</li>
+<li>2156 pages</li>
+<li>116041 requests</li>
+</ul>
+</div></blockquote>
+</div></blockquote>
 </div>
-<div class="section" id="results-for-testing-mobile-reads">
-<h2>8. Results for testing mobile reads<a class="headerlink" href="#results-for-testing-mobile-reads" title="Permalink to this headline">¶</a></h2>
-<div class="section" id="id7">
-<h3>page analysis<a class="headerlink" href="#id7" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="results-for-testing-mobile-authenticated-reads">
+<h2>8. Results for testing mobile authenticated reads<a class="headerlink" href="#results-for-testing-mobile-authenticated-reads" title="Permalink to this headline">¶</a></h2>
 <div class="section" id="id8">
-<h4>Home page<a class="headerlink" href="#id8" title="Permalink to this headline">¶</a></h4>
+<h3>Page analysis<a class="headerlink" href="#id8" title="Permalink to this headline">¶</a></h3>
 <div class="section" id="id9">
-<h5>Projected serve rates<a class="headerlink" href="#id9" title="Permalink to this headline">¶</a></h5>
+<h4>Home page<a class="headerlink" href="#id9" title="Permalink to this headline">¶</a></h4>
+<blockquote>
+<div><p>The unauthenticated mobile home page load at <strong>100 concurrent users</strong>:</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="84%" />
+<col width="16%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">URL</th>
+<th class="head">Request time</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>/</td>
+<td>0.650 s</td>
+</tr>
+<tr class="row-odd"><td>/++resource++gomobiletheme.basic/apple-touch-icon.png</td>
+<td>0.547 s</td>
+</tr>
+<tr class="row-even"><td>/++resource++gomobiletheme.basic/favicon.ico</td>
+<td>0.466 s</td>
+</tr>
+<tr class="row-odd"><td>/++resource++gomobiletheme.basic/common.css</td>
+<td>0.503 s</td>
+</tr>
+<tr class="row-even"><td>/++resource++gomobiletheme.basic/lowend.css</td>
+<td>0.492 s</td>
+</tr>
+<tr class="row-odd"><td>/++resource++emas.mobiletheme/common.css</td>
+<td>0.475 s</td>
+</tr>
+<tr class="row-even"><td>/++resource++emas.mobiletheme/lowend.css</td>
+<td>0.471 s</td>
+</tr>
+<tr class="row-odd"><td>/++theme++emas.theme/images/Logo_transparentBackground-tiny.png</td>
+<td>0.468 s</td>
+</tr>
+<tr class="row-even"><td>/++theme++emas.theme/images/shuttleworthfoundation.jpg</td>
+<td>0.492 s</td>
+</tr>
+<tr class="row-odd"><td>/++theme++emas.theme/images/psggroup.jpg</td>
+<td>0.467 s</td>
+</tr>
+<tr class="row-even"><td>/&#64;&#64;tracking_image?referer=</td>
+<td>0.399 s</td>
+</tr>
+</tbody>
+</table>
+<p>The page load time:</p>
+<p><strong>5.43 seconds per page</strong>.</p>
+<p>Projected serve rate for initial mobile home pages load:</p>
+<p>(60 / 5.43) * 60 = <strong>662.98 per hour</strong></p>
+</div></blockquote>
 </div>
 <div class="section" id="id10">
-<h5>Higher concurrencies<a class="headerlink" href="#id10" title="Permalink to this headline">¶</a></h5>
+<h4>Higher concurrencies<a class="headerlink" href="#id10" title="Permalink to this headline">¶</a></h4>
+<p>250 concurrent users</p>
 <blockquote>
-<div><p>100</p>
-<p>200</p>
+<div><table border="1" class="docutils">
+<colgroup>
+<col width="84%" />
+<col width="16%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">URL</th>
+<th class="head">Request time</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>/</td>
+<td>1.400</td>
+</tr>
+<tr class="row-odd"><td>/++resource++gomobiletheme.basic/apple-touch-icon.png</td>
+<td>1.075</td>
+</tr>
+<tr class="row-even"><td>/++resource++gomobiletheme.basic/favicon.ico</td>
+<td>0.817</td>
+</tr>
+<tr class="row-odd"><td>/++resource++gomobiletheme.basic/common.css</td>
+<td>1.035</td>
+</tr>
+<tr class="row-even"><td>/++resource++gomobiletheme.basic/lowend.css</td>
+<td>1.163</td>
+</tr>
+<tr class="row-odd"><td>/++resource++emas.mobiletheme/common.css</td>
+<td>0.815</td>
+</tr>
+<tr class="row-even"><td>/++resource++emas.mobiletheme/lowend.css</td>
+<td>1.008</td>
+</tr>
+<tr class="row-odd"><td>/++theme++emas.theme/images/Logo_transparentBackground-tiny.png</td>
+<td>1.221</td>
+</tr>
+<tr class="row-even"><td>/++theme++emas.theme/images/shuttleworthfoundation.jpg</td>
+<td>1.002</td>
+</tr>
+<tr class="row-odd"><td>/++theme++emas.theme/images/psggroup.jpg</td>
+<td>0.860</td>
+</tr>
+<tr class="row-even"><td>/&#64;&#64;tracking_image?referer=</td>
+<td>0.563</td>
+</tr>
+</tbody>
+</table>
+<p>Load time per page:</p>
+<p><strong>10.959 seconds</strong></p>
+<p>Projected serve rate:</p>
+<p>(60 / 10.959) * 60 = <strong>328.49 pages per hour.</strong></p>
+</div></blockquote>
+<p>500 concurrent users</p>
+<blockquote>
+<div><table border="1" class="docutils">
+<colgroup>
+<col width="84%" />
+<col width="16%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">URL</th>
+<th class="head">Request time</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>/</td>
+<td>2.924</td>
+</tr>
+<tr class="row-odd"><td>/++resource++gomobiletheme.basic/apple-touch-icon.png</td>
+<td>2.914</td>
+</tr>
+<tr class="row-even"><td>/++resource++gomobiletheme.basic/favicon.ico</td>
+<td>2.411</td>
+</tr>
+<tr class="row-odd"><td>/++resource++gomobiletheme.basic/common.css</td>
+<td>2.206</td>
+</tr>
+<tr class="row-even"><td>/++resource++gomobiletheme.basic/lowend.css</td>
+<td>2.136</td>
+</tr>
+<tr class="row-odd"><td>/++resource++emas.mobiletheme/common.css</td>
+<td>2.136</td>
+</tr>
+<tr class="row-even"><td>/++resource++emas.mobiletheme/lowend.css</td>
+<td>1.756</td>
+</tr>
+<tr class="row-odd"><td>/++theme++emas.theme/images/Logo_transparentBackground-tiny.png</td>
+<td>0.794</td>
+</tr>
+<tr class="row-even"><td>/++theme++emas.theme/images/shuttleworthfoundation.jpg</td>
+<td>0.627</td>
+</tr>
+<tr class="row-odd"><td>/++theme++emas.theme/images/psggroup.jpg</td>
+<td>2.174</td>
+</tr>
+<tr class="row-even"><td>/&#64;&#64;tracking_image?referer=</td>
+<td>0.517</td>
+</tr>
+</tbody>
+</table>
+<p>Load time per page:</p>
+<p><strong>20.595 seconds</strong></p>
+<p>Projected serve rate:</p>
+<p>(60 / 20.595) * 60 = <strong>174.79 pages per hour.</strong></p>
+</div></blockquote>
+<p>750 concurrent users</p>
+<blockquote>
+<div><table border="1" class="docutils">
+<colgroup>
+<col width="84%" />
+<col width="16%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">URL</th>
+<th class="head">Request time</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>/</td>
+<td>4.701</td>
+</tr>
+<tr class="row-odd"><td>/++resource++gomobiletheme.basic/apple-touch-icon.png</td>
+<td>3.063</td>
+</tr>
+<tr class="row-even"><td>/++resource++gomobiletheme.basic/favicon.ico</td>
+<td>3.297</td>
+</tr>
+<tr class="row-odd"><td>/++resource++gomobiletheme.basic/common.css</td>
+<td>3.225</td>
+</tr>
+<tr class="row-even"><td>/++resource++gomobiletheme.basic/lowend.css</td>
+<td>1.433</td>
+</tr>
+<tr class="row-odd"><td>/++resource++emas.mobiletheme/common.css</td>
+<td>3.162</td>
+</tr>
+<tr class="row-even"><td>/++resource++emas.mobiletheme/lowend.css</td>
+<td>2.130</td>
+</tr>
+<tr class="row-odd"><td>/++theme++emas.theme/images/Logo_transparentBackground-tiny.png</td>
+<td>3.296</td>
+</tr>
+<tr class="row-even"><td>/++theme++emas.theme/images/shuttleworthfoundation.jpg</td>
+<td>3.241</td>
+</tr>
+<tr class="row-odd"><td>/++theme++emas.theme/images/psggroup.jpg</td>
+<td>3.510</td>
+</tr>
+<tr class="row-even"><td>/&#64;&#64;tracking_image?referer=</td>
+<td>1.967</td>
+</tr>
+</tbody>
+</table>
+<p>Load time per page:</p>
+<p><strong>33.025 seconds</strong></p>
+<p>Projected serve rate:</p>
+<p>(60 / 33.025) * 60 = <strong>109.00 pages per hour.</strong></p>
+</div></blockquote>
+<p>1000 concurrent users</p>
+<blockquote>
+<div><table border="1" class="docutils">
+<colgroup>
+<col width="84%" />
+<col width="16%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">URL</th>
+<th class="head">Request time</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>/</td>
+<td>5.841</td>
+</tr>
+<tr class="row-odd"><td>/++resource++gomobiletheme.basic/apple-touch-icon.png</td>
+<td>4.649</td>
+</tr>
+<tr class="row-even"><td>/++resource++gomobiletheme.basic/favicon.ico</td>
+<td>5.419</td>
+</tr>
+<tr class="row-odd"><td>/++resource++gomobiletheme.basic/common.css</td>
+<td>4.620</td>
+</tr>
+<tr class="row-even"><td>/++resource++gomobiletheme.basic/lowend.css</td>
+<td>7.447</td>
+</tr>
+<tr class="row-odd"><td>/++resource++emas.mobiletheme/common.css</td>
+<td>7.627</td>
+</tr>
+<tr class="row-even"><td>/++resource++emas.mobiletheme/lowend.css</td>
+<td>7.533</td>
+</tr>
+<tr class="row-odd"><td>/++theme++emas.theme/images/Logo_transparentBackground-tiny.png</td>
+<td>6.943</td>
+</tr>
+<tr class="row-even"><td>/++theme++emas.theme/images/shuttleworthfoundation.jpg</td>
+<td>7.573</td>
+</tr>
+<tr class="row-odd"><td>/++theme++emas.theme/images/psggroup.jpg</td>
+<td>4.350</td>
+</tr>
+<tr class="row-even"><td>/&#64;&#64;tracking_image?referer=</td>
+<td>7.125</td>
+</tr>
+</tbody>
+</table>
+<p>Load time per page:</p>
+<p><strong>69.127 seconds</strong></p>
+<p>Projected serve rate:</p>
+<p>(60 / 69.127) * 60 = <strong>52.07 pages per hour.</strong></p>
 </div></blockquote>
 </div>
 </div>
 <div class="section" id="id11">
-<h4>Content pages<a class="headerlink" href="#id11" title="Permalink to this headline">¶</a></h4>
+<h3>Content pages<a class="headerlink" href="#id11" title="Permalink to this headline">¶</a></h3>
+<blockquote>
+<div><p>This section is based on the <a class="reference external" href="http://197.221.50.101/stats/test_AuthenticatedMobileRead-20130916T183506/#id15">slowest authenticated mobile read page</a>.</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="85%" />
+<col width="15%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">URL</th>
+<th class="head">Request time</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>/grade-10/05-the-periodic-table/05-the-periodic-table-01.cnxmlplus</td>
+<td>&nbsp;</td>
+</tr>
+<tr class="row-odd"><td>/&#64;&#64;shortimageurl/AD510</td>
+<td>&nbsp;</td>
+</tr>
+<tr class="row-even"><td>/&#64;&#64;shortimageurl/AD511</td>
+<td>&nbsp;</td>
+</tr>
+<tr class="row-odd"><td>/&#64;&#64;mobile_image?key=8b0bd8e3345bc429a3f636e3e07a04b2.png</td>
+<td>&nbsp;</td>
+</tr>
+<tr class="row-even"><td>/&#64;&#64;shortimageurl/AD512</td>
+<td>&nbsp;</td>
+</tr>
+<tr class="row-odd"><td>/&#64;&#64;mobile_image?key=7b4be31b46722cd43d1015f116b7e3f1.png</td>
+<td>&nbsp;</td>
+</tr>
+<tr class="row-even"><td>/&#64;&#64;mobile_image?key=2544b965c153fae51f6ac177de34b986.png</td>
+<td>&nbsp;</td>
+</tr>
+<tr class="row-odd"><td>/&#64;&#64;mobile_image?key=4ef3bf468cb48070148dd217b034f6fb.png</td>
+<td>&nbsp;</td>
+</tr>
+<tr class="row-even"><td>/&#64;&#64;mobile_image?key=25ff2ae319e6ba28f424d0f3ec2b35ef.png</td>
+<td>&nbsp;</td>
+</tr>
+<tr class="row-odd"><td>/&#64;&#64;mobile_image?key=17ad0d1adc7278d5f3e157641fa0b2f4.png</td>
+<td>&nbsp;</td>
+</tr>
+<tr class="row-even"><td>/&#64;&#64;mobile_image?key=9bd096913bfd88c059698f9ba8b048f1.png</td>
+<td>&nbsp;</td>
+</tr>
+<tr class="row-odd"><td>/&#64;&#64;mobile_image?key=459ea8be55b6b79c61c99e05997b9e51.png</td>
+<td>&nbsp;</td>
+</tr>
+<tr class="row-even"><td>/&#64;&#64;mobile_image?key=6b720d16b7857a81b0d819ec3eac9c22.png</td>
+<td>&nbsp;</td>
+</tr>
+<tr class="row-odd"><td>/&#64;&#64;mobile_image?key=66a94ac3fd51ac936dbc297958d81b42.png</td>
+<td>&nbsp;</td>
+</tr>
+<tr class="row-even"><td>/&#64;&#64;mobile_image?key=f8c53946f5e89a5ae16e7b52c94e96d8.png</td>
+<td>&nbsp;</td>
+</tr>
+<tr class="row-odd"><td>/&#64;&#64;mobile_image?key=feec6c6188f2085b8a4ef86211c90186.png</td>
+<td>&nbsp;</td>
+</tr>
+<tr class="row-even"><td>/&#64;&#64;mobile_image?key=5bc4bd1f5144391739a4d4182410316b.png</td>
+<td>&nbsp;</td>
+</tr>
+<tr class="row-odd"><td>/&#64;&#64;mobile_image?key=8cd33db7801b1911c840342ec94d5ea8.png</td>
+<td>&nbsp;</td>
+</tr>
+<tr class="row-even"><td>/&#64;&#64;mobile_image?key=7d907101d4391f5cc801a24951620ae8.png</td>
+<td>&nbsp;</td>
+</tr>
+<tr class="row-odd"><td>/&#64;&#64;mobile_image?key=49e1207917564b80288d171709bff3fe.png</td>
+<td>&nbsp;</td>
+</tr>
+<tr class="row-even"><td>/&#64;&#64;mobile_image?key=4d4ea0f18c98b9e4f5d7093e58ef77c0.png</td>
+<td>&nbsp;</td>
+</tr>
+<tr class="row-odd"><td>/&#64;&#64;mobile_image?key=bc09066d6104bb4fbab0111d53bb0016.png</td>
+<td>&nbsp;</td>
+</tr>
+<tr class="row-even"><td>/&#64;&#64;mobile_image?key=e73b83c8b7c167019c593db770184cae.png</td>
+<td>&nbsp;</td>
+</tr>
+<tr class="row-odd"><td>/&#64;&#64;mobile_image?key=b2c70956388cc07422c14767c28d74c5.png</td>
+<td>&nbsp;</td>
+</tr>
+<tr class="row-even"><td>/&#64;&#64;mobile_image?key=3880dd8f0fe610278c12be30c42aee55.png</td>
+<td>&nbsp;</td>
+</tr>
+<tr class="row-odd"><td>/&#64;&#64;mobile_image?key=36ac7e4e5bb463b3cb64ea19bb31d7dc.png</td>
+<td>&nbsp;</td>
+</tr>
+<tr class="row-even"><td>/&#64;&#64;mobile_image?key=3a514f9ebde121ec7d03284d4fb4422c.png</td>
+<td>&nbsp;</td>
+</tr>
+<tr class="row-odd"><td>/&#64;&#64;mobile_image?key=4b4b7c48f32657f30a6a772b218fb1a3.png</td>
+<td>&nbsp;</td>
+</tr>
+<tr class="row-even"><td>/&#64;&#64;mobile_image?key=caf1848ad50defe990ea86337eab9233.png</td>
+<td>&nbsp;</td>
+</tr>
+<tr class="row-odd"><td>/&#64;&#64;mobile_image?key=1c87b254d6a03ccd80f634f5de8eafb3.png</td>
+<td>&nbsp;</td>
+</tr>
+<tr class="row-even"><td>/&#64;&#64;mobile_image?key=afd7fbf97328485b45980cc6d9f78cca.png</td>
+<td>&nbsp;</td>
+</tr>
+<tr class="row-odd"><td>/&#64;&#64;mobile_image?key=6eb5016e88ad606a49030715e634f562.png</td>
+<td>&nbsp;</td>
+</tr>
+<tr class="row-even"><td>/&#64;&#64;mobile_image?key=684344c5d30d01fa23632bca5018d909.png</td>
+<td>&nbsp;</td>
+</tr>
+<tr class="row-odd"><td>/&#64;&#64;mobile_image?key=90408fe81acaa6a987db7b19f69e845b.png</td>
+<td>&nbsp;</td>
+</tr>
+<tr class="row-even"><td>/&#64;&#64;mobile_image?key=07f8b53830e827cc02010c031c122018.png</td>
+<td>&nbsp;</td>
+</tr>
+<tr class="row-odd"><td>/&#64;&#64;mobile_image?key=2ede975866d71d01a12b3a8c739fdd3b.png</td>
+<td>&nbsp;</td>
+</tr>
+<tr class="row-even"><td>/&#64;&#64;mobile_image?key=1f56771a9c381b7011b68c754e7e999a.png</td>
+<td>&nbsp;</td>
+</tr>
+<tr class="row-odd"><td>/&#64;&#64;mobile_image?key=67d91b87621708c628b359ceb4981ab2.png</td>
+<td>&nbsp;</td>
+</tr>
+<tr class="row-even"><td>/&#64;&#64;mobile_image?key=373e5902295de703a8d15ba2925b39a9.png</td>
+<td>&nbsp;</td>
+</tr>
+<tr class="row-odd"><td>/&#64;&#64;mobile_image?key=c481ece79b8392fdd694abac94373bb7.png</td>
+<td>&nbsp;</td>
+</tr>
+<tr class="row-even"><td>/&#64;&#64;mobile_image?key=ee4eef421be8f235b8c0329c9e4dde65.png</td>
+<td>&nbsp;</td>
+</tr>
+<tr class="row-odd"><td>/&#64;&#64;mobile_image?key=331350c3e262bf7389b396bfffb626c2.png</td>
+<td>&nbsp;</td>
+</tr>
+<tr class="row-even"><td>/&#64;&#64;mobile_image?key=6631e14cdf53d54a9d9924dd38c89558.png</td>
+<td>&nbsp;</td>
+</tr>
+<tr class="row-odd"><td>/&#64;&#64;mobile_image?key=978a5b8cef208724511317ae1502bffe.png</td>
+<td>&nbsp;</td>
+</tr>
+<tr class="row-even"><td>/&#64;&#64;mobile_image?key=a2a25f6080dd8f9f9bd8d9690d76f395.png</td>
+<td>&nbsp;</td>
+</tr>
+<tr class="row-odd"><td>/&#64;&#64;mobile_image?key=6d71d5f52935a25d0f056ad5c8353135.png</td>
+<td>&nbsp;</td>
+</tr>
+<tr class="row-even"><td>/&#64;&#64;mobile_image?key=e0115a83f9bc84e13d4ad902c70108c8.png</td>
+<td>&nbsp;</td>
+</tr>
+<tr class="row-odd"><td>/&#64;&#64;mobile_image?key=cb33acfe03c34e9dd056393ff3f7db6c.png</td>
+<td>&nbsp;</td>
+</tr>
+<tr class="row-even"><td>/&#64;&#64;mobile_image?key=c9639e5974ddebc4b44b8f094c1ff1ee.png</td>
+<td>&nbsp;</td>
+</tr>
+<tr class="row-odd"><td>/&#64;&#64;mobile_image?key=c580ddcfdbd65c68d283e5d44b381983.png</td>
+<td>&nbsp;</td>
+</tr>
+<tr class="row-even"><td>/&#64;&#64;mobile_image?key=aa920e645e3b49e93ef08208dee18d65.png</td>
+<td>&nbsp;</td>
+</tr>
+<tr class="row-odd"><td>/&#64;&#64;mobile_image?key=2be66372650893e9801a30d442a824a4.png</td>
+<td>&nbsp;</td>
+</tr>
+<tr class="row-even"><td>/&#64;&#64;mobile_image?key=08a047ebe0b9a8343c6609d97d3f5b15.png</td>
+<td>&nbsp;</td>
+</tr>
+<tr class="row-odd"><td>/&#64;&#64;mobile_image?key=7eee7698552130868caf27f039e83f4f.png</td>
+<td>&nbsp;</td>
+</tr>
+<tr class="row-even"><td>/&#64;&#64;mobile_image?key=24830c7d3309a812abbf432067034f00.png</td>
+<td>&nbsp;</td>
+</tr>
+<tr class="row-odd"><td>/&#64;&#64;mobile_image?key=d0cdb3ab8b7aa9bf07b6e31c805f1975.png</td>
+<td>&nbsp;</td>
+</tr>
+<tr class="row-even"><td>/&#64;&#64;mobile_image?key=aac7a0d3c40b9d74083a6cd02769ca2b.png</td>
+<td>&nbsp;</td>
+</tr>
+<tr class="row-odd"><td>/&#64;&#64;mobile_image?key=9a8a89de6adeeff0c8368ea595d14a19.png</td>
+<td>&nbsp;</td>
+</tr>
+<tr class="row-even"><td>/&#64;&#64;mobile_image?key=82ec43195a695b25afe09a0e577810e8.png</td>
+<td>&nbsp;</td>
+</tr>
+<tr class="row-odd"><td>/&#64;&#64;mobile_image?key=ad08b3b82e7745f1d181e6c9fe0fd47d.png</td>
+<td>&nbsp;</td>
+</tr>
+<tr class="row-even"><td>/&#64;&#64;mobile_image?key=67b52a61dc6643e4fdf284e5aed9c8fa.png</td>
+<td>&nbsp;</td>
+</tr>
+<tr class="row-odd"><td>/&#64;&#64;mobile_image?key=679404c6ed73389212cb9b08cabf738d.png</td>
+<td>&nbsp;</td>
+</tr>
+<tr class="row-even"><td>/&#64;&#64;mobile_image?key=8b4a7468255d9bb893a88be1123534aa.png</td>
+<td>&nbsp;</td>
+</tr>
+<tr class="row-odd"><td>/&#64;&#64;mobile_image?key=0e6f5ac561d3141863c38a6cd9fbb515.png</td>
+<td>&nbsp;</td>
+</tr>
+<tr class="row-even"><td>/&#64;&#64;mobile_image?key=20039428e194368ece3c88967fd033f3.png</td>
+<td>&nbsp;</td>
+</tr>
+<tr class="row-odd"><td>/&#64;&#64;mobile_image?key=79d58bb3af55d24126228287f69b28ad.png</td>
+<td>&nbsp;</td>
+</tr>
+<tr class="row-even"><td>/&#64;&#64;mobile_image?key=7eac6588f5c34d23d60b3f5d1a93bb31.png</td>
+<td>&nbsp;</td>
+</tr>
+<tr class="row-odd"><td>/&#64;&#64;mobile_image?key=0b32c74b52648019180ffcf0bea280b2.png</td>
+<td>&nbsp;</td>
+</tr>
+<tr class="row-even"><td>/&#64;&#64;mobile_image?key=60ff5fa9f0ffe0b7b4bad3a9f9b2d6ea.png</td>
+<td>&nbsp;</td>
+</tr>
+<tr class="row-odd"><td>/&#64;&#64;shortimageurl/AD513</td>
+<td>&nbsp;</td>
+</tr>
+<tr class="row-even"><td>/grade-10/05-the-periodic-table/&#64;&#64;tracking_image?referer=</td>
+<td>&nbsp;</td>
+</tr>
+<tr class="row-odd"><td><a class="reference external" href="http://m.qap.everythingscience.co.za/grade-10/04-the-atom/">http://m.qap.everythingscience.co.za/grade-10/04-the-atom/</a></td>
+<td>&nbsp;</td>
+</tr>
+<tr class="row-even"><td>04-the-atom-08.cnxmlplus</td>
+<td>&nbsp;</td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
 <div class="section" id="id12">
-<h5>Projected serve rates<a class="headerlink" href="#id12" title="Permalink to this headline">¶</a></h5>
+<h4>Projected serve rates<a class="headerlink" href="#id12" title="Permalink to this headline">¶</a></h4>
 </div>
 <div class="section" id="id13">
-<h5>Higher concurrencies<a class="headerlink" href="#id13" title="Permalink to this headline">¶</a></h5>
+<h4>Higher concurrencies<a class="headerlink" href="#id13" title="Permalink to this headline">¶</a></h4>
 <blockquote>
 <div><p>100</p>
 <p>200</p>
 </div></blockquote>
-</div>
 </div>
 </div>
 </div>
@@ -767,9 +1945,9 @@ user object.</div></blockquote>
 <h2>9. Testing Varnish<a class="headerlink" href="#testing-varnish" title="Permalink to this headline">¶</a></h2>
 <blockquote>
 <div><p>As background to this test consider the following.  The application servers
-sp2 and sp3 are connected via a non-routable private subnet in the 10.0.0.*
+SP2 and SP3 are connected via a non-routable private subnet in the 10.0.0.*
 range. In the current cluster setup they are accessed over this private
-subnet via the HAProxy and Varnish servers on sp1.  This means any latency
+subnet via the HAProxy and Varnish servers on SP1.  This means any latency
 or throughput issues on the subnet will adversly affect the total
 scalability.</p>
 <p>Varnish serves all our cachable resources (CSS, javascript, images, etc.).
@@ -821,9 +1999,6 @@ off with 1 user and 10 requests all the way up to 1000 concurrent users and
 </tr>
 </tbody>
 </table>
-<p>Both SP1 and SP4 show relatively linear changes in performance.  The important
-thing is the marked difference in the amount of requests per second between
-the 2 servers.</p>
 </div></blockquote>
 </div>
 <div class="section" id="concurrent-users">
@@ -945,7 +2120,14 @@ the 2 servers.</p>
 </tbody>
 </table>
 <p>(1) An entry of &#8216;no data&#8217; indicates that the test cycle could not complete
-successfully and therefore <a href="#id16"><span class="problematic" id="id17">`Apache Bench`_</span></a> did not record the statistics.</p>
+successfully and therefore <a class="reference external" href="https://httpd.apache.org/docs/2.2/programs/ab.html">Apache Benchmark</a> did not record the statistics.</p>
+<p>Both SP1 and SP4 show relatively linear changes in performance.  The important
+thing is the marked difference in the amount of requests per second between
+the 2 servers.  After more investigation we found that the back-end network
+between the servers in the cluster is not running at its full capacity.  This
+has been changed and a second set of tests will be run to validate the
+assumption that network throughput is responsible for the difference in
+performance between the 2 mentioned servers.</p>
 </div></blockquote>
 </div>
 </div>
@@ -971,7 +2153,7 @@ successfully and therefore <a href="#id16"><span class="problematic" id="id17">`
     </div>
     <div class="footer">
         &copy; Copyright 2013, Upfront Systems.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2b1.
     </div>
   </body>
 </html>
