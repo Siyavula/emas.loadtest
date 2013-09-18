@@ -887,91 +887,443 @@ Content pages
     ==================================================================  ============
     URL                                                                 Request time
     ==================================================================  ============
-    /grade-10/05-the-periodic-table/05-the-periodic-table-01.cnxmlplus
-    /@@shortimageurl/AD510
-    /@@shortimageurl/AD511
-    /@@mobile_image?key=8b0bd8e3345bc429a3f636e3e07a04b2.png
-    /@@shortimageurl/AD512
-    /@@mobile_image?key=7b4be31b46722cd43d1015f116b7e3f1.png
-    /@@mobile_image?key=2544b965c153fae51f6ac177de34b986.png
-    /@@mobile_image?key=4ef3bf468cb48070148dd217b034f6fb.png
-    /@@mobile_image?key=25ff2ae319e6ba28f424d0f3ec2b35ef.png
-    /@@mobile_image?key=17ad0d1adc7278d5f3e157641fa0b2f4.png
-    /@@mobile_image?key=9bd096913bfd88c059698f9ba8b048f1.png
-    /@@mobile_image?key=459ea8be55b6b79c61c99e05997b9e51.png
-    /@@mobile_image?key=6b720d16b7857a81b0d819ec3eac9c22.png
-    /@@mobile_image?key=66a94ac3fd51ac936dbc297958d81b42.png
-    /@@mobile_image?key=f8c53946f5e89a5ae16e7b52c94e96d8.png
-    /@@mobile_image?key=feec6c6188f2085b8a4ef86211c90186.png
-    /@@mobile_image?key=5bc4bd1f5144391739a4d4182410316b.png
-    /@@mobile_image?key=8cd33db7801b1911c840342ec94d5ea8.png
-    /@@mobile_image?key=7d907101d4391f5cc801a24951620ae8.png
-    /@@mobile_image?key=49e1207917564b80288d171709bff3fe.png
-    /@@mobile_image?key=4d4ea0f18c98b9e4f5d7093e58ef77c0.png
-    /@@mobile_image?key=bc09066d6104bb4fbab0111d53bb0016.png
-    /@@mobile_image?key=e73b83c8b7c167019c593db770184cae.png
-    /@@mobile_image?key=b2c70956388cc07422c14767c28d74c5.png
-    /@@mobile_image?key=3880dd8f0fe610278c12be30c42aee55.png
-    /@@mobile_image?key=36ac7e4e5bb463b3cb64ea19bb31d7dc.png
-    /@@mobile_image?key=3a514f9ebde121ec7d03284d4fb4422c.png
-    /@@mobile_image?key=4b4b7c48f32657f30a6a772b218fb1a3.png
-    /@@mobile_image?key=caf1848ad50defe990ea86337eab9233.png
-    /@@mobile_image?key=1c87b254d6a03ccd80f634f5de8eafb3.png
-    /@@mobile_image?key=afd7fbf97328485b45980cc6d9f78cca.png
-    /@@mobile_image?key=6eb5016e88ad606a49030715e634f562.png
-    /@@mobile_image?key=684344c5d30d01fa23632bca5018d909.png
-    /@@mobile_image?key=90408fe81acaa6a987db7b19f69e845b.png
-    /@@mobile_image?key=07f8b53830e827cc02010c031c122018.png
-    /@@mobile_image?key=2ede975866d71d01a12b3a8c739fdd3b.png
-    /@@mobile_image?key=1f56771a9c381b7011b68c754e7e999a.png
-    /@@mobile_image?key=67d91b87621708c628b359ceb4981ab2.png
-    /@@mobile_image?key=373e5902295de703a8d15ba2925b39a9.png
-    /@@mobile_image?key=c481ece79b8392fdd694abac94373bb7.png
-    /@@mobile_image?key=ee4eef421be8f235b8c0329c9e4dde65.png
-    /@@mobile_image?key=331350c3e262bf7389b396bfffb626c2.png
-    /@@mobile_image?key=6631e14cdf53d54a9d9924dd38c89558.png
-    /@@mobile_image?key=978a5b8cef208724511317ae1502bffe.png
-    /@@mobile_image?key=a2a25f6080dd8f9f9bd8d9690d76f395.png
-    /@@mobile_image?key=6d71d5f52935a25d0f056ad5c8353135.png
-    /@@mobile_image?key=e0115a83f9bc84e13d4ad902c70108c8.png
-    /@@mobile_image?key=cb33acfe03c34e9dd056393ff3f7db6c.png
-    /@@mobile_image?key=c9639e5974ddebc4b44b8f094c1ff1ee.png
-    /@@mobile_image?key=c580ddcfdbd65c68d283e5d44b381983.png
-    /@@mobile_image?key=aa920e645e3b49e93ef08208dee18d65.png
-    /@@mobile_image?key=2be66372650893e9801a30d442a824a4.png
-    /@@mobile_image?key=08a047ebe0b9a8343c6609d97d3f5b15.png
-    /@@mobile_image?key=7eee7698552130868caf27f039e83f4f.png
-    /@@mobile_image?key=24830c7d3309a812abbf432067034f00.png
-    /@@mobile_image?key=d0cdb3ab8b7aa9bf07b6e31c805f1975.png
-    /@@mobile_image?key=aac7a0d3c40b9d74083a6cd02769ca2b.png
-    /@@mobile_image?key=9a8a89de6adeeff0c8368ea595d14a19.png
-    /@@mobile_image?key=82ec43195a695b25afe09a0e577810e8.png
-    /@@mobile_image?key=ad08b3b82e7745f1d181e6c9fe0fd47d.png
-    /@@mobile_image?key=67b52a61dc6643e4fdf284e5aed9c8fa.png
-    /@@mobile_image?key=679404c6ed73389212cb9b08cabf738d.png
-    /@@mobile_image?key=8b4a7468255d9bb893a88be1123534aa.png
-    /@@mobile_image?key=0e6f5ac561d3141863c38a6cd9fbb515.png
-    /@@mobile_image?key=20039428e194368ece3c88967fd033f3.png
-    /@@mobile_image?key=79d58bb3af55d24126228287f69b28ad.png
-    /@@mobile_image?key=7eac6588f5c34d23d60b3f5d1a93bb31.png
-    /@@mobile_image?key=0b32c74b52648019180ffcf0bea280b2.png
-    /@@mobile_image?key=60ff5fa9f0ffe0b7b4bad3a9f9b2d6ea.png
-    /@@shortimageurl/AD513
-    /grade-10/05-the-periodic-table/@@tracking_image?referer=
+    /grade-10/05-the-periodic-table/05-the-periodic-table-01.cnxmlplus  0.525
+    /@@shortimageurl/AD510                                              0.423
+    /@@shortimageurl/AD511                                              0.393
+    /@@mobile_image?key=8b0bd8e3345bc429a3f636e3e07a04b2.png            0.533
+    /@@shortimageurl/AD512                                              0.391
+    /@@mobile_image?key=7b4be31b46722cd43d1015f116b7e3f1.png            0.545
+    /@@mobile_image?key=2544b965c153fae51f6ac177de34b986.png            0.535
+    /@@mobile_image?key=4ef3bf468cb48070148dd217b034f6fb.png            0.572
+    /@@mobile_image?key=25ff2ae319e6ba28f424d0f3ec2b35ef.png            0.559
+    /@@mobile_image?key=17ad0d1adc7278d5f3e157641fa0b2f4.png            0.542
+    /@@mobile_image?key=9bd096913bfd88c059698f9ba8b048f1.png            0.527
+    /@@mobile_image?key=459ea8be55b6b79c61c99e05997b9e51.png            0.533
+    /@@mobile_image?key=6b720d16b7857a81b0d819ec3eac9c22.png            0.541
+    /@@mobile_image?key=66a94ac3fd51ac936dbc297958d81b42.png            0.563
+    /@@mobile_image?key=f8c53946f5e89a5ae16e7b52c94e96d8.png            0.563
+    /@@mobile_image?key=feec6c6188f2085b8a4ef86211c90186.png            0.541
+    /@@mobile_image?key=5bc4bd1f5144391739a4d4182410316b.png            0.544
+    /@@mobile_image?key=8cd33db7801b1911c840342ec94d5ea8.png            0.539
+    /@@mobile_image?key=7d907101d4391f5cc801a24951620ae8.png            0.566
+    /@@mobile_image?key=49e1207917564b80288d171709bff3fe.png            0.530
+    /@@mobile_image?key=4d4ea0f18c98b9e4f5d7093e58ef77c0.png            0.543
+    /@@mobile_image?key=bc09066d6104bb4fbab0111d53bb0016.png            0.562
+    /@@mobile_image?key=e73b83c8b7c167019c593db770184cae.png            0.556
+    /@@mobile_image?key=b2c70956388cc07422c14767c28d74c5.png            0.566
+    /@@mobile_image?key=3880dd8f0fe610278c12be30c42aee55.png            0.568
+    /@@mobile_image?key=36ac7e4e5bb463b3cb64ea19bb31d7dc.png            0.523
+    /@@mobile_image?key=3a514f9ebde121ec7d03284d4fb4422c.png            0.551
+    /@@mobile_image?key=4b4b7c48f32657f30a6a772b218fb1a3.png            0.553
+    /@@mobile_image?key=caf1848ad50defe990ea86337eab9233.png            0.545
+    /@@mobile_image?key=1c87b254d6a03ccd80f634f5de8eafb3.png            0.540
+    /@@mobile_image?key=afd7fbf97328485b45980cc6d9f78cca.png            0.543
+    /@@mobile_image?key=6eb5016e88ad606a49030715e634f562.png            0.557
+    /@@mobile_image?key=684344c5d30d01fa23632bca5018d909.png            0.575
+    /@@mobile_image?key=90408fe81acaa6a987db7b19f69e845b.png            0.556
+    /@@mobile_image?key=07f8b53830e827cc02010c031c122018.png            0.567
+    /@@mobile_image?key=2ede975866d71d01a12b3a8c739fdd3b.png            0.553
+    /@@mobile_image?key=1f56771a9c381b7011b68c754e7e999a.png            0.562
+    /@@mobile_image?key=67d91b87621708c628b359ceb4981ab2.png            0.557
+    /@@mobile_image?key=373e5902295de703a8d15ba2925b39a9.png            0.551
+    /@@mobile_image?key=c481ece79b8392fdd694abac94373bb7.png            0.563
+    /@@mobile_image?key=ee4eef421be8f235b8c0329c9e4dde65.png            0.525
+    /@@mobile_image?key=331350c3e262bf7389b396bfffb626c2.png            0.526
+    /@@mobile_image?key=6631e14cdf53d54a9d9924dd38c89558.png            0.554
+    /@@mobile_image?key=978a5b8cef208724511317ae1502bffe.png            0.577
+    /@@mobile_image?key=a2a25f6080dd8f9f9bd8d9690d76f395.png            0.568
+    /@@mobile_image?key=6d71d5f52935a25d0f056ad5c8353135.png            0.552
+    /@@mobile_image?key=e0115a83f9bc84e13d4ad902c70108c8.png            0.551
+    /@@mobile_image?key=cb33acfe03c34e9dd056393ff3f7db6c.png            0.561
+    /@@mobile_image?key=c9639e5974ddebc4b44b8f094c1ff1ee.png            0.582
+    /@@mobile_image?key=c580ddcfdbd65c68d283e5d44b381983.png            0.550
+    /@@mobile_image?key=aa920e645e3b49e93ef08208dee18d65.png            0.569
+    /@@mobile_image?key=2be66372650893e9801a30d442a824a4.png            0.563
+    /@@mobile_image?key=08a047ebe0b9a8343c6609d97d3f5b15.png            0.532
+    /@@mobile_image?key=7eee7698552130868caf27f039e83f4f.png            0.558
+    /@@mobile_image?key=24830c7d3309a812abbf432067034f00.png            0.563
+    /@@mobile_image?key=d0cdb3ab8b7aa9bf07b6e31c805f1975.png            0.533
+    /@@mobile_image?key=aac7a0d3c40b9d74083a6cd02769ca2b.png            0.553
+    /@@mobile_image?key=9a8a89de6adeeff0c8368ea595d14a19.png            0.561
+    /@@mobile_image?key=82ec43195a695b25afe09a0e577810e8.png            0.575
+    /@@mobile_image?key=ad08b3b82e7745f1d181e6c9fe0fd47d.png            0.530
+    /@@mobile_image?key=67b52a61dc6643e4fdf284e5aed9c8fa.png            0.547
+    /@@mobile_image?key=679404c6ed73389212cb9b08cabf738d.png            0.517
+    /@@mobile_image?key=8b4a7468255d9bb893a88be1123534aa.png            0.538
+    /@@mobile_image?key=0e6f5ac561d3141863c38a6cd9fbb515.png            0.545
+    /@@mobile_image?key=20039428e194368ece3c88967fd033f3.png            0.594
+    /@@mobile_image?key=79d58bb3af55d24126228287f69b28ad.png            0.552
+    /@@mobile_image?key=7eac6588f5c34d23d60b3f5d1a93bb31.png            0.540
+    /@@mobile_image?key=0b32c74b52648019180ffcf0bea280b2.png            0.571
+    /@@mobile_image?key=60ff5fa9f0ffe0b7b4bad3a9f9b2d6ea.png            0.548
+    /@@shortimageurl/AD513                                              0.398
+    /grade-10/05-the-periodic-table/@@tracking_image?referer=           0.421
     http://m.qap.everythingscience.co.za/grade-10/04-the-atom/
-    04-the-atom-08.cnxmlplus
+    04-the-atom-08.cnxmlplus                                            
     ==================================================================  ============
 
-
-Projected serve rates
-^^^^^^^^^^^^^^^^^^^^^
-
-Higher concurrencies
-^^^^^^^^^^^^^^^^^^^^
+    Load time per page:
     
-    100
+    **38.41 seconds**
 
-    200
+    Projected serve rate:
+
+    (60 / 38.41 seconds) * 60 = **93.7255922937 pages per hour.**
+
+250 concurrent users
+
+    ==================================================================  ============
+    URL                                                                 Request time
+    ==================================================================  ============
+    /grade-10/05-the-periodic-table/05-the-periodic-table-01.cnxmlplus  0.699
+    /@@shortimageurl/AD510                                              0.484
+    /@@shortimageurl/AD511                                              0.515
+    /@@mobile_image?key=8b0bd8e3345bc429a3f636e3e07a04b2.png            0.759
+    /@@shortimageurl/AD512                                              0.543
+    /@@mobile_image?key=7b4be31b46722cd43d1015f116b7e3f1.png            0.747
+    /@@mobile_image?key=2544b965c153fae51f6ac177de34b986.png            0.722
+    /@@mobile_image?key=4ef3bf468cb48070148dd217b034f6fb.png            0.743
+    /@@mobile_image?key=25ff2ae319e6ba28f424d0f3ec2b35ef.png            0.699
+    /@@mobile_image?key=17ad0d1adc7278d5f3e157641fa0b2f4.png            0.716
+    /@@mobile_image?key=9bd096913bfd88c059698f9ba8b048f1.png            0.755
+    /@@mobile_image?key=459ea8be55b6b79c61c99e05997b9e51.png            0.724
+    /@@mobile_image?key=6b720d16b7857a81b0d819ec3eac9c22.png            0.725
+    /@@mobile_image?key=66a94ac3fd51ac936dbc297958d81b42.png            0.699
+    /@@mobile_image?key=f8c53946f5e89a5ae16e7b52c94e96d8.png            0.728
+    /@@mobile_image?key=feec6c6188f2085b8a4ef86211c90186.png            0.778
+    /@@mobile_image?key=5bc4bd1f5144391739a4d4182410316b.png            0.757
+    /@@mobile_image?key=8cd33db7801b1911c840342ec94d5ea8.png            0.702
+    /@@mobile_image?key=7d907101d4391f5cc801a24951620ae8.png            0.689
+    /@@mobile_image?key=49e1207917564b80288d171709bff3fe.png            0.722
+    /@@mobile_image?key=4d4ea0f18c98b9e4f5d7093e58ef77c0.png            0.696
+    /@@mobile_image?key=bc09066d6104bb4fbab0111d53bb0016.png            0.731
+    /@@mobile_image?key=e73b83c8b7c167019c593db770184cae.png            0.722
+    /@@mobile_image?key=b2c70956388cc07422c14767c28d74c5.png            0.748
+    /@@mobile_image?key=3880dd8f0fe610278c12be30c42aee55.png            0.722
+    /@@mobile_image?key=36ac7e4e5bb463b3cb64ea19bb31d7dc.png            0.879
+    /@@mobile_image?key=3a514f9ebde121ec7d03284d4fb4422c.png            0.889
+    /@@mobile_image?key=4b4b7c48f32657f30a6a772b218fb1a3.png            0.819
+    /@@mobile_image?key=caf1848ad50defe990ea86337eab9233.png            1.084
+    /@@mobile_image?key=1c87b254d6a03ccd80f634f5de8eafb3.png            0.718
+    /@@mobile_image?key=afd7fbf97328485b45980cc6d9f78cca.png            0.793
+    /@@mobile_image?key=6eb5016e88ad606a49030715e634f562.png            0.795
+    /@@mobile_image?key=684344c5d30d01fa23632bca5018d909.png            0.698
+    /@@mobile_image?key=90408fe81acaa6a987db7b19f69e845b.png            0.739
+    /@@mobile_image?key=07f8b53830e827cc02010c031c122018.png            0.937
+    /@@mobile_image?key=2ede975866d71d01a12b3a8c739fdd3b.png            0.817
+    /@@mobile_image?key=1f56771a9c381b7011b68c754e7e999a.png            0.845
+    /@@mobile_image?key=67d91b87621708c628b359ceb4981ab2.png            1.089
+    /@@mobile_image?key=373e5902295de703a8d15ba2925b39a9.png            0.700
+    /@@mobile_image?key=c481ece79b8392fdd694abac94373bb7.png            0.715
+    /@@mobile_image?key=ee4eef421be8f235b8c0329c9e4dde65.png            0.755
+    /@@mobile_image?key=331350c3e262bf7389b396bfffb626c2.png            0.802
+    /@@mobile_image?key=6631e14cdf53d54a9d9924dd38c89558.png            0.772
+    /@@mobile_image?key=978a5b8cef208724511317ae1502bffe.png            0.688
+    /@@mobile_image?key=a2a25f6080dd8f9f9bd8d9690d76f395.png            0.895
+    /@@mobile_image?key=6d71d5f52935a25d0f056ad5c8353135.png            0.833
+    /@@mobile_image?key=e0115a83f9bc84e13d4ad902c70108c8.png            0.750
+    /@@mobile_image?key=cb33acfe03c34e9dd056393ff3f7db6c.png            0.729
+    /@@mobile_image?key=c9639e5974ddebc4b44b8f094c1ff1ee.png            0.695
+    /@@mobile_image?key=c580ddcfdbd65c68d283e5d44b381983.png            0.729
+    /@@mobile_image?key=aa920e645e3b49e93ef08208dee18d65.png            0.800
+    /@@mobile_image?key=2be66372650893e9801a30d442a824a4.png            0.738
+    /@@mobile_image?key=08a047ebe0b9a8343c6609d97d3f5b15.png            0.740
+    /@@mobile_image?key=7eee7698552130868caf27f039e83f4f.png            0.697
+    /@@mobile_image?key=24830c7d3309a812abbf432067034f00.png            0.747
+    /@@mobile_image?key=d0cdb3ab8b7aa9bf07b6e31c805f1975.png            0.937
+    /@@mobile_image?key=aac7a0d3c40b9d74083a6cd02769ca2b.png            0.736
+    /@@mobile_image?key=9a8a89de6adeeff0c8368ea595d14a19.png            0.761
+    /@@mobile_image?key=82ec43195a695b25afe09a0e577810e8.png            0.683
+    /@@mobile_image?key=ad08b3b82e7745f1d181e6c9fe0fd47d.png            0.729
+    /@@mobile_image?key=67b52a61dc6643e4fdf284e5aed9c8fa.png            0.691
+    /@@mobile_image?key=679404c6ed73389212cb9b08cabf738d.png            0.979
+    /@@mobile_image?key=8b4a7468255d9bb893a88be1123534aa.png            0.846
+    /@@mobile_image?key=0e6f5ac561d3141863c38a6cd9fbb515.png            0.828
+    /@@mobile_image?key=20039428e194368ece3c88967fd033f3.png            0.945
+    /@@mobile_image?key=79d58bb3af55d24126228287f69b28ad.png            0.680
+    /@@mobile_image?key=7eac6588f5c34d23d60b3f5d1a93bb31.png            0.650
+    /@@mobile_image?key=0b32c74b52648019180ffcf0bea280b2.png            0.697
+    /@@mobile_image?key=60ff5fa9f0ffe0b7b4bad3a9f9b2d6ea.png            0.749
+    /@@shortimageurl/AD513                                              1.492
+    /grade-10/05-the-periodic-table/@@tracking_image?referer=           0.526
+    http://m.qap.everythingscience.co.za/grade-10/04-the-atom/
+    04-the-atom-08.cnxmlplus                                            
+    ==================================================================  ============
+
+    Load time per page:
+    
+    **54.341 seconds**
+
+    Projected serve rate:
+
+    (60 / 54.341 seconds) * 60 = **66.24 pages per hour.**
+
+
+500 concurrent users
+
+    ==================================================================  ============
+    URL                                                                 Request time
+    ==================================================================  ============
+    /grade-10/05-the-periodic-table/05-the-periodic-table-01.cnxmlplus  0.768
+    /@@shortimageurl/AD510                                              0.523
+    /@@shortimageurl/AD511                                              0.546
+    /@@mobile_image?key=8b0bd8e3345bc429a3f636e3e07a04b2.png            0.677
+    /@@shortimageurl/AD512                                              0.513
+    /@@mobile_image?key=7b4be31b46722cd43d1015f116b7e3f1.png            0.735
+    /@@mobile_image?key=2544b965c153fae51f6ac177de34b986.png            0.685
+    /@@mobile_image?key=4ef3bf468cb48070148dd217b034f6fb.png            0.718
+    /@@mobile_image?key=25ff2ae319e6ba28f424d0f3ec2b35ef.png            0.686
+    /@@mobile_image?key=17ad0d1adc7278d5f3e157641fa0b2f4.png            0.786
+    /@@mobile_image?key=9bd096913bfd88c059698f9ba8b048f1.png            0.685
+    /@@mobile_image?key=459ea8be55b6b79c61c99e05997b9e51.png            0.688
+    /@@mobile_image?key=6b720d16b7857a81b0d819ec3eac9c22.png            0.788
+    /@@mobile_image?key=66a94ac3fd51ac936dbc297958d81b42.png            1.105
+    /@@mobile_image?key=f8c53946f5e89a5ae16e7b52c94e96d8.png            0.754
+    /@@mobile_image?key=feec6c6188f2085b8a4ef86211c90186.png            0.775
+    /@@mobile_image?key=5bc4bd1f5144391739a4d4182410316b.png            0.724
+    /@@mobile_image?key=8cd33db7801b1911c840342ec94d5ea8.png            0.799
+    /@@mobile_image?key=7d907101d4391f5cc801a24951620ae8.png            0.727
+    /@@mobile_image?key=49e1207917564b80288d171709bff3fe.png            0.717
+    /@@mobile_image?key=4d4ea0f18c98b9e4f5d7093e58ef77c0.png            0.718
+    /@@mobile_image?key=bc09066d6104bb4fbab0111d53bb0016.png            0.704
+    /@@mobile_image?key=e73b83c8b7c167019c593db770184cae.png            1.901
+    /@@mobile_image?key=b2c70956388cc07422c14767c28d74c5.png            0.784
+    /@@mobile_image?key=3880dd8f0fe610278c12be30c42aee55.png            0.694
+    /@@mobile_image?key=36ac7e4e5bb463b3cb64ea19bb31d7dc.png            0.699
+    /@@mobile_image?key=3a514f9ebde121ec7d03284d4fb4422c.png            0.729
+    /@@mobile_image?key=4b4b7c48f32657f30a6a772b218fb1a3.png            0.706
+    /@@mobile_image?key=caf1848ad50defe990ea86337eab9233.png            0.694
+    /@@mobile_image?key=1c87b254d6a03ccd80f634f5de8eafb3.png            0.723
+    /@@mobile_image?key=afd7fbf97328485b45980cc6d9f78cca.png            1.054
+    /@@mobile_image?key=6eb5016e88ad606a49030715e634f562.png            0.722
+    /@@mobile_image?key=684344c5d30d01fa23632bca5018d909.png            0.736
+    /@@mobile_image?key=90408fe81acaa6a987db7b19f69e845b.png            0.777
+    /@@mobile_image?key=07f8b53830e827cc02010c031c122018.png            0.658
+    /@@mobile_image?key=2ede975866d71d01a12b3a8c739fdd3b.png            0.781
+    /@@mobile_image?key=1f56771a9c381b7011b68c754e7e999a.png            1.012
+    /@@mobile_image?key=67d91b87621708c628b359ceb4981ab2.png            0.775
+    /@@mobile_image?key=373e5902295de703a8d15ba2925b39a9.png            0.704
+    /@@mobile_image?key=c481ece79b8392fdd694abac94373bb7.png            0.692
+    /@@mobile_image?key=ee4eef421be8f235b8c0329c9e4dde65.png            0.716
+    /@@mobile_image?key=331350c3e262bf7389b396bfffb626c2.png            0.706
+    /@@mobile_image?key=6631e14cdf53d54a9d9924dd38c89558.png            0.675
+    /@@mobile_image?key=978a5b8cef208724511317ae1502bffe.png            0.689
+    /@@mobile_image?key=a2a25f6080dd8f9f9bd8d9690d76f395.png            1.239
+    /@@mobile_image?key=6d71d5f52935a25d0f056ad5c8353135.png            0.766
+    /@@mobile_image?key=e0115a83f9bc84e13d4ad902c70108c8.png            0.738
+    /@@mobile_image?key=cb33acfe03c34e9dd056393ff3f7db6c.png            0.778
+    /@@mobile_image?key=c9639e5974ddebc4b44b8f094c1ff1ee.png            0.746
+    /@@mobile_image?key=c580ddcfdbd65c68d283e5d44b381983.png            1.721
+    /@@mobile_image?key=aa920e645e3b49e93ef08208dee18d65.png            0.736
+    /@@mobile_image?key=2be66372650893e9801a30d442a824a4.png            0.670
+    /@@mobile_image?key=08a047ebe0b9a8343c6609d97d3f5b15.png            1.164
+    /@@mobile_image?key=7eee7698552130868caf27f039e83f4f.png            0.674
+    /@@mobile_image?key=24830c7d3309a812abbf432067034f00.png            0.800
+    /@@mobile_image?key=d0cdb3ab8b7aa9bf07b6e31c805f1975.png            0.701
+    /@@mobile_image?key=aac7a0d3c40b9d74083a6cd02769ca2b.png            0.676
+    /@@mobile_image?key=9a8a89de6adeeff0c8368ea595d14a19.png            1.033
+    /@@mobile_image?key=82ec43195a695b25afe09a0e577810e8.png            0.698
+    /@@mobile_image?key=ad08b3b82e7745f1d181e6c9fe0fd47d.png            0.768
+    /@@mobile_image?key=67b52a61dc6643e4fdf284e5aed9c8fa.png            0.662
+    /@@mobile_image?key=679404c6ed73389212cb9b08cabf738d.png            0.795
+    /@@mobile_image?key=8b4a7468255d9bb893a88be1123534aa.png            0.894
+    /@@mobile_image?key=0e6f5ac561d3141863c38a6cd9fbb515.png            0.714
+    /@@mobile_image?key=20039428e194368ece3c88967fd033f3.png            0.730
+    /@@mobile_image?key=79d58bb3af55d24126228287f69b28ad.png            0.750
+    /@@mobile_image?key=7eac6588f5c34d23d60b3f5d1a93bb31.png            0.743
+    /@@mobile_image?key=0b32c74b52648019180ffcf0bea280b2.png            0.806
+    /@@mobile_image?key=60ff5fa9f0ffe0b7b4bad3a9f9b2d6ea.png            0.671
+    /@@shortimageurl/AD513                                              1.091
+    /grade-10/05-the-periodic-table/@@tracking_image?referer=           0.560
+    http://m.qap.everythingscience.co.za/grade-10/04-the-atom/
+    04-the-atom-08.cnxmlplus                                            
+    ==================================================================  ============
+
+    Load time per page:
+    
+    **55.772 seconds**
+
+    Projected serve rate:
+
+    (60 / 55.772 seconds) * 60 = **64.5485189701 pages per hour.**
+
+
+750 concurrent users
+
+    ==================================================================  ============
+    URL                                                                 Request time
+    ==================================================================  ============
+    /grade-10/05-the-periodic-table/05-the-periodic-table-01.cnxmlplus  0.683 
+    /@@shortimageurl/AD510                                              0.569
+    /@@shortimageurl/AD511                                              0.564
+    /@@mobile_image?key=8b0bd8e3345bc429a3f636e3e07a04b2.png            0.691
+    /@@shortimageurl/AD512                                              1.368
+    /@@mobile_image?key=7b4be31b46722cd43d1015f116b7e3f1.png            1.591
+    /@@mobile_image?key=2544b965c153fae51f6ac177de34b986.png            0.750
+    /@@mobile_image?key=4ef3bf468cb48070148dd217b034f6fb.png            0.837
+    /@@mobile_image?key=25ff2ae319e6ba28f424d0f3ec2b35ef.png            0.792
+    /@@mobile_image?key=17ad0d1adc7278d5f3e157641fa0b2f4.png            0.715
+    /@@mobile_image?key=9bd096913bfd88c059698f9ba8b048f1.png            0.785
+    /@@mobile_image?key=459ea8be55b6b79c61c99e05997b9e51.png            0.761
+    /@@mobile_image?key=6b720d16b7857a81b0d819ec3eac9c22.png            0.772
+    /@@mobile_image?key=66a94ac3fd51ac936dbc297958d81b42.png            0.698
+    /@@mobile_image?key=f8c53946f5e89a5ae16e7b52c94e96d8.png            0.732
+    /@@mobile_image?key=feec6c6188f2085b8a4ef86211c90186.png            0.743
+    /@@mobile_image?key=5bc4bd1f5144391739a4d4182410316b.png            0.714
+    /@@mobile_image?key=8cd33db7801b1911c840342ec94d5ea8.png            0.824
+    /@@mobile_image?key=7d907101d4391f5cc801a24951620ae8.png            0.750
+    /@@mobile_image?key=49e1207917564b80288d171709bff3fe.png            0.680
+    /@@mobile_image?key=4d4ea0f18c98b9e4f5d7093e58ef77c0.png            0.699
+    /@@mobile_image?key=bc09066d6104bb4fbab0111d53bb0016.png            0.734
+    /@@mobile_image?key=e73b83c8b7c167019c593db770184cae.png            2.621
+    /@@mobile_image?key=b2c70956388cc07422c14767c28d74c5.png            1.531
+    /@@mobile_image?key=3880dd8f0fe610278c12be30c42aee55.png            1.641
+    /@@mobile_image?key=36ac7e4e5bb463b3cb64ea19bb31d7dc.png            0.696
+    /@@mobile_image?key=3a514f9ebde121ec7d03284d4fb4422c.png            0.727
+    /@@mobile_image?key=4b4b7c48f32657f30a6a772b218fb1a3.png            0.688
+    /@@mobile_image?key=caf1848ad50defe990ea86337eab9233.png            1.517
+    /@@mobile_image?key=1c87b254d6a03ccd80f634f5de8eafb3.png            3.306
+    /@@mobile_image?key=afd7fbf97328485b45980cc6d9f78cca.png            1.658
+    /@@mobile_image?key=6eb5016e88ad606a49030715e634f562.png            0.854
+    /@@mobile_image?key=684344c5d30d01fa23632bca5018d909.png            0.737
+    /@@mobile_image?key=90408fe81acaa6a987db7b19f69e845b.png            0.689
+    /@@mobile_image?key=07f8b53830e827cc02010c031c122018.png            1.441
+    /@@mobile_image?key=2ede975866d71d01a12b3a8c739fdd3b.png            2.192
+    /@@mobile_image?key=1f56771a9c381b7011b68c754e7e999a.png            1.520
+    /@@mobile_image?key=67d91b87621708c628b359ceb4981ab2.png            0.760
+    /@@mobile_image?key=373e5902295de703a8d15ba2925b39a9.png            0.698
+    /@@mobile_image?key=c481ece79b8392fdd694abac94373bb7.png            0.710
+    /@@mobile_image?key=ee4eef421be8f235b8c0329c9e4dde65.png            3.119
+    /@@mobile_image?key=331350c3e262bf7389b396bfffb626c2.png            0.742
+    /@@mobile_image?key=6631e14cdf53d54a9d9924dd38c89558.png            1.497
+    /@@mobile_image?key=978a5b8cef208724511317ae1502bffe.png            0.723
+    /@@mobile_image?key=a2a25f6080dd8f9f9bd8d9690d76f395.png            2.794
+    /@@mobile_image?key=6d71d5f52935a25d0f056ad5c8353135.png            1.952
+    /@@mobile_image?key=e0115a83f9bc84e13d4ad902c70108c8.png            2.482
+    /@@mobile_image?key=cb33acfe03c34e9dd056393ff3f7db6c.png            0.757
+    /@@mobile_image?key=c9639e5974ddebc4b44b8f094c1ff1ee.png            0.765
+    /@@mobile_image?key=c580ddcfdbd65c68d283e5d44b381983.png            0.727
+    /@@mobile_image?key=aa920e645e3b49e93ef08208dee18d65.png            1.721
+    /@@mobile_image?key=2be66372650893e9801a30d442a824a4.png            3.651
+    /@@mobile_image?key=08a047ebe0b9a8343c6609d97d3f5b15.png            1.533
+    /@@mobile_image?key=7eee7698552130868caf27f039e83f4f.png            0.693
+    /@@mobile_image?key=24830c7d3309a812abbf432067034f00.png            0.823
+    /@@mobile_image?key=d0cdb3ab8b7aa9bf07b6e31c805f1975.png            0.788
+    /@@mobile_image?key=aac7a0d3c40b9d74083a6cd02769ca2b.png            0.780
+    /@@mobile_image?key=9a8a89de6adeeff0c8368ea595d14a19.png            0.702
+    /@@mobile_image?key=82ec43195a695b25afe09a0e577810e8.png            0.747
+    /@@mobile_image?key=ad08b3b82e7745f1d181e6c9fe0fd47d.png            2.310
+    /@@mobile_image?key=67b52a61dc6643e4fdf284e5aed9c8fa.png            0.676
+    /@@mobile_image?key=679404c6ed73389212cb9b08cabf738d.png            0.778
+    /@@mobile_image?key=8b4a7468255d9bb893a88be1123534aa.png            0.734
+    /@@mobile_image?key=0e6f5ac561d3141863c38a6cd9fbb515.png            0.681
+    /@@mobile_image?key=20039428e194368ece3c88967fd033f3.png            1.715
+    /@@mobile_image?key=79d58bb3af55d24126228287f69b28ad.png            0.716
+    /@@mobile_image?key=7eac6588f5c34d23d60b3f5d1a93bb31.png            1.645
+    /@@mobile_image?key=0b32c74b52648019180ffcf0bea280b2.png            3.586
+    /@@mobile_image?key=60ff5fa9f0ffe0b7b4bad3a9f9b2d6ea.png            0.738
+    /@@shortimageurl/AD513                                              0.594
+    /grade-10/05-the-periodic-table/@@tracking_image?referer=           0.559
+    http://m.qap.everythingscience.co.za/grade-10/04-the-atom/
+    04-the-atom-08.cnxmlplus                                            
+    ==================================================================  ============
+
+    Load time per page:
+    
+    **83.16 seconds**
+
+    Projected serve rate:
+
+    (60 / 83.166 seconds) * 60 = **43.28 pages per hour.**
+
+
+1000 concurrent users
+
+    ==================================================================  ============
+    URL                                                                 Request time
+    ==================================================================  ============
+    /grade-10/05-the-periodic-table/05-the-periodic-table-01.cnxmlplus  2.154
+    /@@shortimageurl/AD510                                              2.592
+    /@@shortimageurl/AD511                                              2.078
+    /@@mobile_image?key=8b0bd8e3345bc429a3f636e3e07a04b2.png            4.167
+    /@@shortimageurl/AD512                                              0.886
+    /@@mobile_image?key=7b4be31b46722cd43d1015f116b7e3f1.png            0.759
+    /@@mobile_image?key=2544b965c153fae51f6ac177de34b986.png            0.716
+    /@@mobile_image?key=4ef3bf468cb48070148dd217b034f6fb.png            1.039
+    /@@mobile_image?key=25ff2ae319e6ba28f424d0f3ec2b35ef.png            4.390
+    /@@mobile_image?key=17ad0d1adc7278d5f3e157641fa0b2f4.png            0.782
+    /@@mobile_image?key=9bd096913bfd88c059698f9ba8b048f1.png            0.812
+    /@@mobile_image?key=459ea8be55b6b79c61c99e05997b9e51.png            2.055
+    /@@mobile_image?key=6b720d16b7857a81b0d819ec3eac9c22.png            2.154
+    /@@mobile_image?key=66a94ac3fd51ac936dbc297958d81b42.png            1.971
+    /@@mobile_image?key=f8c53946f5e89a5ae16e7b52c94e96d8.png            2.121
+    /@@mobile_image?key=feec6c6188f2085b8a4ef86211c90186.png            0.676
+    /@@mobile_image?key=5bc4bd1f5144391739a4d4182410316b.png            6.917
+    /@@mobile_image?key=8cd33db7801b1911c840342ec94d5ea8.png            3.261
+    /@@mobile_image?key=7d907101d4391f5cc801a24951620ae8.png            0.844
+    /@@mobile_image?key=49e1207917564b80288d171709bff3fe.png            3.706
+    /@@mobile_image?key=4d4ea0f18c98b9e4f5d7093e58ef77c0.png            0.759
+    /@@mobile_image?key=bc09066d6104bb4fbab0111d53bb0016.png            2.128
+    /@@mobile_image?key=e73b83c8b7c167019c593db770184cae.png            3.575
+    /@@mobile_image?key=b2c70956388cc07422c14767c28d74c5.png            0.965
+    /@@mobile_image?key=3880dd8f0fe610278c12be30c42aee55.png            4.933
+    /@@mobile_image?key=36ac7e4e5bb463b3cb64ea19bb31d7dc.png            2.013
+    /@@mobile_image?key=3a514f9ebde121ec7d03284d4fb4422c.png            1.605
+    /@@mobile_image?key=4b4b7c48f32657f30a6a772b218fb1a3.png            2.167
+    /@@mobile_image?key=caf1848ad50defe990ea86337eab9233.png            2.048
+    /@@mobile_image?key=1c87b254d6a03ccd80f634f5de8eafb3.png            0.745
+    /@@mobile_image?key=afd7fbf97328485b45980cc6d9f78cca.png            0.703
+    /@@mobile_image?key=6eb5016e88ad606a49030715e634f562.png            0.957
+    /@@mobile_image?key=684344c5d30d01fa23632bca5018d909.png            2.263
+    /@@mobile_image?key=90408fe81acaa6a987db7b19f69e845b.png            0.738
+    /@@mobile_image?key=07f8b53830e827cc02010c031c122018.png            0.681
+    /@@mobile_image?key=2ede975866d71d01a12b3a8c739fdd3b.png            3.310
+    /@@mobile_image?key=1f56771a9c381b7011b68c754e7e999a.png            5.699
+    /@@mobile_image?key=67d91b87621708c628b359ceb4981ab2.png            4.468
+    /@@mobile_image?key=373e5902295de703a8d15ba2925b39a9.png            4.395
+    /@@mobile_image?key=c481ece79b8392fdd694abac94373bb7.png            3.702
+    /@@mobile_image?key=ee4eef421be8f235b8c0329c9e4dde65.png            0.736
+    /@@mobile_image?key=331350c3e262bf7389b396bfffb626c2.png            2.748
+    /@@mobile_image?key=6631e14cdf53d54a9d9924dd38c89558.png            2.161
+    /@@mobile_image?key=978a5b8cef208724511317ae1502bffe.png            7.801
+    /@@mobile_image?key=a2a25f6080dd8f9f9bd8d9690d76f395.png            1.283
+    /@@mobile_image?key=6d71d5f52935a25d0f056ad5c8353135.png            1.486
+    /@@mobile_image?key=e0115a83f9bc84e13d4ad902c70108c8.png            0.855
+    /@@mobile_image?key=cb33acfe03c34e9dd056393ff3f7db6c.png            2.089
+    /@@mobile_image?key=c9639e5974ddebc4b44b8f094c1ff1ee.png            3.675
+    /@@mobile_image?key=c580ddcfdbd65c68d283e5d44b381983.png            1.941
+    /@@mobile_image?key=aa920e645e3b49e93ef08208dee18d65.png            2.869
+    /@@mobile_image?key=2be66372650893e9801a30d442a824a4.png            0.695
+    /@@mobile_image?key=08a047ebe0b9a8343c6609d97d3f5b15.png            3.190
+    /@@mobile_image?key=7eee7698552130868caf27f039e83f4f.png            4.656
+    /@@mobile_image?key=24830c7d3309a812abbf432067034f00.png            0.850
+    /@@mobile_image?key=d0cdb3ab8b7aa9bf07b6e31c805f1975.png            6.472
+    /@@mobile_image?key=aac7a0d3c40b9d74083a6cd02769ca2b.png            0.757
+    /@@mobile_image?key=9a8a89de6adeeff0c8368ea595d14a19.png            2.568
+    /@@mobile_image?key=82ec43195a695b25afe09a0e577810e8.png            1.964
+    /@@mobile_image?key=ad08b3b82e7745f1d181e6c9fe0fd47d.png            0.772
+    /@@mobile_image?key=67b52a61dc6643e4fdf284e5aed9c8fa.png            0.724
+    /@@mobile_image?key=679404c6ed73389212cb9b08cabf738d.png            1.101
+    /@@mobile_image?key=8b4a7468255d9bb893a88be1123534aa.png            2.848
+    /@@mobile_image?key=0e6f5ac561d3141863c38a6cd9fbb515.png            2.148
+    /@@mobile_image?key=20039428e194368ece3c88967fd033f3.png            0.722
+    /@@mobile_image?key=79d58bb3af55d24126228287f69b28ad.png            0.895
+    /@@mobile_image?key=7eac6588f5c34d23d60b3f5d1a93bb31.png            0.974
+    /@@mobile_image?key=0b32c74b52648019180ffcf0bea280b2.png            1.974
+    /@@mobile_image?key=60ff5fa9f0ffe0b7b4bad3a9f9b2d6ea.png            2.395
+    /@@shortimageurl/AD513                                              0.653
+    /grade-10/05-the-periodic-table/@@tracking_image?referer=
+    http://m.qap.everythingscience.co.za/grade-10/04-the-atom/
+    04-the-atom-08.cnxmlplus                                            5.730
+    ==================================================================  ============
+
+    Load time per page:
+    
+    **161.66 seconds**
+
+    Projected serve rate:
+
+    (60 / 161.666 seconds) * 60 = **22.26 pages per hour.**
 
 
 9. Testing Varnish
