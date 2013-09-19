@@ -61,8 +61,10 @@ class MyContentHandler(ContentHandler):
     def __init__(self, workbook):
         self._workbook = workbook
         self._sheets = {}
+        self._root = {}
+        self._config = {}
+        self._responses = {}
         self._testResults = {}
-        self.responses_written = 0
 
     def startElementNS(self, name, qname, attributes):
         uri, localname = name
@@ -78,6 +80,94 @@ class MyContentHandler(ContentHandler):
     def endElementNS(self, ns_name, qname):
         pass
    
+    def export_root(self, localname, qname, attributes):
+        attrs = self._getAttrs(attributes)
+        name = self._worksheetName(localname, attrs)
+        val = self._root.get(name, [])
+        val.append(attrs)
+        self._root[name] = val
+
+    def export_config(self, localname, qname, attributes):
+        attrs = self._getConfigAttrs(attributes)
+        name = self._worksheetName(localname, attrs)
+        val = self._config.get(name, [])
+        val.append(attrs)
+        self._config[name] = val
+
+    def export_response(self, localname, qname, attributes):
+        attrs = self._getAttrs(attributes)
+        name = self._worksheetName(localname, attrs)
+        val = self._responses.get(name, [])
+        val.append(attrs)
+        self._responses[name] = val
+
+    def export_testresult(self, localname, qname, attributes):
+        attrs = self._getAttrs(attributes)
+        name = self._worksheetName(localname, attrs)
+        val = self._testResults.get(name, [])
+        val.append(attrs)
+        self._testResults[name] = val
+
+    def write_root(self):
+        for ws_name, root_attrs in self._root.items():
+            worksheet = self._getWorksheet(ws_name)
+            for attrs in root_attrs:
+                for idx, key in enumerate(['version', 'time']):
+                    worksheet.write(idx, 0, key)
+                    worksheet.write(idx, 1, attrs[key])
+
+    def write_config(self):
+        columns = ["sleep_time_min", "node", "startup_delay", "cycles",
+                   "cycle_time", "description", "configuration_file",
+                   "class_title", "server_url", "module", "id", 
+                   "class_description", "sleep_time", "sleep_time_max",
+                   "duration", "method", "log_xml", "class", "python_version"
+                  ]
+        for ws_name, config_attrs in self._config.items():
+            worksheet = self._getWorksheet(ws_name)
+            offset = worksheet.last_used_row +1
+            for attrs in config_attrs:
+                for idx, key in enumerate(columns):
+                    value = attrs.get(key)
+                    if value is not None:
+                        worksheet.write(idx+offset, 0, key)
+                        worksheet.write(idx+offset, 1, attrs.get(key))
+
+    def write_responses(self):
+        columns = ["cycle", "cvus", "thread", "suite", "name", "step", "number",
+                   "type", "result", "url", "code", "description", "time",
+                   "duration",]
+        
+        ws_names = self._responses.keys()
+        ws_names.sort()
+        for ws_count, ws_name in enumerate(ws_names):
+            print 'Writing %s' % ws_name
+            print '    %s of %s' % (ws_count, len(ws_names))
+            worksheet = self._getWorksheet(ws_name)
+            last_row = worksheet.last_used_row
+            if last_row == 0:
+                self._writeHeaders(worksheet, 0, columns)
+            response_attrs = self._responses[ws_name]
+            for response_count, attrs in enumerate(response_attrs):
+                row_offset = last_row +1
+                print 'Writing response number %s' % response_count
+                for idx, col_name in enumerate(columns):
+                    worksheet.write(row_offset, idx, attrs.get(col_name))
+                last_row = worksheet.last_used_row
+    
+    def write_testresults(self):
+        columns = ["cycle", "cvus", "thread", "suite", "name", "time", "result",
+                   "steps", "duration", "connection_duration", "requests",
+                   "pages", "xmlrpc", "redirects", "images", "links",]
+        for ws_name, results_attrs in self._testResults.items():
+            worksheet = self._getWorksheet(ws_name)
+            row_offset = worksheet.last_used_row +2
+            self._writeHeaders(worksheet, row_offset, columns)
+            for attrs in results_attrs:
+                for row_idx, col_name in enumerate(columns):
+                    print 'Writing testResult %s to worksheet %s' % (row_idx+1, ws_name)
+                    worksheet.write(row_offset+1, row_idx, attrs.get(col_name))
+
     def _worksheetName(self, localname, attrs):
         if localname in ['funkload', 'config']:
             return 'main'
@@ -110,67 +200,6 @@ class MyContentHandler(ContentHandler):
         for idx, col_name in enumerate(columns):
             worksheet.write(row, idx, col_name)
 
-    def export_root(self, localname, qname, attributes):
-        attrs = self._getAttrs(attributes)
-        name = self._worksheetName(localname, attrs)
-        worksheet = self._getWorksheet(name)
-        for idx, key in enumerate(['version', 'time']):
-            worksheet.write(idx, 0, key)
-            worksheet.write(idx, 1, attrs[key])
-
-    def export_config(self, localname, qname, attributes):
-        attrs = self._getConfigAttrs(attributes)
-        name = self._worksheetName(localname, attrs)
-        worksheet = self._getWorksheet(name)
-
-        offset = worksheet.last_used_row +1
-        for idx, key in enumerate(["sleep_time_min", "node", "startup_delay",
-                                    "cycles", "cycle_time", "description",
-                                    "configuration_file", "class_title",
-                                    "server_url", "module", "id",
-                                    "class_description", "sleep_time",
-                                    "sleep_time_max", "duration", "method",
-                                    "log_xml", "class", "python_version"
-                                   ]):
-            value = attrs.get(key)
-            if value:
-                worksheet.write(idx+offset, 0, key)
-                worksheet.write(idx+offset, 1, attrs.get(key))
-
-    def export_response(self, localname, qname, attributes):
-        columns = ["cycle", "cvus", "thread", "suite", "name", "step", "number",
-                   "type", "result", "url", "code", "description", "time",
-                   "duration",]
-        self.responses_written += 1
-        attrs = self._getAttrs(attributes)
-        name = self._worksheetName(localname, attrs)
-        worksheet = self._getWorksheet(name)
-        last_row = worksheet.last_used_row
-        if last_row == 0:
-            self._writeHeaders(worksheet, 0, columns)
-        row_offset = last_row +1
-        for idx, col_name in enumerate(columns):
-            print 'Writing response number %s' % self.responses_written
-            worksheet.write(row_offset, idx, attrs.get(col_name))
-    
-    def export_testresult(self, localname, qname, attributes):
-        attrs = self._getAttrs(attributes)
-        name = self._worksheetName(localname, attrs)
-        worksheet = self._getWorksheet(name)
-        self._testResults[name] = attrs
-    
-    def exportAllTestResults(self):
-        columns = ["cycle", "cvus", "thread", "suite", "name", "time", "result",
-                   "steps", "duration", "connection_duration", "requests",
-                   "pages", "xmlrpc", "redirects", "images", "links",]
-        for ws_name, result in self._testResults.items():
-            worksheet = self._getWorksheet(ws_name)
-            row_offset = worksheet.last_used_row +2
-            self._writeHeaders(worksheet, row_offset, columns)
-            for idx, col_name in enumerate(columns):
-                print 'Writing testResult %s to worksheet %s' % (idx+1, ws_name)
-                worksheet.write(row_offset+1, idx, result.get(col_name))
-
 
 if __name__ == '__main__':
     if len(sys.argv) < 3:
@@ -185,7 +214,10 @@ if __name__ == '__main__':
 
         handler = MyContentHandler(workbook)
         lxml.sax.saxify(tree, handler)
-        handler.exportAllTestResults()
+        handler.write_root()
+        handler.write_config()
+        handler.write_responses()
+        handler.write_testresults()
 
         workbook.save(outfile)
         workbook.save(TemporaryFile())
