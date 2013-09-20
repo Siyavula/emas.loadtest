@@ -52,39 +52,27 @@
 <li><a class="reference internal" href="#an-overview-of-the-setup-we-benchmarked">2. An overview of the setup we benchmarked</a></li>
 <li><a class="reference internal" href="#testing-authenticated-reads">3. Testing authenticated reads</a></li>
 <li><a class="reference internal" href="#authenticated-read-test-results">4. Authenticated read test results</a><ul>
-<li><a class="reference internal" href="#concurrent-users">100 concurrent users</a></li>
-<li><a class="reference internal" href="#id2">250 concurrent users</a></li>
-<li><a class="reference internal" href="#id3">500 concurrent users</a></li>
-<li><a class="reference internal" href="#id4">750 concurrent users</a></li>
-<li><a class="reference internal" href="#id5">1000 concurrent users</a></li>
-<li><a class="reference internal" href="#summary">Summary</a></li>
 <li><a class="reference internal" href="#observations">Observations</a></li>
 <li><a class="reference internal" href="#optimisations-done">Optimisations done</a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#testing-practice-service">5. Testing practice service</a></li>
 <li><a class="reference internal" href="#results-for-testing-practice-service">6. Results for testing practice service</a><ul>
-<li><a class="reference internal" href="#id6">100 concurrent users</a></li>
-<li><a class="reference internal" href="#id7">150 concurrent users</a></li>
-<li><a class="reference internal" href="#id8">200 concurrent users</a></li>
-<li><a class="reference internal" href="#id9">Optimisations done</a></li>
+<li><a class="reference internal" href="#id2">Observations</a></li>
+<li><a class="reference internal" href="#id3">Optimisations done</a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#testing-mobile-authenticated-reads">7. Testing mobile authenticated reads</a></li>
 <li><a class="reference internal" href="#results-for-testing-mobile-authenticated-reads">8. Results for testing mobile authenticated reads</a><ul>
-<li><a class="reference internal" href="#id10">100 concurrent users</a></li>
-<li><a class="reference internal" href="#id11">250 concurrent users</a></li>
-<li><a class="reference internal" href="#id12">500 concurrent users</a></li>
-<li><a class="reference internal" href="#id13">750 concurrent users</a></li>
-<li><a class="reference internal" href="#id14">1000 concurrent users</a></li>
+<li><a class="reference internal" href="#id4">Observations</a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#testing-varnish">9. Testing Varnish</a></li>
 <li><a class="reference internal" href="#results-of-varnish">10. Results of Varnish</a><ul>
 <li><a class="reference internal" href="#user">1 user</a></li>
-<li><a class="reference internal" href="#id15">10 concurrent users</a></li>
-<li><a class="reference internal" href="#id16">100 concurrent users</a></li>
-<li><a class="reference internal" href="#id17">1000 concurrent users</a></li>
+<li><a class="reference internal" href="#concurrent-users">10 concurrent users</a></li>
+<li><a class="reference internal" href="#id5">100 concurrent users</a></li>
+<li><a class="reference internal" href="#id6">1000 concurrent users</a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#recommendation-for-scaling-conclusion">Recommendation for scaling / Conclusion</a></li>
@@ -272,73 +260,6 @@ to 1000 concurrent users.</p>
 <h2>4. Authenticated read test results<a class="headerlink" href="#authenticated-read-test-results" title="Permalink to this headline">¶</a></h2>
 <blockquote>
 <div>Funkload bench report here: <a class="reference external" href="http://197.221.50.101/stats/test_AuthenticatedRead-20130822T143507/">Authenticated read</a></div></blockquote>
-<div class="section" id="concurrent-users">
-<h3>100 concurrent users<a class="headerlink" href="#concurrent-users" title="Permalink to this headline">¶</a></h3>
-<blockquote>
-<div><ul class="simple">
-<li>Total pages served:             2037 pages</li>
-<li>Successfull pages per second:   11.317 pages/ second</li>
-<li>Errors:                         0.00% errors</li>
-<li>Fastest page:                   0.198 seconds</li>
-<li>Slowest page:                   44.309 second</li>
-<li>95th percentile:                27.128 seconds</li>
-</ul>
-</div></blockquote>
-</div>
-<div class="section" id="id2">
-<h3>250 concurrent users<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h3>
-<blockquote>
-<div><ul class="simple">
-<li>Total pages served:             1863 pages</li>
-<li>Successfull pages per second:   10.350 pages/ second</li>
-<li>Errors:                         0.00% errors</li>
-<li>Fastest page:                   0.475 seconds</li>
-<li>Slowest page:                   68.065 second</li>
-<li>95th percentile:                44. 851 seconds</li>
-</ul>
-</div></blockquote>
-</div>
-<div class="section" id="id3">
-<h3>500 concurrent users<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h3>
-<blockquote>
-<div><ul class="simple">
-<li>Total pages served:             1929 pages</li>
-<li>Successfull pages per second:   10.717 pages/ second</li>
-<li>Errors:                         0.00% errors</li>
-<li>Fastest page:                   0.428 seconds</li>
-<li>Slowest page:                   64.953 second</li>
-<li>95th percentile:                33.854 seconds</li>
-</ul>
-</div></blockquote>
-</div>
-<div class="section" id="id4">
-<h3>750 concurrent users<a class="headerlink" href="#id4" title="Permalink to this headline">¶</a></h3>
-<blockquote>
-<div><ul class="simple">
-<li>Total pages served:             1984 pages</li>
-<li>Successfull pages per second:   11.022 pages/ second</li>
-<li>Errors:                         0.00% errors</li>
-<li>Fastest page:                   0.439 seconds</li>
-<li>Slowest page:                   43.599 second</li>
-<li>95th percentile:                20.745 seconds</li>
-</ul>
-</div></blockquote>
-</div>
-<div class="section" id="id5">
-<h3>1000 concurrent users<a class="headerlink" href="#id5" title="Permalink to this headline">¶</a></h3>
-<blockquote>
-<div><ul class="simple">
-<li>Total pages served:             1888 pages</li>
-<li>Successfull pages per second:   10.489 pages/ second</li>
-<li>Errors:                         0.00% errors</li>
-<li>Fastest page:                   0.374 seconds</li>
-<li>Slowest page:                   34.843 second</li>
-<li>95th percentile:                18.969 seconds</li>
-</ul>
-</div></blockquote>
-</div>
-<div class="section" id="summary">
-<h3>Summary<a class="headerlink" href="#summary" title="Permalink to this headline">¶</a></h3>
 <table border="1" class="docutils">
 <colgroup>
 <col width="15%" />
@@ -395,19 +316,18 @@ to 1000 concurrent users.</p>
 </tr>
 </tbody>
 </table>
-</div>
 <div class="section" id="observations">
 <h3>Observations<a class="headerlink" href="#observations" title="Permalink to this headline">¶</a></h3>
 <blockquote>
-<div><p>Accross all tested concurrencies the cluster serves more than 10 pages per
-second.  Given this number we can project that the cluster should be able to
-serve:</p>
+<div><p>Accross all tested concurrencies, for simple authenticated reading, the
+cluster serves more than 10 pages per second.  Given this number we can
+project that the cluster should be able to serve around:</p>
 <p>10 pages/ second * 60 seconds * 60 minutes = <strong>36000 pages / hour</strong></p>
 <p>The test results show an interesting decline in performance around 250 and
 500 concurrent users.  This trend is reversed for 750 and 1000 concurrent
 users, where the tests show marked better performance.  No errors were
-experienced by Funkload during the test cycles.  This means the cluster
-continued to work even at high concurrencies.</p>
+experienced by Funkload during any the test cycles.  This means the cluster
+continued to serve even at high concurrencies.</p>
 <p>At the top tested concurrency of 1000 users the cluster will serve most
 pages in about 18.969 seconds.  This gives the cluster an Apdex rating of
 &#8216;Good&#8217; (0.916) which means most users should be satisfied with their
@@ -462,17 +382,53 @@ This test we then ran with user concurrencies of 100, 150 and 200.</p>
 <h2>6. Results for testing practice service<a class="headerlink" href="#results-for-testing-practice-service" title="Permalink to this headline">¶</a></h2>
 <blockquote>
 <div>Funkload bench report here: <a class="reference external" href="http://197.221.50.101/stats/test_practice-20130823T121013/">Practise service test</a></div></blockquote>
-<div class="section" id="id6">
-<h3>100 concurrent users<a class="headerlink" href="#id6" title="Permalink to this headline">¶</a></h3>
+<table border="1" class="docutils">
+<colgroup>
+<col width="17%" />
+<col width="17%" />
+<col width="17%" />
+<col width="17%" />
+<col width="17%" />
+<col width="17%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Concurrent users</th>
+<th class="head">Successfull pages/s</th>
+<th class="head">Total pages served</th>
+<th class="head">Fastest pages</th>
+<th class="head">Slowest pages</th>
+<th class="head">95th percentile</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>100</td>
+<td>32.404</td>
+<td>7777</td>
+<td>0.648</td>
+<td>30.055</td>
+<td>4.562</td>
+</tr>
+<tr class="row-odd"><td>150</td>
+<td>28.571</td>
+<td>6860</td>
+<td>1.236</td>
+<td>67.015</td>
+<td>8.508</td>
+</tr>
+<tr class="row-even"><td>200</td>
+<td>26.683</td>
+<td>6404</td>
+<td>1.883</td>
+<td>91.480</td>
+<td>11.373</td>
+</tr>
+</tbody>
+</table>
+<div class="section" id="id2">
+<h3>Observations<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h3>
 </div>
-<div class="section" id="id7">
-<h3>150 concurrent users<a class="headerlink" href="#id7" title="Permalink to this headline">¶</a></h3>
-</div>
-<div class="section" id="id8">
-<h3>200 concurrent users<a class="headerlink" href="#id8" title="Permalink to this headline">¶</a></h3>
-</div>
-<div class="section" id="id9">
-<h3>Optimisations done<a class="headerlink" href="#id9" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id3">
+<h3>Optimisations done<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h3>
 <blockquote>
 <div>When we analysed the data from the practice service test we realized that
 the Plone login process takes quite a bit of time.  Upon further
@@ -542,20 +498,64 @@ of cycles and concurrencies in those cycles.</p>
 </div>
 <div class="section" id="results-for-testing-mobile-authenticated-reads">
 <h2>8. Results for testing mobile authenticated reads<a class="headerlink" href="#results-for-testing-mobile-authenticated-reads" title="Permalink to this headline">¶</a></h2>
-<div class="section" id="id10">
-<h3>100 concurrent users<a class="headerlink" href="#id10" title="Permalink to this headline">¶</a></h3>
-</div>
-<div class="section" id="id11">
-<h3>250 concurrent users<a class="headerlink" href="#id11" title="Permalink to this headline">¶</a></h3>
-</div>
-<div class="section" id="id12">
-<h3>500 concurrent users<a class="headerlink" href="#id12" title="Permalink to this headline">¶</a></h3>
-</div>
-<div class="section" id="id13">
-<h3>750 concurrent users<a class="headerlink" href="#id13" title="Permalink to this headline">¶</a></h3>
-</div>
-<div class="section" id="id14">
-<h3>1000 concurrent users<a class="headerlink" href="#id14" title="Permalink to this headline">¶</a></h3>
+<table border="1" class="docutils">
+<colgroup>
+<col width="17%" />
+<col width="17%" />
+<col width="17%" />
+<col width="17%" />
+<col width="17%" />
+<col width="17%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Concurrent users</th>
+<th class="head">Successfull pages/s</th>
+<th class="head">Total pages served</th>
+<th class="head">Fastest pages</th>
+<th class="head">Slowest pages</th>
+<th class="head">95th percentile</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>100</td>
+<td>5.222</td>
+<td>940</td>
+<td>0.322</td>
+<td>56.810</td>
+<td>51.439</td>
+</tr>
+<tr class="row-odd"><td>250</td>
+<td>3.317</td>
+<td>597</td>
+<td>0.524</td>
+<td>75.697</td>
+<td>68.783</td>
+</tr>
+<tr class="row-even"><td>500</td>
+<td>3.439</td>
+<td>619</td>
+<td>0.516</td>
+<td>50.441</td>
+<td>41.022</td>
+</tr>
+<tr class="row-odd"><td>750</td>
+<td>4.072</td>
+<td>733</td>
+<td>0.255</td>
+<td>37.729</td>
+<td>26.844</td>
+</tr>
+<tr class="row-even"><td>1000</td>
+<td>4.178</td>
+<td>752</td>
+<td>0.471</td>
+<td>33.915</td>
+<td>26.374</td>
+</tr>
+</tbody>
+</table>
+<div class="section" id="id4">
+<h3>Observations<a class="headerlink" href="#id4" title="Permalink to this headline">¶</a></h3>
 </div>
 </div>
 <div class="section" id="testing-varnish">
@@ -618,8 +618,8 @@ off with 1 user and 10 requests all the way up to 1000 concurrent users and
 </table>
 </div></blockquote>
 </div>
-<div class="section" id="id15">
-<h3>10 concurrent users<a class="headerlink" href="#id15" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="concurrent-users">
+<h3>10 concurrent users<a class="headerlink" href="#concurrent-users" title="Permalink to this headline">¶</a></h3>
 <blockquote>
 <div><table border="1" class="docutils">
 <colgroup>
@@ -658,8 +658,8 @@ off with 1 user and 10 requests all the way up to 1000 concurrent users and
 </table>
 </div></blockquote>
 </div>
-<div class="section" id="id16">
-<h3>100 concurrent users<a class="headerlink" href="#id16" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id5">
+<h3>100 concurrent users<a class="headerlink" href="#id5" title="Permalink to this headline">¶</a></h3>
 <blockquote>
 <div><table border="1" class="docutils">
 <colgroup>
@@ -698,8 +698,8 @@ off with 1 user and 10 requests all the way up to 1000 concurrent users and
 </table>
 </div></blockquote>
 </div>
-<div class="section" id="id17">
-<h3>1000 concurrent users<a class="headerlink" href="#id17" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id6">
+<h3>1000 concurrent users<a class="headerlink" href="#id6" title="Permalink to this headline">¶</a></h3>
 <blockquote>
 <div><table border="1" class="docutils">
 <colgroup>

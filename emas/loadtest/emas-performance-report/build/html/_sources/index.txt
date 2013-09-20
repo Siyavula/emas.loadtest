@@ -165,61 +165,6 @@ Introduction
     
     Funkload bench report here: `Authenticated read`_
 
-
-100 concurrent users
---------------------
-
-    - Total pages served:             2037 pages
-    - Successfull pages per second:   11.317 pages/ second
-    - Errors:                         0.00% errors             
-    - Fastest page:                   0.198 seconds       
-    - Slowest page:                   44.309 second  
-    - 95th percentile:                27.128 seconds
-
-250 concurrent users
---------------------
-
-    - Total pages served:             1863 pages
-    - Successfull pages per second:   10.350 pages/ second
-    - Errors:                         0.00% errors             
-    - Fastest page:                   0.475 seconds       
-    - Slowest page:                   68.065 second  
-    - 95th percentile:                44. 851 seconds
-
-500 concurrent users
---------------------
-
-    - Total pages served:             1929 pages
-    - Successfull pages per second:   10.717 pages/ second
-    - Errors:                         0.00% errors             
-    - Fastest page:                   0.428 seconds       
-    - Slowest page:                   64.953 second  
-    - 95th percentile:                33.854 seconds
-
-750 concurrent users
---------------------
-
-    - Total pages served:             1984 pages
-    - Successfull pages per second:   11.022 pages/ second
-    - Errors:                         0.00% errors             
-    - Fastest page:                   0.439 seconds       
-    - Slowest page:                   43.599 second  
-    - 95th percentile:                20.745 seconds
-
-1000 concurrent users
---------------------
-
-    - Total pages served:             1888 pages
-    - Successfull pages per second:   10.489 pages/ second
-    - Errors:                         0.00% errors             
-    - Fastest page:                   0.374 seconds       
-    - Slowest page:                   34.843 second  
-    - 95th percentile:                18.969 seconds
-
-Summary
--------
-
-
 ================  =================== ================== ================== ==================  ==================
 Concurrent users  Successfull pages/s Total pages served Fastest pages      Slowest pages       95th percentile 
 ================  =================== ================== ================== ==================  ==================
@@ -233,17 +178,17 @@ Concurrent users  Successfull pages/s Total pages served Fastest pages      Slow
 Observations
 ------------
     
-    Accross all tested concurrencies the cluster serves more than 10 pages per
-    second.  Given this number we can project that the cluster should be able to
-    serve:
+    Accross all tested concurrencies, for simple authenticated reading, the
+    cluster serves more than 10 pages per second.  Given this number we can
+    project that the cluster should be able to serve around:
 
     10 pages/ second * 60 seconds * 60 minutes = **36000 pages / hour**
 
     The test results show an interesting decline in performance around 250 and
     500 concurrent users.  This trend is reversed for 750 and 1000 concurrent
     users, where the tests show marked better performance.  No errors were
-    experienced by Funkload during the test cycles.  This means the cluster
-    continued to work even at high concurrencies.
+    experienced by Funkload during any the test cycles.  This means the cluster
+    continued to serve even at high concurrencies.
 
     At the top tested concurrency of 1000 users the cluster will serve most
     pages in about 18.969 seconds.  This gives the cluster an Apdex rating of
@@ -303,17 +248,17 @@ Optimisations done
 
     Funkload bench report here: `Practise service test`_
 
-100 concurrent users
---------------------
+================== =================== ================== ================== ================== ==================
+Concurrent users   Successfull pages/s Total pages served Fastest pages      Slowest pages      95th percentile   
+================== =================== ================== ================== ================== ==================
+            100             32.404               7777             0.648             30.055              4.562
+            150             28.571               6860             1.236             67.015              8.508
+            200             26.683               6404             1.883             91.480             11.373
+================== =================== ================== ================== ================== ==================
 
 
-150 concurrent users
---------------------
-
-
-200 concurrent users
---------------------
-
+Observations
+------------
 
 Optimisations done
 ------------------
@@ -386,23 +331,18 @@ Optimisations done
 8. Results for testing mobile authenticated reads
 =================================================
 
-100 concurrent users
---------------------
+================== =================== ================== ================== ================== ==================
+Concurrent users   Successfull pages/s Total pages served Fastest pages      Slowest pages      95th percentile   
+================== =================== ================== ================== ================== ==================
+            100              5.222                940             0.322             56.810             51.439
+            250              3.317                597             0.524             75.697             68.783
+            500              3.439                619             0.516             50.441             41.022
+            750              4.072                733             0.255             37.729             26.844
+           1000              4.178                752             0.471             33.915             26.374
+================== =================== ================== ================== ================== ==================
 
-
-250 concurrent users
---------------------
-
-500 concurrent users
---------------------
-
-
-750 concurrent users
---------------------
-
-
-1000 concurrent users
----------------------
+Observations
+------------
 
 
 9. Testing Varnish
