@@ -57,6 +57,8 @@
 <li><a class="reference internal" href="#id3">500 concurrent users</a></li>
 <li><a class="reference internal" href="#id4">750 concurrent users</a></li>
 <li><a class="reference internal" href="#id5">1000 concurrent users</a></li>
+<li><a class="reference internal" href="#summary">Summary</a></li>
+<li><a class="reference internal" href="#observations">Observations</a></li>
 <li><a class="reference internal" href="#optimisations-done">Optimisations done</a></li>
 </ul>
 </li>
@@ -188,8 +190,12 @@ mention of &#8216;test cluster&#8217; in this document refers to the following s
 <p>As load generating infrastructure we chose Funkload, since it is written in
 Python, tests are very easy to record, customise and run and the reporting
 functions are excellent.</p>
-<p>Network topology:
-TODO:</p>
+<p>Network topology:</p>
+<p>The public side of the network is 100mbit/sec. The private subnet is
+1000mbit/sec.  Currently SP1, SP2 and SP3 are on the public network and the
+private subnet.  Subsequently all internal communication between these 3
+servers run at 1000mbit/sec.  SP4 is not on the private 1000mbit/ sec
+network.  It is only on the 100mbit/sec public network.</p>
 </div></blockquote>
 </div>
 <div class="section" id="testing-authenticated-reads">
@@ -269,44 +275,154 @@ to 1000 concurrent users.</p>
 <div class="section" id="concurrent-users">
 <h3>100 concurrent users<a class="headerlink" href="#concurrent-users" title="Permalink to this headline">¶</a></h3>
 <blockquote>
-<div>Projected serve rate:</div></blockquote>
+<div><ul class="simple">
+<li>Total pages served:             2037 pages</li>
+<li>Successfull pages per second:   11.317 pages/ second</li>
+<li>Errors:                         0.00% errors</li>
+<li>Fastest page:                   0.198 seconds</li>
+<li>Slowest page:                   44.309 second</li>
+<li>95th percentile:                27.128 seconds</li>
+</ul>
+</div></blockquote>
 </div>
 <div class="section" id="id2">
 <h3>250 concurrent users<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h3>
 <blockquote>
-<div>Projected serve rate:</div></blockquote>
+<div><ul class="simple">
+<li>Total pages served:             1863 pages</li>
+<li>Successfull pages per second:   10.350 pages/ second</li>
+<li>Errors:                         0.00% errors</li>
+<li>Fastest page:                   0.475 seconds</li>
+<li>Slowest page:                   68.065 second</li>
+<li>95th percentile:                44. 851 seconds</li>
+</ul>
+</div></blockquote>
 </div>
 <div class="section" id="id3">
 <h3>500 concurrent users<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h3>
 <blockquote>
-<div><p>Load time per page:</p>
-<p>Projected serve rate:</p>
+<div><ul class="simple">
+<li>Total pages served:             1929 pages</li>
+<li>Successfull pages per second:   10.717 pages/ second</li>
+<li>Errors:                         0.00% errors</li>
+<li>Fastest page:                   0.428 seconds</li>
+<li>Slowest page:                   64.953 second</li>
+<li>95th percentile:                33.854 seconds</li>
+</ul>
 </div></blockquote>
 </div>
 <div class="section" id="id4">
 <h3>750 concurrent users<a class="headerlink" href="#id4" title="Permalink to this headline">¶</a></h3>
 <blockquote>
-<div><p>Load time per page:</p>
-<p>Projected serve rate:</p>
+<div><ul class="simple">
+<li>Total pages served:             1984 pages</li>
+<li>Successfull pages per second:   11.022 pages/ second</li>
+<li>Errors:                         0.00% errors</li>
+<li>Fastest page:                   0.439 seconds</li>
+<li>Slowest page:                   43.599 second</li>
+<li>95th percentile:                20.745 seconds</li>
+</ul>
 </div></blockquote>
 </div>
 <div class="section" id="id5">
 <h3>1000 concurrent users<a class="headerlink" href="#id5" title="Permalink to this headline">¶</a></h3>
 <blockquote>
-<div><p>Load time per page:</p>
-<p>Projected serve rate:</p>
-<p>It is quite clear that as the concurrency rises the cluster serves less-
-and-less pages per second, but never completely stops working.</p>
+<div><ul class="simple">
+<li>Total pages served:             1888 pages</li>
+<li>Successfull pages per second:   10.489 pages/ second</li>
+<li>Errors:                         0.00% errors</li>
+<li>Fastest page:                   0.374 seconds</li>
+<li>Slowest page:                   34.843 second</li>
+<li>95th percentile:                18.969 seconds</li>
+</ul>
+</div></blockquote>
+</div>
+<div class="section" id="summary">
+<h3>Summary<a class="headerlink" href="#summary" title="Permalink to this headline">¶</a></h3>
+<table border="1" class="docutils">
+<colgroup>
+<col width="15%" />
+<col width="18%" />
+<col width="17%" />
+<col width="17%" />
+<col width="17%" />
+<col width="17%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Concurrent users</th>
+<th class="head">Successfull pages/s</th>
+<th class="head">Total pages served</th>
+<th class="head">Fastest pages</th>
+<th class="head">Slowest pages</th>
+<th class="head">95th percentile</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>100</td>
+<td>11.317</td>
+<td>2037</td>
+<td>0.198 s</td>
+<td>44.309 s</td>
+<td>27.128 s</td>
+</tr>
+<tr class="row-odd"><td>250</td>
+<td>10.350</td>
+<td>1863</td>
+<td>0.475 s</td>
+<td>68.065 s</td>
+<td>44.851 s</td>
+</tr>
+<tr class="row-even"><td>500</td>
+<td>10.717</td>
+<td>1929</td>
+<td>0.428 s</td>
+<td>64.953 s</td>
+<td>33.854 s</td>
+</tr>
+<tr class="row-odd"><td>750</td>
+<td>11.022</td>
+<td>1984</td>
+<td>0.439 s</td>
+<td>43.599 s</td>
+<td>20.745 s</td>
+</tr>
+<tr class="row-even"><td>1000</td>
+<td>10.489</td>
+<td>1888</td>
+<td>0.374 s</td>
+<td>34.843 s</td>
+<td>18.969 s</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="observations">
+<h3>Observations<a class="headerlink" href="#observations" title="Permalink to this headline">¶</a></h3>
+<blockquote>
+<div><p>Accross all tested concurrencies the cluster serves more than 10 pages per
+second.  Given this number we can project that the cluster should be able to
+serve:</p>
+<p>10 pages/ second * 60 seconds * 60 minutes = <strong>36000 pages / hour</strong></p>
+<p>The test results show an interesting decline in performance around 250 and
+500 concurrent users.  This trend is reversed for 750 and 1000 concurrent
+users, where the tests show marked better performance.  No errors were
+experienced by Funkload during the test cycles.  This means the cluster
+continued to work even at high concurrencies.</p>
+<p>At the top tested concurrency of 1000 users the cluster will serve most
+pages in about 18.969 seconds.  This gives the cluster an Apdex rating of
+&#8216;Good&#8217; (0.916) which means most users should be satisfied with their
+experience.</p>
+<p>The longest a user ever waited for a page across all tested concurrencies
+was 68.065 seconds which occured at 250 concurrent users.</p>
 </div></blockquote>
 </div>
 <div class="section" id="optimisations-done">
 <h3>Optimisations done<a class="headerlink" href="#optimisations-done" title="Permalink to this headline">¶</a></h3>
 <blockquote>
-<div><p>During the testing process we realised that some elements in the pages are
-causing sub-optimal caching in Varnish.  This is due to elements like
-username and personal links which are unique to each authenticated user.
-These elements cause Varnish to view pages as different although very little
-actually differ between them.</p>
+<div><p>During the testing process we realised that some content pages were not
+cached in Varnish.  This is due to elements like username and personal links
+which are unique to each authenticated user.  These elements cause Varnish
+to view pages as different although very little actually differ between them.</p>
 <p>We implemented an <a class="reference external" href="http://en.wikipedia.org/wiki/Edge_Side_Includes">Edge-side include</a> (ESI) for the personal toolbar which
 leads to Varnish caching most of the page and only fetching the ESI content.</p>
 </div></blockquote>
@@ -338,7 +454,7 @@ This test we then ran with user concurrencies of 100, 150 and 200.</p>
 <li>Test: test_Practice.py Practice.test_practice</li>
 <li>Target server: <a class="reference external" href="http://qap.everythingmaths.co.za">http://qap.everythingmaths.co.za</a></li>
 <li>Cycles of concurrent users: [100, 150, 200]</li>
-<li><a class="reference external" href="http://apdex.org/">Apdex</a>: 1.5</li>
+<li>Apdex: 1.5</li>
 </ul>
 </div></blockquote>
 </div>
@@ -348,27 +464,12 @@ This test we then ran with user concurrencies of 100, 150 and 200.</p>
 <div>Funkload bench report here: <a class="reference external" href="http://197.221.50.101/stats/test_practice-20130823T121013/">Practise service test</a></div></blockquote>
 <div class="section" id="id6">
 <h3>100 concurrent users<a class="headerlink" href="#id6" title="Permalink to this headline">¶</a></h3>
-<blockquote>
-<div><p>Projected serve rates</p>
-<p>This gives us a  load time of <strong>40.451 seconds per page at 100
-concurrent users.</strong></p>
-<p>At this rate we can serve:</p>
-<p>(60 / 40.451) * 60 = <strong>88.99 pages per hour.</strong></p>
-</div></blockquote>
 </div>
 <div class="section" id="id7">
 <h3>150 concurrent users<a class="headerlink" href="#id7" title="Permalink to this headline">¶</a></h3>
-<blockquote>
-<div><p>Page load time: <strong>62.589 seconds</strong></p>
-<p>(60 / 62.589) * 60 = <strong>57.51 pages per hour.</strong></p>
-</div></blockquote>
 </div>
 <div class="section" id="id8">
 <h3>200 concurrent users<a class="headerlink" href="#id8" title="Permalink to this headline">¶</a></h3>
-<blockquote>
-<div><p>Page load time: <strong>104.25 seconds</strong></p>
-<p>(60 / 104.25) * 60 = <strong>34.532 pages per hour.</strong></p>
-</div></blockquote>
 </div>
 <div class="section" id="id9">
 <h3>Optimisations done<a class="headerlink" href="#id9" title="Permalink to this headline">¶</a></h3>
@@ -398,7 +499,7 @@ of cycles and concurrencies in those cycles.</p>
 <li>Target server: <a class="reference external" href="http://m.qap.everythingscience.co.za">http://m.qap.everythingscience.co.za</a></li>
 <li>Cycles of concurrent users: <strong>[100, 250, 500]</strong></li>
 <li>Cycle duration: 180s</li>
-<li><a class="reference external" href="http://apdex.org/">Apdex</a>: 1.5</li>
+<li>Apdex: 1.5</li>
 </ul>
 <p>The results of each test cycle contains:</p>
 <ul class="simple">
@@ -422,7 +523,7 @@ of cycles and concurrencies in those cycles.</p>
 <li>Target server: <a class="reference external" href="http://m.qap.everythingscience.co.za">http://m.qap.everythingscience.co.za</a></li>
 <li>Cycles of concurrent users: <strong>[750, 1000]</strong></li>
 <li>Cycle duration: 180s</li>
-<li><a class="reference external" href="http://apdex.org/">Apdex</a>: 1.5</li>
+<li>Apdex: 1.5</li>
 </ul>
 <p>The results of each test cycle contains:</p>
 <ul class="simple">
@@ -443,48 +544,18 @@ of cycles and concurrencies in those cycles.</p>
 <h2>8. Results for testing mobile authenticated reads<a class="headerlink" href="#results-for-testing-mobile-authenticated-reads" title="Permalink to this headline">¶</a></h2>
 <div class="section" id="id10">
 <h3>100 concurrent users<a class="headerlink" href="#id10" title="Permalink to this headline">¶</a></h3>
-<blockquote>
-<div><p>The page load time:</p>
-<p><strong>5.43 seconds per page</strong>.</p>
-<p>Projected serve rate for initial mobile home pages load:</p>
-<p>(60 / 5.43) * 60 = <strong>662.98 per hour</strong></p>
-</div></blockquote>
 </div>
 <div class="section" id="id11">
 <h3>250 concurrent users<a class="headerlink" href="#id11" title="Permalink to this headline">¶</a></h3>
-<blockquote>
-<div><p>Load time per page:</p>
-<p><strong>10.959 seconds</strong></p>
-<p>Projected serve rate:</p>
-<p>(60 / 10.959) * 60 = <strong>328.49 pages per hour.</strong></p>
-</div></blockquote>
 </div>
 <div class="section" id="id12">
 <h3>500 concurrent users<a class="headerlink" href="#id12" title="Permalink to this headline">¶</a></h3>
-<blockquote>
-<div><p>Load time per page:</p>
-<p><strong>20.595 seconds</strong></p>
-<p>Projected serve rate:</p>
-<p>(60 / 20.595) * 60 = <strong>174.79 pages per hour.</strong></p>
-</div></blockquote>
 </div>
 <div class="section" id="id13">
 <h3>750 concurrent users<a class="headerlink" href="#id13" title="Permalink to this headline">¶</a></h3>
-<blockquote>
-<div><p>Load time per page:</p>
-<p><strong>33.025 seconds</strong></p>
-<p>Projected serve rate:</p>
-<p>(60 / 33.025) * 60 = <strong>109.00 pages per hour.</strong></p>
-</div></blockquote>
 </div>
 <div class="section" id="id14">
 <h3>1000 concurrent users<a class="headerlink" href="#id14" title="Permalink to this headline">¶</a></h3>
-<blockquote>
-<div><p>Load time per page:</p>
-<p><strong>69.127 seconds</strong></p>
-<p>Projected serve rate:</p>
-<p>(60 / 69.127) * 60 = <strong>52.07 pages per hour.</strong></p>
-</div></blockquote>
 </div>
 </div>
 <div class="section" id="testing-varnish">

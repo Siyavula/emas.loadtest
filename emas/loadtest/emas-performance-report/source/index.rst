@@ -77,7 +77,12 @@ Introduction
     functions are excellent.
 
     Network topology:
-    TODO::
+
+    The public side of the network is 100mbit/sec. The private subnet is
+    1000mbit/sec.  Currently SP1, SP2 and SP3 are on the public network and the
+    private subnet.  Subsequently all internal communication between these 3
+    servers run at 1000mbit/sec.  SP4 is not on the private 1000mbit/ sec
+    network.  It is only on the 100mbit/sec public network.
 
 
 .. _Testing authenticated reads:
@@ -160,58 +165,102 @@ Introduction
     
     Funkload bench report here: `Authenticated read`_
 
+
 100 concurrent users
 --------------------
 
-    Projected serve rate:
+    - Total pages served:             2037 pages
+    - Successfull pages per second:   11.317 pages/ second
+    - Errors:                         0.00% errors             
+    - Fastest page:                   0.198 seconds       
+    - Slowest page:                   44.309 second  
+    - 95th percentile:                27.128 seconds
 
-    
 250 concurrent users
 --------------------
 
-    Projected serve rate:
-
+    - Total pages served:             1863 pages
+    - Successfull pages per second:   10.350 pages/ second
+    - Errors:                         0.00% errors             
+    - Fastest page:                   0.475 seconds       
+    - Slowest page:                   68.065 second  
+    - 95th percentile:                44. 851 seconds
 
 500 concurrent users
 --------------------
 
-    Load time per page:
-    
-
-    Projected serve rate:
-
+    - Total pages served:             1929 pages
+    - Successfull pages per second:   10.717 pages/ second
+    - Errors:                         0.00% errors             
+    - Fastest page:                   0.428 seconds       
+    - Slowest page:                   64.953 second  
+    - 95th percentile:                33.854 seconds
 
 750 concurrent users
 --------------------
 
-
-    Load time per page:
-    
-
-    Projected serve rate:
-
+    - Total pages served:             1984 pages
+    - Successfull pages per second:   11.022 pages/ second
+    - Errors:                         0.00% errors             
+    - Fastest page:                   0.439 seconds       
+    - Slowest page:                   43.599 second  
+    - 95th percentile:                20.745 seconds
 
 1000 concurrent users
 --------------------
 
-    Load time per page:
+    - Total pages served:             1888 pages
+    - Successfull pages per second:   10.489 pages/ second
+    - Errors:                         0.00% errors             
+    - Fastest page:                   0.374 seconds       
+    - Slowest page:                   34.843 second  
+    - 95th percentile:                18.969 seconds
+
+Summary
+-------
+
+
+================  =================== ================== ================== ==================  ==================
+Concurrent users  Successfull pages/s Total pages served Fastest pages      Slowest pages       95th percentile 
+================  =================== ================== ================== ==================  ==================
+            100            11.317               2037        0.198 s             44.309 s              27.128 s 
+            250            10.350               1863        0.475 s             68.065 s              44.851 s
+            500            10.717               1929        0.428 s             64.953 s              33.854 s
+            750            11.022               1984        0.439 s             43.599 s              20.745 s
+           1000            10.489               1888        0.374 s             34.843 s              18.969 s
+================  =================== ================== ================== ==================  ==================
+
+Observations
+------------
     
+    Accross all tested concurrencies the cluster serves more than 10 pages per
+    second.  Given this number we can project that the cluster should be able to
+    serve:
 
-    Projected serve rate:
+    10 pages/ second * 60 seconds * 60 minutes = **36000 pages / hour**
 
+    The test results show an interesting decline in performance around 250 and
+    500 concurrent users.  This trend is reversed for 750 and 1000 concurrent
+    users, where the tests show marked better performance.  No errors were
+    experienced by Funkload during the test cycles.  This means the cluster
+    continued to work even at high concurrencies.
 
-    It is quite clear that as the concurrency rises the cluster serves less-
-    and-less pages per second, but never completely stops working.
+    At the top tested concurrency of 1000 users the cluster will serve most
+    pages in about 18.969 seconds.  This gives the cluster an Apdex rating of
+    'Good' (0.916) which means most users should be satisfied with their
+    experience.
+
+    The longest a user ever waited for a page across all tested concurrencies
+    was 68.065 seconds which occured at 250 concurrent users.
 
 
 Optimisations done
 ------------------
     
-    During the testing process we realised that some elements in the pages are
-    causing sub-optimal caching in Varnish.  This is due to elements like
-    username and personal links which are unique to each authenticated user.
-    These elements cause Varnish to view pages as different although very little
-    actually differ between them.
+    During the testing process we realised that some content pages were not
+    cached in Varnish.  This is due to elements like username and personal links
+    which are unique to each authenticated user.  These elements cause Varnish
+    to view pages as different although very little actually differ between them.
 
     We implemented an `Edge-side include`_ (ESI) for the personal toolbar which
     leads to Varnish caching most of the page and only fetching the ESI content.
@@ -246,7 +295,7 @@ Optimisations done
     - Test: test_Practice.py Practice.test_practice
     - Target server: http://qap.everythingmaths.co.za
     - Cycles of concurrent users: [100, 150, 200]
-    - `Apdex`_: 1.5
+    - Apdex: 1.5
 
 
 6. Results for testing practice service
@@ -257,28 +306,14 @@ Optimisations done
 100 concurrent users
 --------------------
 
-    Projected serve rates
-
-    This gives us a  load time of **40.451 seconds per page at 100 
-    concurrent users.**
-    
-    At this rate we can serve:
-
-    (60 / 40.451) * 60 = **88.99 pages per hour.**
 
 150 concurrent users
 --------------------
 
-    Page load time: **62.589 seconds**
-
-    (60 / 62.589) * 60 = **57.51 pages per hour.**
 
 200 concurrent users
 --------------------
 
-    Page load time: **104.25 seconds**
-
-    (60 / 104.25) * 60 = **34.532 pages per hour.**
 
 Optimisations done
 ------------------
@@ -310,7 +345,7 @@ Optimisations done
         - Target server: http://m.qap.everythingscience.co.za
         - Cycles of concurrent users: **[100, 250, 500]**
         - Cycle duration: 180s
-        - `Apdex`_: 1.5
+        - Apdex: 1.5
 
         The results of each test cycle contains:
 
@@ -333,7 +368,7 @@ Optimisations done
         - Target server: http://m.qap.everythingscience.co.za
         - Cycles of concurrent users: **[750, 1000]**
         - Cycle duration: 180s
-        - `Apdex`_: 1.5
+        - Apdex: 1.5
 
         The results of each test cycle contains:
 
@@ -354,56 +389,21 @@ Optimisations done
 100 concurrent users
 --------------------
 
-    The page load time:
-    
-    **5.43 seconds per page**.
-
-    Projected serve rate for initial mobile home pages load:
-    
-    (60 / 5.43) * 60 = **662.98 per hour**
 
 250 concurrent users
 --------------------
-    Load time per page:
-    
-    **10.959 seconds**
-
-    Projected serve rate:
-
-    (60 / 10.959) * 60 = **328.49 pages per hour.**
 
 500 concurrent users
 --------------------
 
-    Load time per page:
-    
-    **20.595 seconds**
-
-    Projected serve rate:
-
-    (60 / 20.595) * 60 = **174.79 pages per hour.**
 
 750 concurrent users
 --------------------
 
-    Load time per page:
-    
-    **33.025 seconds**
-
-    Projected serve rate:
-
-    (60 / 33.025) * 60 = **109.00 pages per hour.**
 
 1000 concurrent users
 ---------------------
 
-    Load time per page:
-    
-    **69.127 seconds**
-
-    Projected serve rate:
-
-    (60 / 69.127) * 60 = **52.07 pages per hour.**
 
 9. Testing Varnish
 ==================
