@@ -19,7 +19,7 @@ Introduction
     that were reached and the remedial steps that were taken.
     
     Each section has a link to the specific `Funkload bench reports`_.  The
-    Funkload bench tests were configure not to follow external links, since
+    Funkload bench tests were configured not to follow external links, since
     we are attempting to benchmark the EMAS software and hardware cluster
     not external CDNs or external network access.
 
@@ -46,12 +46,14 @@ Introduction
     Four distinct servers were used in the benchmarking process.  Any further
     mention of 'test cluster' in this document refers to the following setup:
 
-    Siyavula Performance 1 (aka. SP1)
+Siyavula Performance 1 (aka. SP1)
+---------------------------------
         
         - Varnish caching proxy
         - HAProxy load balancing server
 
-    Siyavula Performance 2 (aka. SP2)
+Siyavula Performance 2 (aka. SP2)
+---------------------------------
 
         - 4 EMAS application server instances
         - 1 ZEO server with Zope Replication Service
@@ -59,7 +61,8 @@ Introduction
         - 1 PostgreSQL cluster (initial primary database server)
         - 4 Monassis instances
 
-    Siyavula Performance 3 (aka. SP3)
+Siyavula Performance 3 (aka. SP3)
+---------------------------------
 
         - 4 EMAS application server instances
         - 1 ZEO server with Zope Replication Service
@@ -67,7 +70,8 @@ Introduction
         - 1 PostgreSQL cluster (initial secondary database server)
         - 4 Monassis instances
 
-    Siyavula Performance 4 (aka. sp4)
+Siyavula Performance 4 (aka. sp4)
+---------------------------------
 
         - Load generation server
         - Host for the `Funkload`_ benchmark tests
@@ -76,14 +80,87 @@ Introduction
     Python, tests are very easy to record, customise and run and the reporting
     functions are excellent.
 
-    Network topology:
+Network topology
+----------------
 
     The public side of the network is 100mbit/sec. The private subnet is
     1000mbit/sec.  Currently SP1, SP2 and SP3 are on the public network and the
     private subnet.  Subsequently all internal communication between these 3
     servers run at 1000mbit/sec.  SP4 is not on the private 1000mbit/ sec
     network.  It is only on the 100mbit/sec public network.
+    
+Network test from SP1 to SP2
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    
+    SP1 data (client)::
+    
+        iperf -c 10.0.0.12
+        ------------------------------------------------------------
+        Client connecting to 10.0.0.12, TCP port 5001
+        TCP window size: 23.5 KByte (default)
+        ------------------------------------------------------------
+        [  3] local 10.0.0.11 port 51040 connected with 10.0.0.12 port 5001
+        [ ID] Interval       Transfer     Bandwidth
+        [  3]  0.0-10.0 sec  1.09 GBytes   936 Mbits/sec
+        
+    SP2 data (server)::
 
+        iperf -s
+        ------------------------------------------------------------
+        Server listening on TCP port 5001
+        TCP window size: 85.3 KByte (default)
+        ------------------------------------------------------------
+        [  4] local 10.0.0.12 port 5001 connected with 10.0.0.11 port 51040
+        [ ID] Interval       Transfer     Bandwidth
+        [  4]  0.0-10.0 sec  1.09 GBytes   934 Mbits/sec
+    
+    
+Network test from SP1 to SP3
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    
+    SP1 data (client)::
+
+        iperf -c 10.0.0.13
+        ------------------------------------------------------------
+        Client connecting to 10.0.0.13, TCP port 5001
+        TCP window size: 23.5 KByte (default)
+        ------------------------------------------------------------
+        [  3] local 10.0.0.11 port 51776 connected with 10.0.0.13 port 5001
+        [ ID] Interval       Transfer     Bandwidth
+        [  3]  0.0-10.0 sec  1.09 GBytes   936 Mbits/sec
+        
+    SP3 data (server)::
+
+        iperf -s
+        ------------------------------------------------------------
+        Server listening on TCP port 5001
+        TCP window size: 85.3 KByte (default)
+        ------------------------------------------------------------
+        [  4] local 10.0.0.13 port 5001 connected with 10.0.0.11 port 51776
+        [ ID] Interval       Transfer     Bandwidth
+        [  4]  0.0-10.0 sec  1.09 GBytes   934 Mbits/sec
+
+Network test from SP1 to SP4
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    
+    SP1 data (server)::
+
+        iperf -s -c 197.221.50.98 -p 80 -f M
+        ------------------------------------------------------------
+        Server listening on TCP port 80
+        TCP window size: 0.08 MByte (default)
+        ------------------------------------------------------------
+        
+    SP4 data (client)::
+
+        iperf -c 197.221.50.98 -p 80 -f M
+        ------------------------------------------------------------
+        Client connecting to 197.221.50.98, TCP port 80
+        TCP window size: 0.02 MByte (default)
+        ------------------------------------------------------------
+        [  3] local 197.221.50.101 port 55115 connected with 197.221.50.98 port 80
+        [ ID] Interval       Transfer     Bandwidth
+        [  3]  0.0-10.0 sec  17592186044415 MBytes  1757660262852 MBytes/sec
 
 .. _Testing authenticated reads:
 
@@ -135,7 +212,7 @@ Introduction
     We also chose some URLs that seemed to serve quite fast.  This we did to get
     some balance to the overall stats for the reading experience.
 
-    The resultant Funkload test was run with 4 test cycles ranging from 100
+    The resultant Funkload test was run with 5 test cycles ranging from 100
     to 1000 concurrent users.
 
     Authenticated read setup:
@@ -184,16 +261,16 @@ Observations
 
     10 pages/ second * 60 seconds * 60 minutes = **36000 pages / hour**
 
-    The test results show an interesting decline in performance around 250 and
+    The test results show an interesting decline in performance at 250 and
     500 concurrent users.  This trend is reversed for 750 and 1000 concurrent
     users, where the tests show marked better performance.  No errors were
     experienced by Funkload during any the test cycles.  This means the cluster
     continued to serve even at high concurrencies.
 
     At the top tested concurrency of 1000 users the cluster will serve most
-    pages in about 18.969 seconds.  This gives the cluster an Apdex rating of
-    'Good' (0.916) which means most users should be satisfied with their
-    experience.
+    pages in about 18.969 seconds (95th percentile).  This gives the cluster an
+    Apdex rating of 'Good' (0.916) which means most users should be satisfied
+    with their experience.
 
     The longest a user ever waited for a page across all tested concurrencies
     was 68.065 seconds which occured at 250 concurrent users.
@@ -220,18 +297,24 @@ Optimisations done
     the pickle of all the saved answers to be a huge performance hit in our
     `Funkload`_ tests.
 
-    During the testing we also tested the practice proxy in the Plone
-    application.  This was done in order to establish if any processing in this
-    proxy is possibly more of a performance issue than processing in the
-    external system.  Here are the `Practice proxy`_ results.  To test this we
-    recorded a `Funkload`_ test that logs in to the site and then navigates to a
-    simple view in Monassis.  This view does no processing beyond returning
-    basic headers and the string literal 'OK'.
+    We also tested the practice proxy in the Plone application.  This was done
+    in order to establish if any processing in this proxy is more of a
+    performance issue than processing in the external system.  Here are the
+    `Practice proxy`_ results.  To test this we recorded a Funkload  bench test
+    that logs in to the site and then navigates to a simple view in Monassis.  
+    This view does no processing beyond returning basic headers and the string
+    literal 'OK'.
 
-    For the full practise service test we recorded a `Funkload`_ test that logs in
+    For the full practise service test we recorded a Funkload test that logs in
     to the site, browses to the practise service and then does 10 questions.
     The answers to these questions are fetched from the 'oracle' HTTP server.  
-    This test we then ran with user concurrencies of 100, 150 and 200.
+    This test we then ran with user concurrencies of 100, 150 and 200.  We
+    stopped at 200 concurrent users, because tests started failing at 250
+    concurrent users. 
+    
+        TODO::
+
+        double check
 
     We used the following test configuration:
 
@@ -256,9 +339,10 @@ Concurrent users   Successfull pages/s Total pages served Fastest pages      Slo
             200             26.683               6404             1.883             91.480             11.373
 ================== =================== ================== ================== ================== ==================
 
-
 Observations
 ------------
+
+    The practice service tests 
 
 Optimisations done
 ------------------
@@ -343,17 +427,18 @@ Concurrent users   Successfull pages/s Total pages served Fastest pages      Slo
 
 Observations
 ------------
+    
+    Is caching turned on for the mobile theme?
 
 
 9. Testing Varnish
 ==================
     
     As background to this test consider the following.  The application servers
-    SP2 and SP3 are connected via a non-routable private subnet in the 10.0.0.*
-    range. In the current cluster setup they are accessed over this private
-    subnet via the HAProxy and Varnish servers on SP1.  This means any latency 
-    or throughput issues on the subnet will adversly affect the total 
-    scalability.
+    SP2 and SP3 are connected via a private subnet in the 10.0.0.* range. In
+    the current cluster setup they are accessed over this private subnet via
+    the HAProxy and Varnish servers on SP1.  This means any latency or
+    throughput issues on the subnet will adversly affect the total scalability.
 
     Varnish serves all our cachable resources (CSS, javascript, images, etc.).  
     In order to understand the total scalability we decided to checked Varnish's 
@@ -434,6 +519,8 @@ Observations
 
 Recommendation for scaling / Conclusion
 ==========================================
+    
+    Conclusions / Recommendations
 
 
 .. _Apdex: http://apdex.org/
@@ -455,3 +542,29 @@ Recommendation for scaling / Conclusion
 .. _Science authenticated mobile read: http://197.221.50.101/stats/test_AuthenticatedMobileRead-20130916T193836/
 .. _authenticated mobile read: http://197.221.50.101/stats/test_AuthenticatedMobileRead-20130916T193836/
 .. _slowest authenticated mobile read page: http://197.221.50.101/stats/test_AuthenticatedMobileRead-20130916T183506/#id15
+
+
+Extra issues
+============
+
+Check out http://www.mnot.net/blog/2011/05/18/http_benchmark_rules
+
+CPU
+---
+
+    - scaling (on-demand scaling-governor in Linux?)
+    - power saving modes
+    - temperatures lm_sensors, etc.
+
+Network
+-------
+
+    - check actual network iperf/ etc.
+
+Basic HTTP sanity check
+-----------------------
+
+    redbot.org
+
+        - RED is a robot that checks HTTP resources to see how they'll behave,
+        pointing out common problems and suggesting improvements.

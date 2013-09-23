@@ -49,7 +49,19 @@
 <li><a class="reference internal" href="#">Siyavula performance tuning report</a><ul>
 <li><a class="reference internal" href="#introduction">Introduction</a></li>
 <li><a class="reference internal" href="#pre-test-optimisation">1. Pre-test optimisation</a></li>
-<li><a class="reference internal" href="#an-overview-of-the-setup-we-benchmarked">2. An overview of the setup we benchmarked</a></li>
+<li><a class="reference internal" href="#an-overview-of-the-setup-we-benchmarked">2. An overview of the setup we benchmarked</a><ul>
+<li><a class="reference internal" href="#siyavula-performance-1-aka-sp1">Siyavula Performance 1 (aka. SP1)</a></li>
+<li><a class="reference internal" href="#siyavula-performance-2-aka-sp2">Siyavula Performance 2 (aka. SP2)</a></li>
+<li><a class="reference internal" href="#siyavula-performance-3-aka-sp3">Siyavula Performance 3 (aka. SP3)</a></li>
+<li><a class="reference internal" href="#siyavula-performance-4-aka-sp4">Siyavula Performance 4 (aka. sp4)</a></li>
+<li><a class="reference internal" href="#network-topology">Network topology</a><ul>
+<li><a class="reference internal" href="#network-test-from-sp1-to-sp2">Network test from SP1 to SP2</a></li>
+<li><a class="reference internal" href="#network-test-from-sp1-to-sp3">Network test from SP1 to SP3</a></li>
+<li><a class="reference internal" href="#network-test-from-sp1-to-sp4">Network test from SP1 to SP4</a></li>
+</ul>
+</li>
+</ul>
+</li>
 <li><a class="reference internal" href="#testing-authenticated-reads">3. Testing authenticated reads</a></li>
 <li><a class="reference internal" href="#authenticated-read-test-results">4. Authenticated read test results</a><ul>
 <li><a class="reference internal" href="#observations">Observations</a></li>
@@ -76,6 +88,12 @@
 </ul>
 </li>
 <li><a class="reference internal" href="#recommendation-for-scaling-conclusion">Recommendation for scaling / Conclusion</a></li>
+<li><a class="reference internal" href="#extra-issues">Extra issues</a><ul>
+<li><a class="reference internal" href="#cpu">CPU</a></li>
+<li><a class="reference internal" href="#network">Network</a></li>
+<li><a class="reference internal" href="#basic-http-sanity-check">Basic HTTP sanity check</a></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
@@ -117,7 +135,7 @@ undertaken.  The results of these tests were used to do optimisation changes.</p
 <p>This document tries to summarise the data that was gathered, the conclusions
 that were reached and the remedial steps that were taken.</p>
 <p>Each section has a link to the specific <a class="reference external" href="http://197.221.50.101/stats/">Funkload bench reports</a>.  The
-Funkload bench tests were configure not to follow external links, since
+Funkload bench tests were configured not to follow external links, since
 we are attempting to benchmark the EMAS software and hardware cluster
 not external CDNs or external network access.</p>
 </div></blockquote>
@@ -139,16 +157,19 @@ catalogue we did move orders to their own smaller catalogue though.</p>
 <div class="section" id="an-overview-of-the-setup-we-benchmarked">
 <h2>2. An overview of the setup we benchmarked<a class="headerlink" href="#an-overview-of-the-setup-we-benchmarked" title="Permalink to this headline">¶</a></h2>
 <blockquote>
-<div><p>Four distinct servers were used in the benchmarking process.  Any further
-mention of &#8216;test cluster&#8217; in this document refers to the following setup:</p>
-<p>Siyavula Performance 1 (aka. SP1)</p>
+<div>Four distinct servers were used in the benchmarking process.  Any further
+mention of &#8216;test cluster&#8217; in this document refers to the following setup:</div></blockquote>
+<div class="section" id="siyavula-performance-1-aka-sp1">
+<h3>Siyavula Performance 1 (aka. SP1)<a class="headerlink" href="#siyavula-performance-1-aka-sp1" title="Permalink to this headline">¶</a></h3>
 <blockquote>
 <div><ul class="simple">
 <li>Varnish caching proxy</li>
 <li>HAProxy load balancing server</li>
 </ul>
 </div></blockquote>
-<p>Siyavula Performance 2 (aka. SP2)</p>
+</div>
+<div class="section" id="siyavula-performance-2-aka-sp2">
+<h3>Siyavula Performance 2 (aka. SP2)<a class="headerlink" href="#siyavula-performance-2-aka-sp2" title="Permalink to this headline">¶</a></h3>
 <blockquote>
 <div><ul class="simple">
 <li>4 EMAS application server instances</li>
@@ -158,7 +179,9 @@ mention of &#8216;test cluster&#8217; in this document refers to the following s
 <li>4 Monassis instances</li>
 </ul>
 </div></blockquote>
-<p>Siyavula Performance 3 (aka. SP3)</p>
+</div>
+<div class="section" id="siyavula-performance-3-aka-sp3">
+<h3>Siyavula Performance 3 (aka. SP3)<a class="headerlink" href="#siyavula-performance-3-aka-sp3" title="Permalink to this headline">¶</a></h3>
 <blockquote>
 <div><ul class="simple">
 <li>4 EMAS application server instances</li>
@@ -168,8 +191,11 @@ mention of &#8216;test cluster&#8217; in this document refers to the following s
 <li>4 Monassis instances</li>
 </ul>
 </div></blockquote>
-<p>Siyavula Performance 4 (aka. sp4)</p>
+</div>
+<div class="section" id="siyavula-performance-4-aka-sp4">
+<h3>Siyavula Performance 4 (aka. sp4)<a class="headerlink" href="#siyavula-performance-4-aka-sp4" title="Permalink to this headline">¶</a></h3>
 <blockquote>
+<div><blockquote>
 <div><ul class="simple">
 <li>Load generation server</li>
 <li>Host for the <a class="reference external" href="http://funkload.nuxeo.org">Funkload</a> benchmark tests</li>
@@ -178,13 +204,89 @@ mention of &#8216;test cluster&#8217; in this document refers to the following s
 <p>As load generating infrastructure we chose Funkload, since it is written in
 Python, tests are very easy to record, customise and run and the reporting
 functions are excellent.</p>
-<p>Network topology:</p>
-<p>The public side of the network is 100mbit/sec. The private subnet is
+</div></blockquote>
+</div>
+<div class="section" id="network-topology">
+<h3>Network topology<a class="headerlink" href="#network-topology" title="Permalink to this headline">¶</a></h3>
+<blockquote>
+<div>The public side of the network is 100mbit/sec. The private subnet is
 1000mbit/sec.  Currently SP1, SP2 and SP3 are on the public network and the
 private subnet.  Subsequently all internal communication between these 3
 servers run at 1000mbit/sec.  SP4 is not on the private 1000mbit/ sec
-network.  It is only on the 100mbit/sec public network.</p>
+network.  It is only on the 100mbit/sec public network.</div></blockquote>
+<div class="section" id="network-test-from-sp1-to-sp2">
+<h4>Network test from SP1 to SP2<a class="headerlink" href="#network-test-from-sp1-to-sp2" title="Permalink to this headline">¶</a></h4>
+<blockquote>
+<div><p>SP1 data (client):</p>
+<div class="highlight-python"><pre>iperf -c 10.0.0.12
+------------------------------------------------------------
+Client connecting to 10.0.0.12, TCP port 5001
+TCP window size: 23.5 KByte (default)
+------------------------------------------------------------
+[  3] local 10.0.0.11 port 51040 connected with 10.0.0.12 port 5001
+[ ID] Interval       Transfer     Bandwidth
+[  3]  0.0-10.0 sec  1.09 GBytes   936 Mbits/sec</pre>
+</div>
+<p>SP2 data (server):</p>
+<div class="highlight-python"><pre>iperf -s
+------------------------------------------------------------
+Server listening on TCP port 5001
+TCP window size: 85.3 KByte (default)
+------------------------------------------------------------
+[  4] local 10.0.0.12 port 5001 connected with 10.0.0.11 port 51040
+[ ID] Interval       Transfer     Bandwidth
+[  4]  0.0-10.0 sec  1.09 GBytes   934 Mbits/sec</pre>
+</div>
 </div></blockquote>
+</div>
+<div class="section" id="network-test-from-sp1-to-sp3">
+<h4>Network test from SP1 to SP3<a class="headerlink" href="#network-test-from-sp1-to-sp3" title="Permalink to this headline">¶</a></h4>
+<blockquote>
+<div><p>SP1 data (client):</p>
+<div class="highlight-python"><pre>iperf -c 10.0.0.13
+------------------------------------------------------------
+Client connecting to 10.0.0.13, TCP port 5001
+TCP window size: 23.5 KByte (default)
+------------------------------------------------------------
+[  3] local 10.0.0.11 port 51776 connected with 10.0.0.13 port 5001
+[ ID] Interval       Transfer     Bandwidth
+[  3]  0.0-10.0 sec  1.09 GBytes   936 Mbits/sec</pre>
+</div>
+<p>SP3 data (server):</p>
+<div class="highlight-python"><pre>iperf -s
+------------------------------------------------------------
+Server listening on TCP port 5001
+TCP window size: 85.3 KByte (default)
+------------------------------------------------------------
+[  4] local 10.0.0.13 port 5001 connected with 10.0.0.11 port 51776
+[ ID] Interval       Transfer     Bandwidth
+[  4]  0.0-10.0 sec  1.09 GBytes   934 Mbits/sec</pre>
+</div>
+</div></blockquote>
+</div>
+<div class="section" id="network-test-from-sp1-to-sp4">
+<h4>Network test from SP1 to SP4<a class="headerlink" href="#network-test-from-sp1-to-sp4" title="Permalink to this headline">¶</a></h4>
+<blockquote>
+<div><p>SP1 data (server):</p>
+<div class="highlight-python"><pre>iperf -s -c 197.221.50.98 -p 80 -f M
+------------------------------------------------------------
+Server listening on TCP port 80
+TCP window size: 0.08 MByte (default)
+------------------------------------------------------------</pre>
+</div>
+<p>SP4 data (client):</p>
+<div class="highlight-python"><pre>iperf -c 197.221.50.98 -p 80 -f M
+------------------------------------------------------------
+Client connecting to 197.221.50.98, TCP port 80
+TCP window size: 0.02 MByte (default)
+------------------------------------------------------------
+[  3] local 197.221.50.101 port 55115 connected with 197.221.50.98 port 80
+[ ID] Interval       Transfer     Bandwidth
+[  3]  0.0-10.0 sec  17592186044415 MBytes  1757660262852 MBytes/sec</pre>
+</div>
+</div></blockquote>
+</div>
+</div>
 </div>
 <div class="section" id="testing-authenticated-reads">
 <span id="id1"></span><h2>3. Testing authenticated reads<a class="headerlink" href="#testing-authenticated-reads" title="Permalink to this headline">¶</a></h2>
@@ -231,7 +333,7 @@ in the unauthenticated reading tests.  The pages that are slow during
 unauthenticated reading will be even slower during authenticated reading.</p>
 <p>We also chose some URLs that seemed to serve quite fast.  This we did to get
 some balance to the overall stats for the reading experience.</p>
-<p>The resultant Funkload test was run with 4 test cycles ranging from 100
+<p>The resultant Funkload test was run with 5 test cycles ranging from 100
 to 1000 concurrent users.</p>
 <p>Authenticated read setup:</p>
 <ul class="simple">
@@ -323,15 +425,15 @@ to 1000 concurrent users.</p>
 cluster serves more than 10 pages per second.  Given this number we can
 project that the cluster should be able to serve around:</p>
 <p>10 pages/ second * 60 seconds * 60 minutes = <strong>36000 pages / hour</strong></p>
-<p>The test results show an interesting decline in performance around 250 and
+<p>The test results show an interesting decline in performance at 250 and
 500 concurrent users.  This trend is reversed for 750 and 1000 concurrent
 users, where the tests show marked better performance.  No errors were
 experienced by Funkload during any the test cycles.  This means the cluster
 continued to serve even at high concurrencies.</p>
 <p>At the top tested concurrency of 1000 users the cluster will serve most
-pages in about 18.969 seconds.  This gives the cluster an Apdex rating of
-&#8216;Good&#8217; (0.916) which means most users should be satisfied with their
-experience.</p>
+pages in about 18.969 seconds (95th percentile).  This gives the cluster an
+Apdex rating of &#8216;Good&#8217; (0.916) which means most users should be satisfied
+with their experience.</p>
 <p>The longest a user ever waited for a page across all tested concurrencies
 was 68.065 seconds which occured at 250 concurrent users.</p>
 </div></blockquote>
@@ -356,17 +458,23 @@ implemented an &#8216;oracle&#8217; for answers generated from the Monassis data
 This &#8216;oracle&#8217; we then wrapped in an HTTP server when we found that opening
 the pickle of all the saved answers to be a huge performance hit in our
 <a class="reference external" href="http://funkload.nuxeo.org">Funkload</a> tests.</p>
-<p>During the testing we also tested the practice proxy in the Plone
-application.  This was done in order to establish if any processing in this
-proxy is possibly more of a performance issue than processing in the
-external system.  Here are the <a class="reference external" href="http://197.221.50.101/stats/test_practiceproxy-20130819T124350/">Practice proxy</a> results.  To test this we
-recorded a <a class="reference external" href="http://funkload.nuxeo.org">Funkload</a> test that logs in to the site and then navigates to a
-simple view in Monassis.  This view does no processing beyond returning
-basic headers and the string literal &#8216;OK&#8217;.</p>
-<p>For the full practise service test we recorded a <a class="reference external" href="http://funkload.nuxeo.org">Funkload</a> test that logs in
+<p>We also tested the practice proxy in the Plone application.  This was done
+in order to establish if any processing in this proxy is more of a
+performance issue than processing in the external system.  Here are the
+<a class="reference external" href="http://197.221.50.101/stats/test_practiceproxy-20130819T124350/">Practice proxy</a> results.  To test this we recorded a Funkload  bench test
+that logs in to the site and then navigates to a simple view in Monassis.
+This view does no processing beyond returning basic headers and the string
+literal &#8216;OK&#8217;.</p>
+<p>For the full practise service test we recorded a Funkload test that logs in
 to the site, browses to the practise service and then does 10 questions.
 The answers to these questions are fetched from the &#8216;oracle&#8217; HTTP server.
-This test we then ran with user concurrencies of 100, 150 and 200.</p>
+This test we then ran with user concurrencies of 100, 150 and 200.  We
+stopped at 200 concurrent users, because tests started failing at 250
+concurrent users.</p>
+<blockquote>
+<div><p>TODO:</p>
+<p>double check</p>
+</div></blockquote>
 <p>We used the following test configuration:</p>
 <ul class="simple">
 <li>Launched: 2013-08-23 12:10:13</li>
@@ -426,6 +534,8 @@ This test we then ran with user concurrencies of 100, 150 and 200.</p>
 </table>
 <div class="section" id="id2">
 <h3>Observations<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h3>
+<blockquote>
+<div>The practice service tests</div></blockquote>
 </div>
 <div class="section" id="id3">
 <h3>Optimisations done<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h3>
@@ -556,17 +666,18 @@ of cycles and concurrencies in those cycles.</p>
 </table>
 <div class="section" id="id4">
 <h3>Observations<a class="headerlink" href="#id4" title="Permalink to this headline">¶</a></h3>
+<blockquote>
+<div>Is caching turned on for the mobile theme?</div></blockquote>
 </div>
 </div>
 <div class="section" id="testing-varnish">
 <h2>9. Testing Varnish<a class="headerlink" href="#testing-varnish" title="Permalink to this headline">¶</a></h2>
 <blockquote>
 <div><p>As background to this test consider the following.  The application servers
-SP2 and SP3 are connected via a non-routable private subnet in the 10.0.0.*
-range. In the current cluster setup they are accessed over this private
-subnet via the HAProxy and Varnish servers on SP1.  This means any latency
-or throughput issues on the subnet will adversly affect the total
-scalability.</p>
+SP2 and SP3 are connected via a private subnet in the 10.0.0.* range. In
+the current cluster setup they are accessed over this private subnet via
+the HAProxy and Varnish servers on SP1.  This means any latency or
+throughput issues on the subnet will adversly affect the total scalability.</p>
 <p>Varnish serves all our cachable resources (CSS, javascript, images, etc.).
 In order to understand the total scalability we decided to checked Varnish&#8217;s
 scalability in our current cluster setup.</p>
@@ -750,6 +861,42 @@ performance between the 2 mentioned servers.</p>
 </div>
 <div class="section" id="recommendation-for-scaling-conclusion">
 <h2>Recommendation for scaling / Conclusion<a class="headerlink" href="#recommendation-for-scaling-conclusion" title="Permalink to this headline">¶</a></h2>
+<blockquote>
+<div>Conclusions / Recommendations</div></blockquote>
+</div>
+<div class="section" id="extra-issues">
+<h2>Extra issues<a class="headerlink" href="#extra-issues" title="Permalink to this headline">¶</a></h2>
+<p>Check out <a class="reference external" href="http://www.mnot.net/blog/2011/05/18/http_benchmark_rules">http://www.mnot.net/blog/2011/05/18/http_benchmark_rules</a></p>
+<div class="section" id="cpu">
+<h3>CPU<a class="headerlink" href="#cpu" title="Permalink to this headline">¶</a></h3>
+<blockquote>
+<div><ul class="simple">
+<li>scaling (on-demand scaling-governor in Linux?)</li>
+<li>power saving modes</li>
+<li>temperatures lm_sensors, etc.</li>
+</ul>
+</div></blockquote>
+</div>
+<div class="section" id="network">
+<h3>Network<a class="headerlink" href="#network" title="Permalink to this headline">¶</a></h3>
+<blockquote>
+<div><ul class="simple">
+<li>check actual network iperf/ etc.</li>
+</ul>
+</div></blockquote>
+</div>
+<div class="section" id="basic-http-sanity-check">
+<h3>Basic HTTP sanity check<a class="headerlink" href="#basic-http-sanity-check" title="Permalink to this headline">¶</a></h3>
+<blockquote>
+<div><p>redbot.org</p>
+<blockquote>
+<div><ul class="simple">
+<li>RED is a robot that checks HTTP resources to see how they&#8217;ll behave,</li>
+</ul>
+<p>pointing out common problems and suggesting improvements.</p>
+</div></blockquote>
+</div></blockquote>
+</div>
 </div>
 </div>
 
