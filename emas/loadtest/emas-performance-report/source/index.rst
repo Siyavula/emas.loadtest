@@ -40,11 +40,11 @@ Introduction
     catalogue we did move orders to their own smaller catalogue though.
 
 
-2. An overview of the setup we benchmarked
+2. An overview of the set-up we benchmarked
 ==========================================
 
     Four distinct servers were used in the benchmarking process.  Any further
-    mention of 'test cluster' in this document refers to the following setup:
+    mention of 'test cluster' in this document refers to the following set-up:
 
 Siyavula Performance 1 (aka. SP1)
 ---------------------------------
@@ -70,7 +70,7 @@ Siyavula Performance 3 (aka. SP3)
         - 1 PostgreSQL cluster (initial secondary database server)
         - 4 Monassis instances
 
-Siyavula Performance 4 (aka. sp4)
+Siyavula Performance 4 (aka. SP4)
 ---------------------------------
 
         - Load generation server
@@ -99,7 +99,6 @@ Network test from SP1 to SP2
         Server listening on TCP port 5001
         TCP window size: 85.3 KByte (default)
         ------------------------------------------------------------
-
     
     SP2 client::
 
@@ -116,7 +115,12 @@ Network test from SP1 to SP3
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     
     SP1 server::
-
+    
+        iperf -s -c 10.0.0.11 -f k
+        ------------------------------------------------------------
+        Server listening on TCP port 5001
+        TCP window size: 85.3 KByte (default)
+        ------------------------------------------------------------
         
     SP3 client::
 
@@ -132,11 +136,7 @@ Network test from SP1 to SP3
 Network test from SP1 to SP4
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     
-    SP1 server::
-    
-
-
-    SP4 client::
+    This server is not on the private subnet.
 
 
 .. _Testing authenticated reads:
@@ -151,7 +151,7 @@ Network test from SP1 to SP4
     unauthenticated (results available here: `Science unauthenticated read`_).
     This test was run with only 1 user and 1 cycle.
 
-    Unauthenticated read setup:
+    Unauthenticated read set-up:
 
     - Launched: 2013-07-26 15:54:29
     - Test: test_wholesite.py WholeSite.test_WholeSite
@@ -182,17 +182,17 @@ Network test from SP1 to SP4
     - grade-11/13-types-of-reactions/13-types-of-reactions-01.cnxmlplus
     - grade-11/14-lithosphere/14-lithosphere-01.cnxmlplus    
     
-    The criterium we used to choose the above URLs is simply the performance
+    The criterion we used to choose the above URLs is simply the performance
     in the unauthenticated reading tests.  The pages that are slow during
     unauthenticated reading will be even slower during authenticated reading.
 
     We also chose some URLs that seemed to serve quite fast.  This we did to get
-    some balance to the overall stats for the reading experience.
+    some balance to the overall statistics for the reading experience.
 
     The resultant Funkload test was run with 5 test cycles ranging from 100
     to 1000 concurrent users.
 
-    Authenticated read setup:
+    Authenticated read set-up:
 
     - Launched: 2013-08-22 14:35:07
     - From: siyavulap04
@@ -217,47 +217,57 @@ Network test from SP1 to SP4
 4. Authenticated read test results
 ==================================
     
-    Funkload bench report here: `Authenticated read`_
+    Funkload bench report here: `Authenticated read`_ and
+    `Authenticated read (with errors)`_
+    
 
 ================  =================== ================== ================== ==================  ==================
-Concurrent users  Successfull pages/s Total pages served Fastest pages      Slowest pages       95th percentile 
+Concurrent users  Successful pages/s  Total pages served Fastest pages      Slowest pages       95th percentile 
 ================  =================== ================== ================== ==================  ==================
             100            11.317               2037        0.198 s             44.309 s              27.128 s 
             250            10.350               1863        0.475 s             68.065 s              44.851 s
             500            10.717               1929        0.428 s             64.953 s              33.854 s
             750            11.022               1984        0.439 s             43.599 s              20.745 s
            1000            10.489               1888        0.374 s             34.843 s              18.969 s
+           1500            01.500                349        0.039 s             05.075 s              03.304 s
 ================  =================== ================== ================== ==================  ==================
 
 Observations
 ------------
     
-    Accross all tested concurrencies, for simple authenticated reading, the
-    cluster serves more than 10 pages per second.  Given this number we can
-    project that the cluster should be able to serve around:
-
-    10 pages/ second * 60 seconds * 60 minutes = **36000 pages / hour**
-
-    The test results show an interesting decline in performance at 250 and
-    500 concurrent users.  This trend is reversed for 750 and 1000 concurrent
-    users, where the tests show marked better performance.  No errors were
-    experienced by Funkload during any the test cycles.  This means the cluster
-    continued to serve even at high concurrencies.
-
     At the top tested concurrency of 1000 users the cluster will serve most
     pages in about 18.969 seconds (95th percentile).  This gives the cluster an
     Apdex rating of 'Good' (0.916) which means most users should be satisfied
     with their experience.
 
     The longest a user ever waited for a page across all tested concurrencies
-    was 68.065 seconds which occured at 250 concurrent users.
+    was 68.065 seconds which occurred at 250 concurrent users.  In subsequent
+    cycles the slowest pages where all served faster than this.  
+    
+    The test results show a small decline in performance at 250 concurrent
+    users.  From 500 concurrent users, this changes.  The tests show marked
+    improvement in performance up to and including the maximum concurrency of
+    1000 users.  When one considers the complete test and the fact that all the
+    error-free cycles serve around 10 pages per second, this appears to be
+    irrelevant for the current discussion.
+
+    The error rate stays at 0% throughout all the testing cycles up to 1000.
+    This means the cluster continued to serve even at high concurrencies.  At a
+    concurrency of 1500 users we start to see errors which leads us to think
+    that 1000 concurrent users is the current safe maximum for this cluster.
+
+    Across all tested concurrencies, for simple authenticated reading, the
+    cluster serves more than 10 pages per second.  Given this number we can
+    project that the cluster should be able to serve around:
+
+    10 pages/ second * 60 seconds * 60 minutes = **36000 pages / hour**
 
 
 Optimisations done
 ------------------
     
     During the testing process we realised that some content pages were not
-    cached in Varnish.  This is due to elements like username and personal links
+    cached in Varnish.  This is due to elements like user name and personal links
     which are unique to each authenticated user.  These elements cause Varnish
     to view pages as different although very little actually differ between them.
 
@@ -309,17 +319,32 @@ Optimisations done
     Funkload bench report here: `Practise service test`_
 
 ================== =================== ================== ================== ================== ==================
-Concurrent users   Successfull pages/s Total pages served Fastest pages      Slowest pages      95th percentile   
+Concurrent users   Successful pages/s  Total pages served Fastest pages      Slowest pages      95th percentile   
 ================== =================== ================== ================== ================== ==================
             100             32.404               7777             0.648             30.055              4.562
             150             28.571               6860             1.236             67.015              8.508
             200             26.683               6404             1.883             91.480             11.373
+            250
 ================== =================== ================== ================== ================== ==================
 
 Observations
 ------------
+    
+    As the concurrency rises the cluster servers less-and-less pages.  This is
+    clear from the amount of successful pages per second and the total pages
+    served.  Pages also take longer to serve.  Above 250 concurrent users we 
+    start to experience errors.
 
-    The practice service tests 
+    At 200 concurrent users the cluster can server 26 pages per second.  This
+    means it can potentially serve:
+
+    26 pages * 60 seconds * 60 minutes = **93600 practice service pages per hour.**
+    
+    At a concurrency level of 200, most pages are served within 12 seconds (95th
+    percentile).
+
+    This makes it clear that 200 users should be considered the safe maximum
+    concurrency for the practice service on this cluster.
 
 Optimisations done
 ------------------
@@ -344,7 +369,7 @@ Optimisations done
 
     First batch:
 
-        Test setup:
+        Test set-up:
 
         - Launched: 2013-09-16 18:35:06
         - Test: test_AuthenticatedMobileRead.py AuthenticatedMobileRead.test_AuthenticatedMobileRead
@@ -367,7 +392,7 @@ Optimisations done
 
     Second batch:
 
-        Test setup:
+        Test set-up:
 
         - Launched: 2013-09-16 19:38:36
         - Test: test_AuthenticatedMobileRead.py AuthenticatedMobileRead.test_AuthenticatedMobileRead
@@ -393,7 +418,7 @@ Optimisations done
 =================================================
 
 ================== =================== ================== ================== ================== ==================
-Concurrent users   Successfull pages/s Total pages served Fastest pages      Slowest pages      95th percentile   
+Concurrent users   Successful pages/s  Total pages served Fastest pages      Slowest pages      95th percentile   
 ================== =================== ================== ================== ================== ==================
             100              5.222                940             0.322             56.810             51.439
             250              3.317                597             0.524             75.697             68.783
@@ -413,13 +438,13 @@ Observations
     
     As background to this test consider the following.  The application servers
     SP2 and SP3 are connected via a private subnet in the 10.0.0.* range. In
-    the current cluster setup they are accessed over this private subnet via
+    the current cluster set-up they are accessed over this private subnet via
     the HAProxy and Varnish servers on SP1.  This means any latency or
-    throughput issues on the subnet will adversly affect the total scalability.
+    throughput issues on the subnet will adversely affect the total scalability.
 
     Varnish serves all our cachable resources (CSS, javascript, images, etc.).  
     In order to understand the total scalability we decided to checked Varnish's 
-    scalability in our current cluster setup.
+    scalability in our current cluster set-up.
 
     We used `Apache Benchmark`_ to test Varnish from our load generating server
     and the Varnish/ HAProxy server.  This was done with a script that starts
@@ -519,7 +544,7 @@ Recommendation for scaling / Conclusion
 .. _Science authenticated mobile read: http://197.221.50.101/stats/test_AuthenticatedMobileRead-20130916T193836/
 .. _authenticated mobile read: http://197.221.50.101/stats/test_AuthenticatedMobileRead-20130916T193836/
 .. _slowest authenticated mobile read page: http://197.221.50.101/stats/test_AuthenticatedMobileRead-20130916T183506/#id15
-
+.. _Authenticated read (with errors): http://197.221.50.101/stats/test_AuthenticatedRead-20130730T203634
 
 Extra issues
 ============

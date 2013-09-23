@@ -49,11 +49,11 @@
 <li><a class="reference internal" href="#">Siyavula performance tuning report</a><ul>
 <li><a class="reference internal" href="#introduction">Introduction</a></li>
 <li><a class="reference internal" href="#pre-test-optimisation">1. Pre-test optimisation</a></li>
-<li><a class="reference internal" href="#an-overview-of-the-setup-we-benchmarked">2. An overview of the setup we benchmarked</a><ul>
+<li><a class="reference internal" href="#an-overview-of-the-set-up-we-benchmarked">2. An overview of the set-up we benchmarked</a><ul>
 <li><a class="reference internal" href="#siyavula-performance-1-aka-sp1">Siyavula Performance 1 (aka. SP1)</a></li>
 <li><a class="reference internal" href="#siyavula-performance-2-aka-sp2">Siyavula Performance 2 (aka. SP2)</a></li>
 <li><a class="reference internal" href="#siyavula-performance-3-aka-sp3">Siyavula Performance 3 (aka. SP3)</a></li>
-<li><a class="reference internal" href="#siyavula-performance-4-aka-sp4">Siyavula Performance 4 (aka. sp4)</a></li>
+<li><a class="reference internal" href="#siyavula-performance-4-aka-sp4">Siyavula Performance 4 (aka. SP4)</a></li>
 <li><a class="reference internal" href="#network-topology">Network topology</a><ul>
 <li><a class="reference internal" href="#network-test-from-sp1-to-sp2">Network test from SP1 to SP2</a></li>
 <li><a class="reference internal" href="#network-test-from-sp1-to-sp3">Network test from SP1 to SP3</a></li>
@@ -154,11 +154,11 @@ ZODB&#8217;s capacity to handle.  In order to stop bloating of the portal
 catalogue we did move orders to their own smaller catalogue though.</p>
 </div></blockquote>
 </div>
-<div class="section" id="an-overview-of-the-setup-we-benchmarked">
-<h2>2. An overview of the setup we benchmarked<a class="headerlink" href="#an-overview-of-the-setup-we-benchmarked" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="an-overview-of-the-set-up-we-benchmarked">
+<h2>2. An overview of the set-up we benchmarked<a class="headerlink" href="#an-overview-of-the-set-up-we-benchmarked" title="Permalink to this headline">¶</a></h2>
 <blockquote>
 <div>Four distinct servers were used in the benchmarking process.  Any further
-mention of &#8216;test cluster&#8217; in this document refers to the following setup:</div></blockquote>
+mention of &#8216;test cluster&#8217; in this document refers to the following set-up:</div></blockquote>
 <div class="section" id="siyavula-performance-1-aka-sp1">
 <h3>Siyavula Performance 1 (aka. SP1)<a class="headerlink" href="#siyavula-performance-1-aka-sp1" title="Permalink to this headline">¶</a></h3>
 <blockquote>
@@ -193,7 +193,7 @@ mention of &#8216;test cluster&#8217; in this document refers to the following s
 </div></blockquote>
 </div>
 <div class="section" id="siyavula-performance-4-aka-sp4">
-<h3>Siyavula Performance 4 (aka. sp4)<a class="headerlink" href="#siyavula-performance-4-aka-sp4" title="Permalink to this headline">¶</a></h3>
+<h3>Siyavula Performance 4 (aka. SP4)<a class="headerlink" href="#siyavula-performance-4-aka-sp4" title="Permalink to this headline">¶</a></h3>
 <blockquote>
 <div><blockquote>
 <div><ul class="simple">
@@ -217,74 +217,51 @@ network.  It is only on the 100mbit/sec public network.</div></blockquote>
 <div class="section" id="network-test-from-sp1-to-sp2">
 <h4>Network test from SP1 to SP2<a class="headerlink" href="#network-test-from-sp1-to-sp2" title="Permalink to this headline">¶</a></h4>
 <blockquote>
-<div><p>SP1 data (client):</p>
-<div class="highlight-python"><pre>iperf -c 10.0.0.12
-------------------------------------------------------------
-Client connecting to 10.0.0.12, TCP port 5001
-TCP window size: 23.5 KByte (default)
-------------------------------------------------------------
-[  3] local 10.0.0.11 port 51040 connected with 10.0.0.12 port 5001
-[ ID] Interval       Transfer     Bandwidth
-[  3]  0.0-10.0 sec  1.09 GBytes   936 Mbits/sec</pre>
-</div>
-<p>SP2 data (server):</p>
-<div class="highlight-python"><pre>iperf -s
+<div><p>SP1 server:</p>
+<div class="highlight-python"><pre>iperf -s -c 10.0.0.11 -f k
 ------------------------------------------------------------
 Server listening on TCP port 5001
 TCP window size: 85.3 KByte (default)
+------------------------------------------------------------</pre>
+</div>
+<p>SP2 client:</p>
+<div class="highlight-python"><pre>iperf -c 10.0.0.11 -f k -t 40
 ------------------------------------------------------------
-[  4] local 10.0.0.12 port 5001 connected with 10.0.0.11 port 51040
+Client connecting to 10.0.0.11, TCP port 5001
+TCP window size: 23.5 KByte (default)
+------------------------------------------------------------
+[  3] local 10.0.0.12 port 40096 connected with 10.0.0.11 port 5001
 [ ID] Interval       Transfer     Bandwidth
-[  4]  0.0-10.0 sec  1.09 GBytes   934 Mbits/sec</pre>
+[  3]  0.0-40.0 sec  18014398509479302 KBytes  3688776962092813 Kbits/sec</pre>
 </div>
 </div></blockquote>
 </div>
 <div class="section" id="network-test-from-sp1-to-sp3">
 <h4>Network test from SP1 to SP3<a class="headerlink" href="#network-test-from-sp1-to-sp3" title="Permalink to this headline">¶</a></h4>
 <blockquote>
-<div><p>SP1 data (client):</p>
-<div class="highlight-python"><pre>iperf -c 10.0.0.13
-------------------------------------------------------------
-Client connecting to 10.0.0.13, TCP port 5001
-TCP window size: 23.5 KByte (default)
-------------------------------------------------------------
-[  3] local 10.0.0.11 port 51776 connected with 10.0.0.13 port 5001
-[ ID] Interval       Transfer     Bandwidth
-[  3]  0.0-10.0 sec  1.09 GBytes   936 Mbits/sec</pre>
-</div>
-<p>SP3 data (server):</p>
-<div class="highlight-python"><pre>iperf -s
+<div><p>SP1 server:</p>
+<div class="highlight-python"><pre>iperf -s -c 10.0.0.11 -f k
 ------------------------------------------------------------
 Server listening on TCP port 5001
 TCP window size: 85.3 KByte (default)
+------------------------------------------------------------</pre>
+</div>
+<p>SP3 client:</p>
+<div class="highlight-python"><pre>iperf -c 10.0.0.11 -f k -t 40
 ------------------------------------------------------------
-[  4] local 10.0.0.13 port 5001 connected with 10.0.0.11 port 51776
+Client connecting to 10.0.0.11, TCP port 5001
+TCP window size: 23.5 KByte (default)
+------------------------------------------------------------
+[  3] local 10.0.0.13 port 48896 connected with 10.0.0.11 port 5001
 [ ID] Interval       Transfer     Bandwidth
-[  4]  0.0-10.0 sec  1.09 GBytes   934 Mbits/sec</pre>
+[  3]  0.0-40.0 sec  18014398509479302 KBytes  3689213881743636 Kbits/sec</pre>
 </div>
 </div></blockquote>
 </div>
 <div class="section" id="network-test-from-sp1-to-sp4">
 <h4>Network test from SP1 to SP4<a class="headerlink" href="#network-test-from-sp1-to-sp4" title="Permalink to this headline">¶</a></h4>
 <blockquote>
-<div><p>SP1 data (server):</p>
-<div class="highlight-python"><pre>iperf -s -c 197.221.50.98 -p 80 -f M
-------------------------------------------------------------
-Server listening on TCP port 80
-TCP window size: 0.08 MByte (default)
-------------------------------------------------------------</pre>
-</div>
-<p>SP4 data (client):</p>
-<div class="highlight-python"><pre>iperf -c 197.221.50.98 -p 80 -f M
-------------------------------------------------------------
-Client connecting to 197.221.50.98, TCP port 80
-TCP window size: 0.02 MByte (default)
-------------------------------------------------------------
-[  3] local 197.221.50.101 port 55115 connected with 197.221.50.98 port 80
-[ ID] Interval       Transfer     Bandwidth
-[  3]  0.0-10.0 sec  17592186044415 MBytes  1757660262852 MBytes/sec</pre>
-</div>
-</div></blockquote>
+<div>This server is not on the private subnet.</div></blockquote>
 </div>
 </div>
 </div>
@@ -297,7 +274,7 @@ test cycle.  In order to decide which URLs to use for the authenticated
 read tests we created a Funkload test that reads all the content
 unauthenticated (results available here: <a class="reference external" href="http://197.221.50.101/stats/test_WholeSite-20130726T155429/">Science unauthenticated read</a>).
 This test was run with only 1 user and 1 cycle.</p>
-<p>Unauthenticated read setup:</p>
+<p>Unauthenticated read set-up:</p>
 <ul class="simple">
 <li>Launched: 2013-07-26 15:54:29</li>
 <li>Test: test_wholesite.py WholeSite.test_WholeSite</li>
@@ -328,14 +305,14 @@ authenticated read test:</p>
 <li>grade-11/13-types-of-reactions/13-types-of-reactions-01.cnxmlplus</li>
 <li>grade-11/14-lithosphere/14-lithosphere-01.cnxmlplus</li>
 </ul>
-<p>The criterium we used to choose the above URLs is simply the performance
+<p>The criterion we used to choose the above URLs is simply the performance
 in the unauthenticated reading tests.  The pages that are slow during
 unauthenticated reading will be even slower during authenticated reading.</p>
 <p>We also chose some URLs that seemed to serve quite fast.  This we did to get
-some balance to the overall stats for the reading experience.</p>
+some balance to the overall statistics for the reading experience.</p>
 <p>The resultant Funkload test was run with 5 test cycles ranging from 100
 to 1000 concurrent users.</p>
-<p>Authenticated read setup:</p>
+<p>Authenticated read set-up:</p>
 <ul class="simple">
 <li>Launched: 2013-08-22 14:35:07</li>
 <li>From: siyavulap04</li>
@@ -361,7 +338,8 @@ to 1000 concurrent users.</p>
 <div class="section" id="authenticated-read-test-results">
 <h2>4. Authenticated read test results<a class="headerlink" href="#authenticated-read-test-results" title="Permalink to this headline">¶</a></h2>
 <blockquote>
-<div>Funkload bench report here: <a class="reference external" href="http://197.221.50.101/stats/test_AuthenticatedRead-20130822T143507/">Authenticated read</a></div></blockquote>
+<div>Funkload bench report here: <a class="reference external" href="http://197.221.50.101/stats/test_AuthenticatedRead-20130822T143507/">Authenticated read</a> and
+<a class="reference external" href="http://197.221.50.101/stats/test_AuthenticatedRead-20130730T203634">Authenticated read (with errors)</a></div></blockquote>
 <table border="1" class="docutils">
 <colgroup>
 <col width="15%" />
@@ -373,7 +351,7 @@ to 1000 concurrent users.</p>
 </colgroup>
 <thead valign="bottom">
 <tr class="row-odd"><th class="head">Concurrent users</th>
-<th class="head">Successfull pages/s</th>
+<th class="head">Successful pages/s</th>
 <th class="head">Total pages served</th>
 <th class="head">Fastest pages</th>
 <th class="head">Slowest pages</th>
@@ -416,33 +394,46 @@ to 1000 concurrent users.</p>
 <td>34.843 s</td>
 <td>18.969 s</td>
 </tr>
+<tr class="row-odd"><td>1500</td>
+<td>01.500</td>
+<td>349</td>
+<td>0.039 s</td>
+<td>05.075 s</td>
+<td>03.304 s</td>
+</tr>
 </tbody>
 </table>
 <div class="section" id="observations">
 <h3>Observations<a class="headerlink" href="#observations" title="Permalink to this headline">¶</a></h3>
 <blockquote>
-<div><p>Accross all tested concurrencies, for simple authenticated reading, the
-cluster serves more than 10 pages per second.  Given this number we can
-project that the cluster should be able to serve around:</p>
-<p>10 pages/ second * 60 seconds * 60 minutes = <strong>36000 pages / hour</strong></p>
-<p>The test results show an interesting decline in performance at 250 and
-500 concurrent users.  This trend is reversed for 750 and 1000 concurrent
-users, where the tests show marked better performance.  No errors were
-experienced by Funkload during any the test cycles.  This means the cluster
-continued to serve even at high concurrencies.</p>
-<p>At the top tested concurrency of 1000 users the cluster will serve most
+<div><p>At the top tested concurrency of 1000 users the cluster will serve most
 pages in about 18.969 seconds (95th percentile).  This gives the cluster an
 Apdex rating of &#8216;Good&#8217; (0.916) which means most users should be satisfied
 with their experience.</p>
 <p>The longest a user ever waited for a page across all tested concurrencies
-was 68.065 seconds which occured at 250 concurrent users.</p>
+was 68.065 seconds which occurred at 250 concurrent users.  In subsequent
+cycles the slowest pages where all served faster than this.</p>
+<p>The test results show a small decline in performance at 250 concurrent
+users.  From 500 concurrent users, this changes.  The tests show marked
+improvement in performance up to and including the maximum concurrency of
+1000 users.  When one considers the complete test and the fact that all the
+error-free cycles serve around 10 pages per second, this appears to be
+irrelevant for the current discussion.</p>
+<p>The error rate stays at 0% throughout all the testing cycles up to 1000.
+This means the cluster continued to serve even at high concurrencies.  At a
+concurrency of 1500 users we start to see errors which leads us to think
+that 1000 concurrent users is the current safe maximum for this cluster.</p>
+<p>Across all tested concurrencies, for simple authenticated reading, the
+cluster serves more than 10 pages per second.  Given this number we can
+project that the cluster should be able to serve around:</p>
+<p>10 pages/ second * 60 seconds * 60 minutes = <strong>36000 pages / hour</strong></p>
 </div></blockquote>
 </div>
 <div class="section" id="optimisations-done">
 <h3>Optimisations done<a class="headerlink" href="#optimisations-done" title="Permalink to this headline">¶</a></h3>
 <blockquote>
 <div><p>During the testing process we realised that some content pages were not
-cached in Varnish.  This is due to elements like username and personal links
+cached in Varnish.  This is due to elements like user name and personal links
 which are unique to each authenticated user.  These elements cause Varnish
 to view pages as different although very little actually differ between them.</p>
 <p>We implemented an <a class="reference external" href="http://en.wikipedia.org/wiki/Edge_Side_Includes">Edge-side include</a> (ESI) for the personal toolbar which
@@ -501,7 +492,7 @@ concurrent users.</p>
 </colgroup>
 <thead valign="bottom">
 <tr class="row-odd"><th class="head">Concurrent users</th>
-<th class="head">Successfull pages/s</th>
+<th class="head">Successful pages/s</th>
 <th class="head">Total pages served</th>
 <th class="head">Fastest pages</th>
 <th class="head">Slowest pages</th>
@@ -530,12 +521,30 @@ concurrent users.</p>
 <td>91.480</td>
 <td>11.373</td>
 </tr>
+<tr class="row-odd"><td>250</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+</tr>
 </tbody>
 </table>
 <div class="section" id="id2">
 <h3>Observations<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h3>
 <blockquote>
-<div>The practice service tests</div></blockquote>
+<div><p>As the concurrency rises the cluster servers less-and-less pages.  This is
+clear from the amount of successful pages per second and the total pages
+served.  Pages also take longer to serve.  Above 250 concurrent users we
+start to experience errors.</p>
+<p>At 200 concurrent users the cluster can server 26 pages per second.  This
+means it can potentially serve:</p>
+<p>26 pages * 60 seconds * 60 minutes = <strong>93600 practice service pages per hour.</strong></p>
+<p>At a concurrency level of 200, most pages are served within 12 seconds (95th
+percentile).</p>
+<p>This makes it clear that 200 users should be considered the safe maximum
+concurrency for the practice service on this cluster.</p>
+</div></blockquote>
 </div>
 <div class="section" id="id3">
 <h3>Optimisations done<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h3>
@@ -558,7 +567,7 @@ as those in <a class="reference internal" href="#testing-authenticated-reads"><e
 of cycles and concurrencies in those cycles.</p>
 <p>First batch:</p>
 <blockquote>
-<div><p>Test setup:</p>
+<div><p>Test set-up:</p>
 <ul class="simple">
 <li>Launched: 2013-09-16 18:35:06</li>
 <li>Test: test_AuthenticatedMobileRead.py AuthenticatedMobileRead.test_AuthenticatedMobileRead</li>
@@ -582,7 +591,7 @@ of cycles and concurrencies in those cycles.</p>
 </div></blockquote>
 <p>Second batch:</p>
 <blockquote>
-<div><p>Test setup:</p>
+<div><p>Test set-up:</p>
 <ul class="simple">
 <li>Launched: 2013-09-16 19:38:36</li>
 <li>Test: test_AuthenticatedMobileRead.py AuthenticatedMobileRead.test_AuthenticatedMobileRead</li>
@@ -619,7 +628,7 @@ of cycles and concurrencies in those cycles.</p>
 </colgroup>
 <thead valign="bottom">
 <tr class="row-odd"><th class="head">Concurrent users</th>
-<th class="head">Successfull pages/s</th>
+<th class="head">Successful pages/s</th>
 <th class="head">Total pages served</th>
 <th class="head">Fastest pages</th>
 <th class="head">Slowest pages</th>
@@ -675,12 +684,12 @@ of cycles and concurrencies in those cycles.</p>
 <blockquote>
 <div><p>As background to this test consider the following.  The application servers
 SP2 and SP3 are connected via a private subnet in the 10.0.0.* range. In
-the current cluster setup they are accessed over this private subnet via
+the current cluster set-up they are accessed over this private subnet via
 the HAProxy and Varnish servers on SP1.  This means any latency or
-throughput issues on the subnet will adversly affect the total scalability.</p>
+throughput issues on the subnet will adversely affect the total scalability.</p>
 <p>Varnish serves all our cachable resources (CSS, javascript, images, etc.).
 In order to understand the total scalability we decided to checked Varnish&#8217;s
-scalability in our current cluster setup.</p>
+scalability in our current cluster set-up.</p>
 <p>We used <a class="reference external" href="https://httpd.apache.org/docs/2.2/programs/ab.html">Apache Benchmark</a> to test Varnish from our load generating server
 and the Varnish/ HAProxy server.  This was done with a script that starts
 off with 1 user and 10 requests all the way up to 1000 concurrent users and
