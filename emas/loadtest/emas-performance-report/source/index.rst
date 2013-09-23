@@ -133,6 +133,13 @@ Network test from SP1 to SP3
         [ ID] Interval       Transfer     Bandwidth
         [  3]  0.0-40.0 sec  18014398509479302 KBytes  3689213881743636 Kbits/sec
 
+Network test between SP2 and SP3
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+    TODO::
+
+        iperf tests
+
 Network test from SP1 to SP4
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     
@@ -229,7 +236,6 @@ Concurrent users  Successful pages/s  Total pages served Fastest pages      Slow
             500            10.717               1929        0.428 s             64.953 s              33.854 s
             750            11.022               1984        0.439 s             43.599 s              20.745 s
            1000            10.489               1888        0.374 s             34.843 s              18.969 s
-           1500            01.500                349        0.039 s             05.075 s              03.304 s
 ================  =================== ================== ================== ==================  ==================
 
 Observations
@@ -253,7 +259,7 @@ Observations
 
     The error rate stays at 0% throughout all the testing cycles up to 1000.
     This means the cluster continued to serve even at high concurrencies.  At a
-    concurrency of 1500 users we start to see errors which leads us to think
+    concurrency of 1500 users we started to see errors which leads us to think
     that 1000 concurrent users is the current safe maximum for this cluster.
 
     Across all tested concurrencies, for simple authenticated reading, the
@@ -324,28 +330,31 @@ Concurrent users   Successful pages/s  Total pages served Fastest pages      Slo
             100             32.404               7777             0.648             30.055              4.562
             150             28.571               6860             1.236             67.015              8.508
             200             26.683               6404             1.883             91.480             11.373
-            250
 ================== =================== ================== ================== ================== ==================
 
 Observations
 ------------
     
-    As the concurrency rises the cluster servers less-and-less pages.  This is
+    As the concurrency rises the cluster serves less-and-less pages.  This is
     clear from the amount of successful pages per second and the total pages
     served.  Pages also take longer to serve.  Above 250 concurrent users we 
-    start to experience errors.
+    start to notice errors.
 
-    At 200 concurrent users the cluster can server 26 pages per second.  This
+    At a concurrency level of 200, most pages are served within 12 seconds (95th
+    percentile).  This along with the fact that errors start to occur at 250
+    concurrent users makes it clear that 200 users should be considered the safe
+    maximum concurrency for the practice service on this cluster.
+
+    The cluster can server 26 pages per second at 200 concurrent users.  This
     means it can potentially serve:
 
     26 pages * 60 seconds * 60 minutes = **93600 practice service pages per hour.**
+
+    TODO::
+
+        Would be nice to be able to test the service for an hour and see what
+        happens.
     
-    At a concurrency level of 200, most pages are served within 12 seconds (95th
-    percentile).
-
-    This makes it clear that 200 users should be considered the safe maximum
-    concurrency for the practice service on this cluster.
-
 Optimisations done
 ------------------
     
@@ -356,16 +365,24 @@ Optimisations done
     changed that specific method and removed all unnecessary changes to the 
     user object.
 
+    TODO::
+
+        before and after stats?
+
 
 7. Testing mobile authenticated reads
 =====================================
 
     Funkload bench report here: `Mobile test`_
-
+    
     We used exactly the same set of pages for the mobile authenticated read tests
     as those in :ref:`Testing authenticated reads` above.  The tests were run in
     2 batches.  The only things different between the 2 batches are the number
-    of cycles and concurrencies in those cycles.
+    of cycles and concurrencies in those cycles.  This test makes no attempt at
+    modelling the nature of a mobile connection and as such does not necessarily
+    accurately mirror the mobile end-user experience.  It does give one a
+    reasonable idea of how the cluster scales under load when using the mobile
+    theme though.
 
     First batch:
 
@@ -430,7 +447,30 @@ Concurrent users   Successful pages/s  Total pages served Fastest pages      Slo
 Observations
 ------------
     
-    Is caching turned on for the mobile theme?
+    The cluster exhibits a gradual decline in successful pages served across the
+    tested concurrencies.  We observed the same degrade in the performance for
+    250 concurrent users as we did for the normal web theme.  In this case we
+    also consider it irrelevant for the goal of determining performance and
+    scalability under load where mobile authenticated reading is concerned.
+    
+    The fastest page is served in 0.322 seconds at 100 concurrent users.  The
+    slowest page is served in 75.697 seconds at a concurrency of 250. After this
+    point the minimum page load times increase steadily.  We observed a very
+    fast load at 750 concurrent users, but several more tests could not reliably
+    reproduce this result, so it is not regarded as significant.  The fact that
+    pages individually load faster under higher concurrencies is likely due to
+    the caching proxy.
+
+    The results indicate that this cluster can serve 4.178 pages per second at
+    a concurrency of 1000 users and can manage around 4 pages per second across
+    the tested concurrencies.  This means we can potentially serve:
+
+    4 pages * 60 seconds * 60 minutes ~ **14400 pages per hour.**
+    
+    TODO::
+
+        - Verify that caching is turned on for the mobile theme.
+        - Test at 1500 concurrent users.
 
 
 9. Testing Varnish
@@ -546,8 +586,13 @@ Recommendation for scaling / Conclusion
 .. _slowest authenticated mobile read page: http://197.221.50.101/stats/test_AuthenticatedMobileRead-20130916T183506/#id15
 .. _Authenticated read (with errors): http://197.221.50.101/stats/test_AuthenticatedRead-20130730T203634
 
-Extra issues
+
+
+Extra issues 
 ============
+
+Hierdie is vir ons om te bespreek Roché. Dis nie iets wat noodwendig
+in die report hoort nie.
 
 Check out http://www.mnot.net/blog/2011/05/18/http_benchmark_rules
 

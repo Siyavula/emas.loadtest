@@ -57,6 +57,7 @@
 <li><a class="reference internal" href="#network-topology">Network topology</a><ul>
 <li><a class="reference internal" href="#network-test-from-sp1-to-sp2">Network test from SP1 to SP2</a></li>
 <li><a class="reference internal" href="#network-test-from-sp1-to-sp3">Network test from SP1 to SP3</a></li>
+<li><a class="reference internal" href="#network-test-between-sp2-and-sp3">Network test between SP2 and SP3</a></li>
 <li><a class="reference internal" href="#network-test-from-sp1-to-sp4">Network test from SP1 to SP4</a></li>
 </ul>
 </li>
@@ -258,6 +259,14 @@ TCP window size: 23.5 KByte (default)
 </div>
 </div></blockquote>
 </div>
+<div class="section" id="network-test-between-sp2-and-sp3">
+<h4>Network test between SP2 and SP3<a class="headerlink" href="#network-test-between-sp2-and-sp3" title="Permalink to this headline">¶</a></h4>
+<blockquote>
+<div><p>TODO:</p>
+<div class="highlight-python"><pre>iperf tests</pre>
+</div>
+</div></blockquote>
+</div>
 <div class="section" id="network-test-from-sp1-to-sp4">
 <h4>Network test from SP1 to SP4<a class="headerlink" href="#network-test-from-sp1-to-sp4" title="Permalink to this headline">¶</a></h4>
 <blockquote>
@@ -394,13 +403,6 @@ to 1000 concurrent users.</p>
 <td>34.843 s</td>
 <td>18.969 s</td>
 </tr>
-<tr class="row-odd"><td>1500</td>
-<td>01.500</td>
-<td>349</td>
-<td>0.039 s</td>
-<td>05.075 s</td>
-<td>03.304 s</td>
-</tr>
 </tbody>
 </table>
 <div class="section" id="observations">
@@ -421,7 +423,7 @@ error-free cycles serve around 10 pages per second, this appears to be
 irrelevant for the current discussion.</p>
 <p>The error rate stays at 0% throughout all the testing cycles up to 1000.
 This means the cluster continued to serve even at high concurrencies.  At a
-concurrency of 1500 users we start to see errors which leads us to think
+concurrency of 1500 users we started to see errors which leads us to think
 that 1000 concurrent users is the current safe maximum for this cluster.</p>
 <p>Across all tested concurrencies, for simple authenticated reading, the
 cluster serves more than 10 pages per second.  Given this number we can
@@ -521,40 +523,41 @@ concurrent users.</p>
 <td>91.480</td>
 <td>11.373</td>
 </tr>
-<tr class="row-odd"><td>250</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-</tr>
 </tbody>
 </table>
 <div class="section" id="id2">
 <h3>Observations<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h3>
 <blockquote>
-<div><p>As the concurrency rises the cluster servers less-and-less pages.  This is
+<div><p>As the concurrency rises the cluster serves less-and-less pages.  This is
 clear from the amount of successful pages per second and the total pages
 served.  Pages also take longer to serve.  Above 250 concurrent users we
-start to experience errors.</p>
-<p>At 200 concurrent users the cluster can server 26 pages per second.  This
+start to notice errors.</p>
+<p>At a concurrency level of 200, most pages are served within 12 seconds (95th
+percentile).  This along with the fact that errors start to occur at 250
+concurrent users makes it clear that 200 users should be considered the safe
+maximum concurrency for the practice service on this cluster.</p>
+<p>The cluster can server 26 pages per second at 200 concurrent users.  This
 means it can potentially serve:</p>
 <p>26 pages * 60 seconds * 60 minutes = <strong>93600 practice service pages per hour.</strong></p>
-<p>At a concurrency level of 200, most pages are served within 12 seconds (95th
-percentile).</p>
-<p>This makes it clear that 200 users should be considered the safe maximum
-concurrency for the practice service on this cluster.</p>
+<p>TODO:</p>
+<div class="highlight-python"><pre>Would be nice to be able to test the service for an hour and see what
+happens.</pre>
+</div>
 </div></blockquote>
 </div>
 <div class="section" id="id3">
 <h3>Optimisations done<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h3>
 <blockquote>
-<div>When we analysed the data from the practice service test we realized that
+<div><p>When we analysed the data from the practice service test we realized that
 the Plone login process takes quite a bit of time.  Upon further
 investigation we found that the user object is updated on each login.
 This is unnecessary given that we do not require the last login time.  We
 changed that specific method and removed all unnecessary changes to the
-user object.</div></blockquote>
+user object.</p>
+<p>TODO:</p>
+<div class="highlight-python"><pre>before and after stats?</pre>
+</div>
+</div></blockquote>
 </div>
 </div>
 <div class="section" id="testing-mobile-authenticated-reads">
@@ -564,7 +567,11 @@ user object.</div></blockquote>
 <p>We used exactly the same set of pages for the mobile authenticated read tests
 as those in <a class="reference internal" href="#testing-authenticated-reads"><em>3. Testing authenticated reads</em></a> above.  The tests were run in
 2 batches.  The only things different between the 2 batches are the number
-of cycles and concurrencies in those cycles.</p>
+of cycles and concurrencies in those cycles.  This test makes no attempt at
+modelling the nature of a mobile connection and as such does not necessarily
+accurately mirror the mobile end-user experience.  It does give one a
+reasonable idea of how the cluster scales under load when using the mobile
+theme though.</p>
 <p>First batch:</p>
 <blockquote>
 <div><p>Test set-up:</p>
@@ -676,7 +683,27 @@ of cycles and concurrencies in those cycles.</p>
 <div class="section" id="id4">
 <h3>Observations<a class="headerlink" href="#id4" title="Permalink to this headline">¶</a></h3>
 <blockquote>
-<div>Is caching turned on for the mobile theme?</div></blockquote>
+<div><p>The cluster exhibits a gradual decline in successful pages served across the
+tested concurrencies.  We observed the same degrade in the performance for
+250 concurrent users as we did for the normal web theme.  In this case we
+also consider it irrelevant for the goal of determining performance and
+scalability under load where mobile authenticated reading is concerned.</p>
+<p>The fastest page is served in 0.322 seconds at 100 concurrent users.  The
+slowest page is served in 75.697 seconds at a concurrency of 250. After this
+point the minimum page load times increase steadily.  We observed a very
+fast load at 750 concurrent users, but several more tests could not reliably
+reproduce this result, so it is not regarded as significant.  The fact that
+pages individually load faster under higher concurrencies is likely due to
+the caching proxy.</p>
+<p>The results indicate that this cluster can serve 4.178 pages per second at
+a concurrency of 1000 users and can manage around 4 pages per second across
+the tested concurrencies.  This means we can potentially serve:</p>
+<p>4 pages * 60 seconds * 60 minutes ~ <strong>14400 pages per hour.</strong></p>
+<p>TODO:</p>
+<div class="highlight-python"><pre>- Verify that caching is turned on for the mobile theme.
+- Test at 1500 concurrent users.</pre>
+</div>
+</div></blockquote>
 </div>
 </div>
 <div class="section" id="testing-varnish">
@@ -875,6 +902,8 @@ performance between the 2 mentioned servers.</p>
 </div>
 <div class="section" id="extra-issues">
 <h2>Extra issues<a class="headerlink" href="#extra-issues" title="Permalink to this headline">¶</a></h2>
+<p>Hierdie is vir ons om te bespreek Roché. Dis nie iets wat noodwendig
+in die report hoort nie.</p>
 <p>Check out <a class="reference external" href="http://www.mnot.net/blog/2011/05/18/http_benchmark_rules">http://www.mnot.net/blog/2011/05/18/http_benchmark_rules</a></p>
 <div class="section" id="cpu">
 <h3>CPU<a class="headerlink" href="#cpu" title="Permalink to this headline">¶</a></h3>
