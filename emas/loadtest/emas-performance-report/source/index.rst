@@ -110,8 +110,8 @@ Network test from SP1 to SP2
         ------------------------------------------------------------
         [  6] local 10.0.0.11 port 51005 connected with 10.0.0.12 port 5001
         [ ID] Interval       Transfer     Bandwidth
-        [  6]  0.0-10.0 sec  1097 MBytes   **920 Mbits/sec**
-        [  4]  0.0-10.0 sec  1112 MBytes   **930 Mbits/sec**
+        [  6]  0.0-10.0 sec  1097 MBytes   920 Mbits/sec
+        [  4]  0.0-10.0 sec  1112 MBytes   930 Mbits/sec
     
     SP2 client::
 
@@ -127,8 +127,8 @@ Network test from SP1 to SP2
         [  5] local 10.0.0.12 port 45482 connected with 10.0.0.11 port 5001
         [  4] local 10.0.0.12 port 5001 connected with 10.0.0.11 port 51005
         [ ID] Interval       Transfer     Bandwidth
-        [  5]  0.0-10.0 sec  1112 MBytes   **932 Mbits/sec**
-        [  4]  0.0-10.0 sec  1097 MBytes   **918 Mbits/sec**
+        [  5]  0.0-10.0 sec  1112 MBytes   932 Mbits/sec
+        [  4]  0.0-10.0 sec  1097 MBytes   918 Mbits/sec
     
 Network test from SP1 to SP3
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -147,8 +147,8 @@ Network test from SP1 to SP3
         ------------------------------------------------------------
         [  6] local 10.0.0.11 port 51450 connected with 10.0.0.13 port 5001
         [ ID] Interval       Transfer     Bandwidth
-        [  4]  0.0-10.0 sec  1110 MBytes   **929 Mbits/sec**
-        [  6]  0.0-10.0 sec  1098 MBytes   **920 Mbits/se
+        [  4]  0.0-10.0 sec  1110 MBytes   929 Mbits/sec
+        [  6]  0.0-10.0 sec  1098 MBytes   920 Mbits/se
         
     SP3 client::
 
@@ -164,8 +164,8 @@ Network test from SP1 to SP3
         [  5] local 10.0.0.13 port 49089 connected with 10.0.0.11 port 5001
         [  4] local 10.0.0.13 port 5001 connected with 10.0.0.11 port 51450
         [ ID] Interval       Transfer     Bandwidth
-        [  5]  0.0-10.0 sec  1110 MBytes   **930 Mbits/sec**
-        [  4]  0.0-10.0 sec  1098 MBytes   **919 Mbits/sec**
+        [  5]  0.0-10.0 sec  1110 MBytes   930 Mbits/sec
+        [  4]  0.0-10.0 sec  1098 MBytes   919 Mbits/sec
 
 Network test between SP2 and SP3
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -184,8 +184,8 @@ Network test between SP2 and SP3
         ------------------------------------------------------------
         [  6] local 10.0.0.12 port 42910 connected with 10.0.0.13 port 5001
         [ ID] Interval       Transfer     Bandwidth
-        [  6]  0.0-10.0 sec  1090 MBytes   **914 Mbits/sec**
-        [  4]  0.0-10.0 sec  1111 MBytes   **930 Mbits/sec**
+        [  6]  0.0-10.0 sec  1090 MBytes   914 Mbits/sec
+        [  4]  0.0-10.0 sec  1111 MBytes   930 Mbits/sec
 
     SP3 bidirectional test::
 
@@ -201,8 +201,8 @@ Network test between SP2 and SP3
         [  5] local 10.0.0.13 port 58467 connected with 10.0.0.12 port 5001
         [  4] local 10.0.0.13 port 5001 connected with 10.0.0.12 port 42910
         [ ID] Interval       Transfer     Bandwidth
-        [  5]  0.0-10.0 sec  1111 MBytes   **931 Mbits/sec**
-        [  4]  0.0-10.0 sec  1090 MBytes   **913 Mbits/sec**
+        [  5]  0.0-10.0 sec  1111 MBytes   931 Mbits/sec
+        [  4]  0.0-10.0 sec  1090 MBytes   913 Mbits/sec
 
 Network test from SP1 to SP4
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -216,7 +216,7 @@ Network test from SP1 to SP4
         ------------------------------------------------------------
         [  4] local 197.221.50.98 port 5001 connected with 197.221.50.101 port 46125
         [ ID] Interval       Transfer     Bandwidth
-        [  4]  0.0-10.3 sec   116 MBytes  **94.1 Mbits/sec**
+        [  4]  0.0-10.3 sec   116 MBytes  94.1 Mbits/sec
     
     SP4 client::
 
@@ -227,7 +227,7 @@ Network test from SP1 to SP4
         ------------------------------------------------------------
         [  3] local 197.221.50.101 port 46125 connected with 197.221.50.98 port 5001
         [ ID] Interval       Transfer     Bandwidth
-        [  3]  0.0-10.0 sec   116 MBytes  **96.5 Mbits/sec**
+        [  3]  0.0-10.0 sec   116 MBytes  96.5 Mbits/sec
 
 Observations on network test results
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
