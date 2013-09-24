@@ -1,4 +1,5 @@
 
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
@@ -14,7 +15,7 @@
     
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    './',
+        URL_ROOT:    '',
         VERSION:     '1.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
@@ -59,6 +60,7 @@
 <li><a class="reference internal" href="#network-test-from-sp1-to-sp3">Network test from SP1 to SP3</a></li>
 <li><a class="reference internal" href="#network-test-between-sp2-and-sp3">Network test between SP2 and SP3</a></li>
 <li><a class="reference internal" href="#network-test-from-sp1-to-sp4">Network test from SP1 to SP4</a></li>
+<li><a class="reference internal" href="#observations-on-network-test-results">Observations on network test results</a></li>
 </ul>
 </li>
 </ul>
@@ -210,30 +212,49 @@ functions are excellent.</p>
 <div class="section" id="network-topology">
 <h3>Network topology<a class="headerlink" href="#network-topology" title="Permalink to this headline">¶</a></h3>
 <blockquote>
-<div>The public side of the network is 100mbit/sec. The private subnet is
-1000mbit/sec.  Currently SP1, SP2 and SP3 are on the public network and the
-private subnet.  Subsequently all internal communication between these 3
-servers run at 1000mbit/sec.  SP4 is not on the private 1000mbit/ sec
-network.  It is only on the 100mbit/sec public network.</div></blockquote>
+<div><p>The public side of the network is 100 Mbits/sec (megabits per second). The
+private subnet is 1000 Mbits/sec.  Currently SP1, SP2 and SP3 are on the
+public network and the private subnet.  Subsequently all internal
+communication between these 3 servers run at 1000 Mbits/sec.  SP4 is not on
+the private 1000 Mbits/ sec network.  It is only on the 100 Mbits/sec
+public network.</p>
+<p>In order to validate the above set-up we ran a series of <a class="reference external" href="http://iperf.sourceforge.net/">iperf</a> tests
+between the servers.</p>
+</div></blockquote>
 <div class="section" id="network-test-from-sp1-to-sp2">
 <h4>Network test from SP1 to SP2<a class="headerlink" href="#network-test-from-sp1-to-sp2" title="Permalink to this headline">¶</a></h4>
 <blockquote>
 <div><p>SP1 server:</p>
-<div class="highlight-python"><pre>iperf -s -c 10.0.0.11 -f k
+<div class="highlight-python"><pre>iperf -s -f m
 ------------------------------------------------------------
 Server listening on TCP port 5001
-TCP window size: 85.3 KByte (default)
-------------------------------------------------------------</pre>
+TCP window size: 0.08 MByte (default)
+------------------------------------------------------------
+[  4] local 10.0.0.11 port 5001 connected with 10.0.0.12 port 45482
+------------------------------------------------------------
+Client connecting to 10.0.0.12, TCP port 5001
+TCP window size: 0.11 MByte (default)
+------------------------------------------------------------
+[  6] local 10.0.0.11 port 51005 connected with 10.0.0.12 port 5001
+[ ID] Interval       Transfer     Bandwidth
+[  6]  0.0-10.0 sec  1097 MBytes   **920 Mbits/sec**
+[  4]  0.0-10.0 sec  1112 MBytes   **930 Mbits/sec**</pre>
 </div>
 <p>SP2 client:</p>
-<div class="highlight-python"><pre>iperf -c 10.0.0.11 -f k -t 40
+<div class="highlight-python"><pre>iperf -c 10.0.0.11 -d -f m
+------------------------------------------------------------
+Server listening on TCP port 5001
+TCP window size: 0.08 MByte (default)
+------------------------------------------------------------
 ------------------------------------------------------------
 Client connecting to 10.0.0.11, TCP port 5001
-TCP window size: 23.5 KByte (default)
+TCP window size: 0.14 MByte (default)
 ------------------------------------------------------------
-[  3] local 10.0.0.12 port 40096 connected with 10.0.0.11 port 5001
+[  5] local 10.0.0.12 port 45482 connected with 10.0.0.11 port 5001
+[  4] local 10.0.0.12 port 5001 connected with 10.0.0.11 port 51005
 [ ID] Interval       Transfer     Bandwidth
-[  3]  0.0-40.0 sec  18014398509479302 KBytes  3688776962092813 Kbits/sec</pre>
+[  5]  0.0-10.0 sec  1112 MBytes   **932 Mbits/sec**
+[  4]  0.0-10.0 sec  1097 MBytes   **918 Mbits/sec**</pre>
 </div>
 </div></blockquote>
 </div>
@@ -241,36 +262,111 @@ TCP window size: 23.5 KByte (default)
 <h4>Network test from SP1 to SP3<a class="headerlink" href="#network-test-from-sp1-to-sp3" title="Permalink to this headline">¶</a></h4>
 <blockquote>
 <div><p>SP1 server:</p>
-<div class="highlight-python"><pre>iperf -s -c 10.0.0.11 -f k
+<div class="highlight-python"><pre>iperf -s -f m
 ------------------------------------------------------------
 Server listening on TCP port 5001
-TCP window size: 85.3 KByte (default)
-------------------------------------------------------------</pre>
+TCP window size: 0.08 MByte (default)
+------------------------------------------------------------
+[  4] local 10.0.0.11 port 5001 connected with 10.0.0.13 port 49089
+------------------------------------------------------------
+Client connecting to 10.0.0.13, TCP port 5001
+TCP window size: 0.11 MByte (default)
+------------------------------------------------------------
+[  6] local 10.0.0.11 port 51450 connected with 10.0.0.13 port 5001
+[ ID] Interval       Transfer     Bandwidth
+[  4]  0.0-10.0 sec  1110 MBytes   **929 Mbits/sec**
+[  6]  0.0-10.0 sec  1098 MBytes   **920 Mbits/se</pre>
 </div>
 <p>SP3 client:</p>
-<div class="highlight-python"><pre>iperf -c 10.0.0.11 -f k -t 40
+<div class="highlight-python"><pre>iperf -c 10.0.0.11 -d -f m
+------------------------------------------------------------
+Server listening on TCP port 5001
+TCP window size: 0.08 MByte (default)
+------------------------------------------------------------
 ------------------------------------------------------------
 Client connecting to 10.0.0.11, TCP port 5001
-TCP window size: 23.5 KByte (default)
+TCP window size: 0.14 MByte (default)
 ------------------------------------------------------------
-[  3] local 10.0.0.13 port 48896 connected with 10.0.0.11 port 5001
+[  5] local 10.0.0.13 port 49089 connected with 10.0.0.11 port 5001
+[  4] local 10.0.0.13 port 5001 connected with 10.0.0.11 port 51450
 [ ID] Interval       Transfer     Bandwidth
-[  3]  0.0-40.0 sec  18014398509479302 KBytes  3689213881743636 Kbits/sec</pre>
+[  5]  0.0-10.0 sec  1110 MBytes   **930 Mbits/sec**
+[  4]  0.0-10.0 sec  1098 MBytes   **919 Mbits/sec**</pre>
 </div>
 </div></blockquote>
 </div>
 <div class="section" id="network-test-between-sp2-and-sp3">
 <h4>Network test between SP2 and SP3<a class="headerlink" href="#network-test-between-sp2-and-sp3" title="Permalink to this headline">¶</a></h4>
 <blockquote>
-<div><p>TODO:</p>
-<div class="highlight-python"><pre>iperf tests</pre>
+<div><p>SP2 server:</p>
+<div class="highlight-python"><pre>iperf -s -f m
+------------------------------------------------------------
+Server listening on TCP port 5001
+TCP window size: 0.08 MByte (default)
+------------------------------------------------------------
+[  4] local 10.0.0.12 port 5001 connected with 10.0.0.13 port 58467
+------------------------------------------------------------
+Client connecting to 10.0.0.13, TCP port 5001
+TCP window size: 0.11 MByte (default)
+------------------------------------------------------------
+[  6] local 10.0.0.12 port 42910 connected with 10.0.0.13 port 5001
+[ ID] Interval       Transfer     Bandwidth
+[  6]  0.0-10.0 sec  1090 MBytes   **914 Mbits/sec**
+[  4]  0.0-10.0 sec  1111 MBytes   **930 Mbits/sec**</pre>
+</div>
+<p>SP3 bidirectional test:</p>
+<div class="highlight-python"><pre>iperf -c 10.0.0.12 -d -f m
+------------------------------------------------------------
+Server listening on TCP port 5001
+TCP window size: 0.08 MByte (default)
+------------------------------------------------------------
+------------------------------------------------------------
+Client connecting to 10.0.0.12, TCP port 5001
+TCP window size: 0.15 MByte (default)
+------------------------------------------------------------
+[  5] local 10.0.0.13 port 58467 connected with 10.0.0.12 port 5001
+[  4] local 10.0.0.13 port 5001 connected with 10.0.0.12 port 42910
+[ ID] Interval       Transfer     Bandwidth
+[  5]  0.0-10.0 sec  1111 MBytes   **931 Mbits/sec**
+[  4]  0.0-10.0 sec  1090 MBytes   **913 Mbits/sec**</pre>
 </div>
 </div></blockquote>
 </div>
 <div class="section" id="network-test-from-sp1-to-sp4">
 <h4>Network test from SP1 to SP4<a class="headerlink" href="#network-test-from-sp1-to-sp4" title="Permalink to this headline">¶</a></h4>
 <blockquote>
-<div>This server is not on the private subnet.</div></blockquote>
+<div><p>SP1 server:</p>
+<div class="highlight-python"><pre>iperf -s -f m
+------------------------------------------------------------
+Server listening on TCP port 5001
+TCP window size: 0.08 MByte (default)
+------------------------------------------------------------
+[  4] local 197.221.50.98 port 5001 connected with 197.221.50.101 port 46125
+[ ID] Interval       Transfer     Bandwidth
+[  4]  0.0-10.3 sec   116 MBytes  **94.1 Mbits/sec**</pre>
+</div>
+<p>SP4 client:</p>
+<div class="highlight-python"><pre>iperf -c 197.221.50.98 -f m
+------------------------------------------------------------
+Client connecting to 197.221.50.98, TCP port 5001
+TCP window size: 0.02 MByte (default)
+------------------------------------------------------------
+[  3] local 197.221.50.101 port 46125 connected with 197.221.50.98 port 5001
+[ ID] Interval       Transfer     Bandwidth
+[  3]  0.0-10.0 sec   116 MBytes  **96.5 Mbits/sec**</pre>
+</div>
+</div></blockquote>
+</div>
+<div class="section" id="observations-on-network-test-results">
+<h4>Observations on network test results<a class="headerlink" href="#observations-on-network-test-results" title="Permalink to this headline">¶</a></h4>
+<blockquote>
+<div><p>The iperf test results of SP1, SP2 and SP3 show throughput of more than
+900 Mbits/s.  When one keeps in mind that iperf does actual data transfer
+and that each of the packets sent and received have a protocol related
+overhead, the results are consistent for a 1000 Mbits/s network.</p>
+<p>SP4&#8217;s results are 96.5 Mbits/sec which is correct for a 100 Mbits/sec
+network.</p>
+</div></blockquote>
 </div>
 </div>
 </div>
@@ -464,10 +560,6 @@ The answers to these questions are fetched from the &#8216;oracle&#8217; HTTP se
 This test we then ran with user concurrencies of 100, 150 and 200.  We
 stopped at 200 concurrent users, because tests started failing at 250
 concurrent users.</p>
-<blockquote>
-<div><p>TODO:</p>
-<p>double check</p>
-</div></blockquote>
 <p>We used the following test configuration:</p>
 <ul class="simple">
 <li>Launched: 2013-08-23 12:10:13</li>
@@ -503,25 +595,25 @@ concurrent users.</p>
 </thead>
 <tbody valign="top">
 <tr class="row-even"><td>100</td>
-<td>32.404</td>
-<td>7777</td>
-<td>0.648</td>
-<td>30.055</td>
-<td>4.562</td>
+<td>32.133</td>
+<td>7712</td>
+<td>0.144</td>
+<td>22.775</td>
+<td>5.919</td>
 </tr>
 <tr class="row-odd"><td>150</td>
-<td>28.571</td>
-<td>6860</td>
-<td>1.236</td>
-<td>67.015</td>
-<td>8.508</td>
+<td>34.852</td>
+<td>8358</td>
+<td>0.223</td>
+<td>51.181</td>
+<td>7.492</td>
 </tr>
 <tr class="row-even"><td>200</td>
-<td>26.683</td>
-<td>6404</td>
-<td>1.883</td>
-<td>91.480</td>
-<td>11.373</td>
+<td>26.583</td>
+<td>6380</td>
+<td>1.862</td>
+<td>89.483</td>
+<td>14.193</td>
 </tr>
 </tbody>
 </table>
@@ -539,32 +631,23 @@ maximum concurrency for the practice service on this cluster.</p>
 <p>The cluster can server 26 pages per second at 200 concurrent users.  This
 means it can potentially serve:</p>
 <p>26 pages * 60 seconds * 60 minutes = <strong>93600 practice service pages per hour.</strong></p>
-<p>TODO:</p>
-<div class="highlight-python"><pre>Would be nice to be able to test the service for an hour and see what
-happens.</pre>
-</div>
 </div></blockquote>
 </div>
 <div class="section" id="id3">
 <h3>Optimisations done<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h3>
 <blockquote>
-<div><p>When we analysed the data from the practice service test we realized that
+<div>When we analysed the data from the practice service test we realized that
 the Plone login process takes quite a bit of time.  Upon further
 investigation we found that the user object is updated on each login.
 This is unnecessary given that we do not require the last login time.  We
 changed that specific method and removed all unnecessary changes to the
-user object.</p>
-<p>TODO:</p>
-<div class="highlight-python"><pre>before and after stats?</pre>
-</div>
-</div></blockquote>
+user object.</div></blockquote>
 </div>
 </div>
 <div class="section" id="testing-mobile-authenticated-reads">
 <h2>7. Testing mobile authenticated reads<a class="headerlink" href="#testing-mobile-authenticated-reads" title="Permalink to this headline">¶</a></h2>
 <blockquote>
-<div><p>Funkload bench report here: <a class="reference external" href="http://197.221.50.101/stats/">Mobile test</a></p>
-<p>We used exactly the same set of pages for the mobile authenticated read tests
+<div><p>We used exactly the same set of pages for the mobile authenticated read tests
 as those in <a class="reference internal" href="#testing-authenticated-reads"><em>3. Testing authenticated reads</em></a> above.  The tests were run in
 2 batches.  The only things different between the 2 batches are the number
 of cycles and concurrencies in those cycles.  This test makes no attempt at
@@ -574,7 +657,8 @@ reasonable idea of how the cluster scales under load when using the mobile
 theme though.</p>
 <p>First batch:</p>
 <blockquote>
-<div><p>Test set-up:</p>
+<div><p>Funkload bench report here: <a class="reference external" href="http://197.221.50.101/stats/test_AuthenticatedMobileRead-20130916T183506/">authenticated mobile read (batch 1)</a></p>
+<p>Test set-up:</p>
 <ul class="simple">
 <li>Launched: 2013-09-16 18:35:06</li>
 <li>Test: test_AuthenticatedMobileRead.py AuthenticatedMobileRead.test_AuthenticatedMobileRead</li>
@@ -599,6 +683,7 @@ theme though.</p>
 <p>Second batch:</p>
 <blockquote>
 <div><p>Test set-up:</p>
+<p>Funkload bench report here: <a class="reference external" href="http://197.221.50.101/stats/test_AuthenticatedMobileRead-20130916T193836/">authenticated mobile read (batch 2)</a></p>
 <ul class="simple">
 <li>Launched: 2013-09-16 19:38:36</li>
 <li>Test: test_AuthenticatedMobileRead.py AuthenticatedMobileRead.test_AuthenticatedMobileRead</li>
@@ -898,7 +983,23 @@ performance between the 2 mentioned servers.</p>
 <div class="section" id="recommendation-for-scaling-conclusion">
 <h2>Recommendation for scaling / Conclusion<a class="headerlink" href="#recommendation-for-scaling-conclusion" title="Permalink to this headline">¶</a></h2>
 <blockquote>
-<div>Conclusions / Recommendations</div></blockquote>
+<div><p>Conclusions / Recommendations</p>
+<p>TODO:</p>
+<div class="highlight-python"><pre>Difference between min, p10, med, p95 and max across all concurrencies
+- changes slowly for lower concurrencies, spikes for 1000
+
+Add error funkload results to each section in order to show where the
+cluster starts misbehaving under load.
+
+Double check that each section has info on fastest, slowest, avg. and
+projected pages/s.
+
+Would be nice to be able to test the service for an hour and see what
+happens.
+
+before and after stats?</pre>
+</div>
+</div></blockquote>
 </div>
 <div class="section" id="extra-issues">
 <h2>Extra issues<a class="headerlink" href="#extra-issues" title="Permalink to this headline">¶</a></h2>
@@ -929,9 +1030,9 @@ in die report hoort nie.</p>
 <div><p>redbot.org</p>
 <blockquote>
 <div><ul class="simple">
-<li>RED is a robot that checks HTTP resources to see how they&#8217;ll behave,</li>
+<li>RED is a robot that checks HTTP resources to see how they&#8217;ll behave,
+pointing out common problems and suggesting improvements.</li>
 </ul>
-<p>pointing out common problems and suggesting improvements.</p>
 </div></blockquote>
 </div></blockquote>
 </div>
@@ -955,7 +1056,7 @@ in die report hoort nie.</p>
     </div>
     <div class="footer">
         &copy; Copyright 2013, Upfront Systems.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2b1.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
     </div>
   </body>
 </html>

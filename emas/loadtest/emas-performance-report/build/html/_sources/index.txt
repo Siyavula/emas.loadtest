@@ -41,7 +41,7 @@ Introduction
 
 
 2. An overview of the set-up we benchmarked
-==========================================
+===========================================
 
     Four distinct servers were used in the benchmarking process.  Any further
     mention of 'test cluster' in this document refers to the following set-up:
@@ -83,68 +83,162 @@ Siyavula Performance 4 (aka. SP4)
 Network topology
 ----------------
 
-    The public side of the network is 100mbit/sec. The private subnet is
-    1000mbit/sec.  Currently SP1, SP2 and SP3 are on the public network and the
-    private subnet.  Subsequently all internal communication between these 3
-    servers run at 1000mbit/sec.  SP4 is not on the private 1000mbit/ sec
-    network.  It is only on the 100mbit/sec public network.
-    
+    The public side of the network is 100 Mbits/sec (megabits per second). The 
+    private subnet is 1000 Mbits/sec.  Currently SP1, SP2 and SP3 are on the
+    public network and the private subnet.  Subsequently all internal
+    communication between these 3 servers run at 1000 Mbits/sec.  SP4 is not on
+    the private 1000 Mbits/ sec network.  It is only on the 100 Mbits/sec
+    public network.
+
+    In order to validate the above set-up we ran a series of `iperf`_ tests
+    between the servers.
+
 Network test from SP1 to SP2
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     
     SP1 server::
-    
-        iperf -s -c 10.0.0.11 -f k
+
+        iperf -s -f m
         ------------------------------------------------------------
         Server listening on TCP port 5001
-        TCP window size: 85.3 KByte (default)
+        TCP window size: 0.08 MByte (default)
         ------------------------------------------------------------
+        [  4] local 10.0.0.11 port 5001 connected with 10.0.0.12 port 45482
+        ------------------------------------------------------------
+        Client connecting to 10.0.0.12, TCP port 5001
+        TCP window size: 0.11 MByte (default)
+        ------------------------------------------------------------
+        [  6] local 10.0.0.11 port 51005 connected with 10.0.0.12 port 5001
+        [ ID] Interval       Transfer     Bandwidth
+        [  6]  0.0-10.0 sec  1097 MBytes   **920 Mbits/sec**
+        [  4]  0.0-10.0 sec  1112 MBytes   **930 Mbits/sec**
     
     SP2 client::
 
-        iperf -c 10.0.0.11 -f k -t 40
+        iperf -c 10.0.0.11 -d -f m
+        ------------------------------------------------------------
+        Server listening on TCP port 5001
+        TCP window size: 0.08 MByte (default)
+        ------------------------------------------------------------
         ------------------------------------------------------------
         Client connecting to 10.0.0.11, TCP port 5001
-        TCP window size: 23.5 KByte (default)
+        TCP window size: 0.14 MByte (default)
         ------------------------------------------------------------
-        [  3] local 10.0.0.12 port 40096 connected with 10.0.0.11 port 5001
+        [  5] local 10.0.0.12 port 45482 connected with 10.0.0.11 port 5001
+        [  4] local 10.0.0.12 port 5001 connected with 10.0.0.11 port 51005
         [ ID] Interval       Transfer     Bandwidth
-        [  3]  0.0-40.0 sec  18014398509479302 KBytes  3688776962092813 Kbits/sec
+        [  5]  0.0-10.0 sec  1112 MBytes   **932 Mbits/sec**
+        [  4]  0.0-10.0 sec  1097 MBytes   **918 Mbits/sec**
     
 Network test from SP1 to SP3
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     
     SP1 server::
-    
-        iperf -s -c 10.0.0.11 -f k
+
+        iperf -s -f m
         ------------------------------------------------------------
         Server listening on TCP port 5001
-        TCP window size: 85.3 KByte (default)
+        TCP window size: 0.08 MByte (default)
         ------------------------------------------------------------
+        [  4] local 10.0.0.11 port 5001 connected with 10.0.0.13 port 49089
+        ------------------------------------------------------------
+        Client connecting to 10.0.0.13, TCP port 5001
+        TCP window size: 0.11 MByte (default)
+        ------------------------------------------------------------
+        [  6] local 10.0.0.11 port 51450 connected with 10.0.0.13 port 5001
+        [ ID] Interval       Transfer     Bandwidth
+        [  4]  0.0-10.0 sec  1110 MBytes   **929 Mbits/sec**
+        [  6]  0.0-10.0 sec  1098 MBytes   **920 Mbits/se
         
     SP3 client::
 
-        iperf -c 10.0.0.11 -f k -t 40
+        iperf -c 10.0.0.11 -d -f m
+        ------------------------------------------------------------
+        Server listening on TCP port 5001
+        TCP window size: 0.08 MByte (default)
+        ------------------------------------------------------------
         ------------------------------------------------------------
         Client connecting to 10.0.0.11, TCP port 5001
-        TCP window size: 23.5 KByte (default)
+        TCP window size: 0.14 MByte (default)
         ------------------------------------------------------------
-        [  3] local 10.0.0.13 port 48896 connected with 10.0.0.11 port 5001
+        [  5] local 10.0.0.13 port 49089 connected with 10.0.0.11 port 5001
+        [  4] local 10.0.0.13 port 5001 connected with 10.0.0.11 port 51450
         [ ID] Interval       Transfer     Bandwidth
-        [  3]  0.0-40.0 sec  18014398509479302 KBytes  3689213881743636 Kbits/sec
+        [  5]  0.0-10.0 sec  1110 MBytes   **930 Mbits/sec**
+        [  4]  0.0-10.0 sec  1098 MBytes   **919 Mbits/sec**
 
 Network test between SP2 and SP3
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-    TODO::
+    SP2 server::
 
-        iperf tests
+        iperf -s -f m
+        ------------------------------------------------------------
+        Server listening on TCP port 5001
+        TCP window size: 0.08 MByte (default)
+        ------------------------------------------------------------
+        [  4] local 10.0.0.12 port 5001 connected with 10.0.0.13 port 58467
+        ------------------------------------------------------------
+        Client connecting to 10.0.0.13, TCP port 5001
+        TCP window size: 0.11 MByte (default)
+        ------------------------------------------------------------
+        [  6] local 10.0.0.12 port 42910 connected with 10.0.0.13 port 5001
+        [ ID] Interval       Transfer     Bandwidth
+        [  6]  0.0-10.0 sec  1090 MBytes   **914 Mbits/sec**
+        [  4]  0.0-10.0 sec  1111 MBytes   **930 Mbits/sec**
+
+    SP3 bidirectional test::
+
+        iperf -c 10.0.0.12 -d -f m
+        ------------------------------------------------------------
+        Server listening on TCP port 5001
+        TCP window size: 0.08 MByte (default)
+        ------------------------------------------------------------
+        ------------------------------------------------------------
+        Client connecting to 10.0.0.12, TCP port 5001
+        TCP window size: 0.15 MByte (default)
+        ------------------------------------------------------------
+        [  5] local 10.0.0.13 port 58467 connected with 10.0.0.12 port 5001
+        [  4] local 10.0.0.13 port 5001 connected with 10.0.0.12 port 42910
+        [ ID] Interval       Transfer     Bandwidth
+        [  5]  0.0-10.0 sec  1111 MBytes   **931 Mbits/sec**
+        [  4]  0.0-10.0 sec  1090 MBytes   **913 Mbits/sec**
 
 Network test from SP1 to SP4
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     
-    This server is not on the private subnet.
+    SP1 server::
 
+        iperf -s -f m
+        ------------------------------------------------------------
+        Server listening on TCP port 5001
+        TCP window size: 0.08 MByte (default)
+        ------------------------------------------------------------
+        [  4] local 197.221.50.98 port 5001 connected with 197.221.50.101 port 46125
+        [ ID] Interval       Transfer     Bandwidth
+        [  4]  0.0-10.3 sec   116 MBytes  **94.1 Mbits/sec**
+    
+    SP4 client::
+
+        iperf -c 197.221.50.98 -f m
+        ------------------------------------------------------------
+        Client connecting to 197.221.50.98, TCP port 5001
+        TCP window size: 0.02 MByte (default)
+        ------------------------------------------------------------
+        [  3] local 197.221.50.101 port 46125 connected with 197.221.50.98 port 5001
+        [ ID] Interval       Transfer     Bandwidth
+        [  3]  0.0-10.0 sec   116 MBytes  **96.5 Mbits/sec**
+
+Observations on network test results
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+    The iperf test results of SP1, SP2 and SP3 show throughput of more than
+    900 Mbits/s.  When one keeps in mind that iperf does actual data transfer
+    and that each of the packets sent and received have a protocol related
+    overhead, the results are consistent for a 1000 Mbits/s network.
+    
+    SP4's results are 96.5 Mbits/sec which is correct for a 100 Mbits/sec
+    network.
 
 .. _Testing authenticated reads:
 
@@ -305,10 +399,6 @@ Optimisations done
     stopped at 200 concurrent users, because tests started failing at 250
     concurrent users. 
     
-        TODO::
-
-        double check
-
     We used the following test configuration:
 
     - Launched: 2013-08-23 12:10:13
@@ -327,9 +417,9 @@ Optimisations done
 ================== =================== ================== ================== ================== ==================
 Concurrent users   Successful pages/s  Total pages served Fastest pages      Slowest pages      95th percentile   
 ================== =================== ================== ================== ================== ==================
-            100             32.404               7777             0.648             30.055              4.562
-            150             28.571               6860             1.236             67.015              8.508
-            200             26.683               6404             1.883             91.480             11.373
+            100             32.133               7712             0.144             22.775              5.919
+            150             34.852               8358             0.223             51.181              7.492 
+            200             26.583               6380             1.862             89.483             14.193 
 ================== =================== ================== ================== ================== ==================
 
 Observations
@@ -350,10 +440,6 @@ Observations
 
     26 pages * 60 seconds * 60 minutes = **93600 practice service pages per hour.**
 
-    TODO::
-
-        Would be nice to be able to test the service for an hour and see what
-        happens.
     
 Optimisations done
 ------------------
@@ -365,16 +451,10 @@ Optimisations done
     changed that specific method and removed all unnecessary changes to the 
     user object.
 
-    TODO::
-
-        before and after stats?
-
 
 7. Testing mobile authenticated reads
 =====================================
 
-    Funkload bench report here: `Mobile test`_
-    
     We used exactly the same set of pages for the mobile authenticated read tests
     as those in :ref:`Testing authenticated reads` above.  The tests were run in
     2 batches.  The only things different between the 2 batches are the number
@@ -385,6 +465,8 @@ Optimisations done
     theme though.
 
     First batch:
+
+        Funkload bench report here: `authenticated mobile read (batch 1)`_
 
         Test set-up:
 
@@ -408,8 +490,10 @@ Optimisations done
         - 76088 requests
 
     Second batch:
-
+ 
         Test set-up:
+
+        Funkload bench report here: `authenticated mobile read (batch 2)`_
 
         - Launched: 2013-09-16 19:38:36
         - Test: test_AuthenticatedMobileRead.py AuthenticatedMobileRead.test_AuthenticatedMobileRead
@@ -563,6 +647,22 @@ Recommendation for scaling / Conclusion
 ==========================================
     
     Conclusions / Recommendations
+    
+    TODO::
+
+        Difference between min, p10, med, p95 and max across all concurrencies
+        - changes slowly for lower concurrencies, spikes for 1000
+
+        Add error funkload results to each section in order to show where the
+        cluster starts misbehaving under load.
+
+        Double check that each section has info on fastest, slowest, avg. and
+        projected pages/s.
+
+        Would be nice to be able to test the service for an hour and see what
+        happens.
+
+        before and after stats?
 
 
 .. _Apdex: http://apdex.org/
@@ -575,17 +675,17 @@ Recommendation for scaling / Conclusion
 .. _slowest authenticated results: http://197.221.50.101/stats/test_AuthenticatedRead-20130822T143507/#slowest-requests
 .. _Practise service test: http://197.221.50.101/stats/test_practice-20130823T121013/
 .. _Practice proxy: http://197.221.50.101/stats/test_practiceproxy-20130819T124350/
-.. _Mobile test: http://197.221.50.101/stats/
 .. _performance goals: https://docs.google.com/a/upfrontsystems.co.za/document/d/1GUjwcpHBpLILQozouukxVQBLB1-GQvdUa6UXfpv75-M/edit#
 .. _Funkload bench reports: http://197.221.50.101/stats/
 .. _Edge-side include: http://en.wikipedia.org/wiki/Edge_Side_Includes
 .. _slow science pages: http://197.221.50.101/stats/test_AuthenticatedRead-20130822T143507/#page-013-get-grade-12-08-work-energy-and-power-08-work-energy-and-power-03-cnxmlplus
 .. _Apache Benchmark: https://httpd.apache.org/docs/2.2/programs/ab.html
 .. _Science authenticated mobile read: http://197.221.50.101/stats/test_AuthenticatedMobileRead-20130916T193836/
-.. _authenticated mobile read: http://197.221.50.101/stats/test_AuthenticatedMobileRead-20130916T193836/
+.. _authenticated mobile read (batch 1): http://197.221.50.101/stats/test_AuthenticatedMobileRead-20130916T183506/
+.. _authenticated mobile read (batch 2): http://197.221.50.101/stats/test_AuthenticatedMobileRead-20130916T193836/
 .. _slowest authenticated mobile read page: http://197.221.50.101/stats/test_AuthenticatedMobileRead-20130916T183506/#id15
 .. _Authenticated read (with errors): http://197.221.50.101/stats/test_AuthenticatedRead-20130730T203634
-
+.. _iperf: http://iperf.sourceforge.net/
 
 
 Extra issues 
@@ -614,4 +714,4 @@ Basic HTTP sanity check
     redbot.org
 
         - RED is a robot that checks HTTP resources to see how they'll behave,
-        pointing out common problems and suggesting improvements.
+          pointing out common problems and suggesting improvements.
