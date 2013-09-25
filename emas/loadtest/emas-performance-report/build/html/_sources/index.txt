@@ -551,11 +551,6 @@ Observations
 
     4 pages * 60 seconds * 60 minutes ~ **14400 pages per hour.**
     
-    TODO::
-
-        - Verify that caching is turned on for the mobile theme.
-        - Test at 1500 concurrent users.
-
 
 9. Testing Varnish
 ==================
@@ -648,22 +643,6 @@ Recommendation for scaling / Conclusion
     
     Conclusions / Recommendations
     
-    TODO::
-
-        Difference between min, p10, med, p95 and max across all concurrencies
-        - changes slowly for lower concurrencies, spikes for 1000
-
-        Add error funkload results to each section in order to show where the
-        cluster starts misbehaving under load.
-
-        Double check that each section has info on fastest, slowest, avg. and
-        projected pages/s.
-
-        Would be nice to be able to test the service for an hour and see what
-        happens.
-
-        before and after stats?
-
 
 .. _Apdex: http://apdex.org/
 .. _All test results: http://197.221.50.101/stats/
