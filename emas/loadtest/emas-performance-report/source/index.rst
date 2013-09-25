@@ -49,17 +49,17 @@ Introduction
 Siyavula Performance 1 (aka. SP1)
 ---------------------------------
         
-        - Varnish caching proxy
-        - HAProxy load balancing server
+        - `Varnish`_ caching proxy
+        - `HAProxy`_ load balancing server
 
 Siyavula Performance 2 (aka. SP2)
 ---------------------------------
 
-        - 4 EMAS application server instances
-        - 1 ZEO server with Zope Replication Service
-        - 1 Redis analytics queue
-        - 1 PostgreSQL cluster (initial primary database server)
-        - 4 Monassis instances
+        - 4 `EMAS`_ application server instances
+        - 1 `ZEO`_ server with `Zope Replication Service`_
+        - 1 `Redis`_ analytics queue
+        - 1 `PostgreSQL`_ cluster (initial primary database server)
+        - 4 `Monassis`_ instances
 
 Siyavula Performance 3 (aka. SP3)
 ---------------------------------
@@ -83,12 +83,11 @@ Siyavula Performance 4 (aka. SP4)
 Network topology
 ----------------
 
-    The public side of the network is 100 Mbits/sec (megabits per second). The 
-    private subnet is 1000 Mbits/sec.  Currently SP1, SP2 and SP3 are on the
-    public network and the private subnet.  Subsequently all internal
-    communication between these 3 servers run at 1000 Mbits/sec.  SP4 is not on
-    the private 1000 Mbits/ sec network.  It is only on the 100 Mbits/sec
-    public network.
+    The public side of the network is 100mbit/sec. The private subnet is
+    1000mbit/sec.  Currently SP1, SP2 and SP3 are on the public network and the
+    private subnet.  Subsequently all internal communication between these 3
+    servers run at 1000mbit/sec.  SP4 is not on the private 1000mbit/ sec
+    network.  It is only on the 100mbit/sec public network.
 
     In order to validate the above set-up we ran a series of `iperf`_ tests
     between the servers.
@@ -207,38 +206,17 @@ Network test between SP2 and SP3
 Network test from SP1 to SP4
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     
-    SP1 server::
-
-        iperf -s -f m
-        ------------------------------------------------------------
-        Server listening on TCP port 5001
-        TCP window size: 0.08 MByte (default)
-        ------------------------------------------------------------
-        [  4] local 197.221.50.98 port 5001 connected with 197.221.50.101 port 46125
-        [ ID] Interval       Transfer     Bandwidth
-        [  4]  0.0-10.3 sec   116 MBytes  94.1 Mbits/sec
-    
-    SP4 client::
-
-        iperf -c 197.221.50.98 -f m
-        ------------------------------------------------------------
-        Client connecting to 197.221.50.98, TCP port 5001
-        TCP window size: 0.02 MByte (default)
-        ------------------------------------------------------------
-        [  3] local 197.221.50.101 port 46125 connected with 197.221.50.98 port 5001
-        [ ID] Interval       Transfer     Bandwidth
-        [  3]  0.0-10.0 sec   116 MBytes  96.5 Mbits/sec
+    This server is not on the private subnet or part of the cluster, so it was
+    not tested.
 
 Observations on network test results
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-    The iperf test results of SP1, SP2 and SP3 show throughput of more than
-    900 Mbits/s.  When one keeps in mind that iperf does actual data transfer
-    and that each of the packets sent and received have a protocol related
-    overhead, the results are consistent for a 1000 Mbits/s network.
-    
-    SP4's results are 96.5 Mbits/sec which is correct for a 100 Mbits/sec
-    network.
+    The iperf test results show throughput of more than 900 mbits/s.  When one
+    keeps in mind that iperf does actual data transfer and that each of the
+    packets sent and received have a protocol related overhead, the results are
+    consistent for a 1000 mbit/s network.
+
 
 .. _Testing authenticated reads:
 
@@ -528,6 +506,10 @@ Concurrent users   Successful pages/s  Total pages served Fastest pages      Slo
            1000              4.178                752             0.471             33.915             26.374
 ================== =================== ================== ================== ================== ==================
 
+In order to verify that the mobile theme resources are cached we gathered
+Varnish statistics via `Munin`_.  The are included here as 
+`Varnish statistics for authenticated mobile reads`_
+
 Observations
 ------------
     
@@ -544,6 +526,22 @@ Observations
     reproduce this result, so it is not regarded as significant.  The fact that
     pages individually load faster under higher concurrencies is likely due to
     the caching proxy.
+
+    The `Varnish statistics for authenticated mobile reads`_ verify that at
+    least 80% of all requests for resources in the mobile authenticated read
+    test is being served by Varnish from its cache.
+
+    We analysed some of the content pages and found that several have very high
+    numbers of resources, some over a 100.  
+    (cf.  http://197.221.50.101/stats/test_AuthenticatedMobileRead-20130916T183506/#id11 and
+    http://197.221.50.101/stats/test_AuthenticatedMobileRead-20130916T183506/#id12).  
+    Each of these resource are requested individually.  This high level of
+    resources per page is due to the way the page is structured and not the 
+    current cluster set-up.  It is a concern though, since high levels of
+    requests for small resources creates a situation where the connection
+    overhead to actually data throughput ratio becomes a problem.  The system
+    spends progressively more time on connection, transport, etc. handling and
+    this reduces the effective throughput of data.
 
     The results indicate that this cluster can serve 4.178 pages per second at
     a concurrency of 1000 users and can manage around 4 pages per second across
@@ -643,6 +641,37 @@ Recommendation for scaling / Conclusion
     
     Conclusions / Recommendations
     
+    TODO::
+
+        Difference between min, p10, med, p95 and max across all concurrencies
+        - changes slowly for lower concurrencies, spikes for 1000
+
+        Add error funkload results to each section in order to show where the
+        cluster starts misbehaving under load.
+
+        Double check that each section has info on fastest, slowest, avg. and
+        projected pages/s.
+
+        Would be nice to be able to test the service for an hour and see what
+        happens.
+
+        before and after stats?
+
+        analytics referrer from tracking image, etc.
+
+
+Referenced images
+=================
+
+Varnish cache statistics
+------------------------
+
+    .. _Varnish statistics for authenticated mobile reads:
+
+    .. image:: ./images/varnish_backend_traffic-day.png
+
+    .. image:: ./images/varnish_hit_rate-day.png
+
 
 .. _Apdex: http://apdex.org/
 .. _All test results: http://197.221.50.101/stats/
@@ -665,6 +694,16 @@ Recommendation for scaling / Conclusion
 .. _slowest authenticated mobile read page: http://197.221.50.101/stats/test_AuthenticatedMobileRead-20130916T183506/#id15
 .. _Authenticated read (with errors): http://197.221.50.101/stats/test_AuthenticatedRead-20130730T203634
 .. _iperf: http://iperf.sourceforge.net/
+.. _Varnish: https://www.varnish-cache.org/
+.. _Munin: http://munin-monitoring.org/
+.. _EMAS: http://projects.siyavula.com/technology-driven-learning/
+.. _ZEO: http://docs.zope.org/zope2/zope2book/ZEO.html
+.. _PostgreSQL: http://www.postgresql.org
+.. _Redis: http://redis.io/
+.. _Monassis: http://projects.siyavula.com/about-intelligent-practice/
+.. _ZRS: http://www.zope.com/products/x1752814276/Zope-Replication-Services
+.. _Zope Replication Service: http://www.zope.com/products/x1752814276/Zope-Replication-Services
+.. _HAProxy: http://haproxy.1wt.eu/
 
 
 Extra issues 

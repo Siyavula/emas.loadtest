@@ -1,5 +1,4 @@
 
-
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
@@ -15,7 +14,7 @@
     
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '',
+        URL_ROOT:    './',
         VERSION:     '1.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
@@ -91,6 +90,10 @@
 </ul>
 </li>
 <li><a class="reference internal" href="#recommendation-for-scaling-conclusion">Recommendation for scaling / Conclusion</a></li>
+<li><a class="reference internal" href="#referenced-images">Referenced images</a><ul>
+<li><a class="reference internal" href="#varnish-cache-statistics">Varnish cache statistics</a></li>
+</ul>
+</li>
 <li><a class="reference internal" href="#extra-issues">Extra issues</a><ul>
 <li><a class="reference internal" href="#cpu">CPU</a></li>
 <li><a class="reference internal" href="#network">Network</a></li>
@@ -166,8 +169,8 @@ mention of &#8216;test cluster&#8217; in this document refers to the following s
 <h3>Siyavula Performance 1 (aka. SP1)<a class="headerlink" href="#siyavula-performance-1-aka-sp1" title="Permalink to this headline">¶</a></h3>
 <blockquote>
 <div><ul class="simple">
-<li>Varnish caching proxy</li>
-<li>HAProxy load balancing server</li>
+<li><a class="reference external" href="https://www.varnish-cache.org/">Varnish</a> caching proxy</li>
+<li><a class="reference external" href="http://haproxy.1wt.eu/">HAProxy</a> load balancing server</li>
 </ul>
 </div></blockquote>
 </div>
@@ -175,11 +178,11 @@ mention of &#8216;test cluster&#8217; in this document refers to the following s
 <h3>Siyavula Performance 2 (aka. SP2)<a class="headerlink" href="#siyavula-performance-2-aka-sp2" title="Permalink to this headline">¶</a></h3>
 <blockquote>
 <div><ul class="simple">
-<li>4 EMAS application server instances</li>
-<li>1 ZEO server with Zope Replication Service</li>
-<li>1 Redis analytics queue</li>
-<li>1 PostgreSQL cluster (initial primary database server)</li>
-<li>4 Monassis instances</li>
+<li>4 <a class="reference external" href="http://projects.siyavula.com/technology-driven-learning/">EMAS</a> application server instances</li>
+<li>1 <a class="reference external" href="http://docs.zope.org/zope2/zope2book/ZEO.html">ZEO</a> server with <a class="reference external" href="http://www.zope.com/products/x1752814276/Zope-Replication-Services">Zope Replication Service</a></li>
+<li>1 <a class="reference external" href="http://redis.io/">Redis</a> analytics queue</li>
+<li>1 <a class="reference external" href="http://www.postgresql.org">PostgreSQL</a> cluster (initial primary database server)</li>
+<li>4 <a class="reference external" href="http://projects.siyavula.com/about-intelligent-practice/">Monassis</a> instances</li>
 </ul>
 </div></blockquote>
 </div>
@@ -212,12 +215,11 @@ functions are excellent.</p>
 <div class="section" id="network-topology">
 <h3>Network topology<a class="headerlink" href="#network-topology" title="Permalink to this headline">¶</a></h3>
 <blockquote>
-<div><p>The public side of the network is 100 Mbits/sec (megabits per second). The
-private subnet is 1000 Mbits/sec.  Currently SP1, SP2 and SP3 are on the
-public network and the private subnet.  Subsequently all internal
-communication between these 3 servers run at 1000 Mbits/sec.  SP4 is not on
-the private 1000 Mbits/ sec network.  It is only on the 100 Mbits/sec
-public network.</p>
+<div><p>The public side of the network is 100mbit/sec. The private subnet is
+1000mbit/sec.  Currently SP1, SP2 and SP3 are on the public network and the
+private subnet.  Subsequently all internal communication between these 3
+servers run at 1000mbit/sec.  SP4 is not on the private 1000mbit/ sec
+network.  It is only on the 100mbit/sec public network.</p>
 <p>In order to validate the above set-up we ran a series of <a class="reference external" href="http://iperf.sourceforge.net/">iperf</a> tests
 between the servers.</p>
 </div></blockquote>
@@ -335,38 +337,16 @@ TCP window size: 0.15 MByte (default)
 <div class="section" id="network-test-from-sp1-to-sp4">
 <h4>Network test from SP1 to SP4<a class="headerlink" href="#network-test-from-sp1-to-sp4" title="Permalink to this headline">¶</a></h4>
 <blockquote>
-<div><p>SP1 server:</p>
-<div class="highlight-python"><pre>iperf -s -f m
-------------------------------------------------------------
-Server listening on TCP port 5001
-TCP window size: 0.08 MByte (default)
-------------------------------------------------------------
-[  4] local 197.221.50.98 port 5001 connected with 197.221.50.101 port 46125
-[ ID] Interval       Transfer     Bandwidth
-[  4]  0.0-10.3 sec   116 MBytes  94.1 Mbits/sec</pre>
-</div>
-<p>SP4 client:</p>
-<div class="highlight-python"><pre>iperf -c 197.221.50.98 -f m
-------------------------------------------------------------
-Client connecting to 197.221.50.98, TCP port 5001
-TCP window size: 0.02 MByte (default)
-------------------------------------------------------------
-[  3] local 197.221.50.101 port 46125 connected with 197.221.50.98 port 5001
-[ ID] Interval       Transfer     Bandwidth
-[  3]  0.0-10.0 sec   116 MBytes  96.5 Mbits/sec</pre>
-</div>
-</div></blockquote>
+<div>This server is not on the private subnet or part of the cluster, so it was
+not tested.</div></blockquote>
 </div>
 <div class="section" id="observations-on-network-test-results">
 <h4>Observations on network test results<a class="headerlink" href="#observations-on-network-test-results" title="Permalink to this headline">¶</a></h4>
 <blockquote>
-<div><p>The iperf test results of SP1, SP2 and SP3 show throughput of more than
-900 Mbits/s.  When one keeps in mind that iperf does actual data transfer
-and that each of the packets sent and received have a protocol related
-overhead, the results are consistent for a 1000 Mbits/s network.</p>
-<p>SP4&#8217;s results are 96.5 Mbits/sec which is correct for a 100 Mbits/sec
-network.</p>
-</div></blockquote>
+<div>The iperf test results show throughput of more than 900 mbits/s.  When one
+keeps in mind that iperf does actual data transfer and that each of the
+packets sent and received have a protocol related overhead, the results are
+consistent for a 1000 mbit/s network.</div></blockquote>
 </div>
 </div>
 </div>
@@ -765,6 +745,9 @@ theme though.</p>
 </tr>
 </tbody>
 </table>
+<p>In order to verify that the mobile theme resources are cached we gathered
+Varnish statistics via <a class="reference external" href="http://munin-monitoring.org/">Munin</a>.  The are included here as
+<a class="reference internal" href="#varnish-statistics-for-authenticated-mobile-reads">Varnish statistics for authenticated mobile reads</a></p>
 <div class="section" id="id4">
 <h3>Observations<a class="headerlink" href="#id4" title="Permalink to this headline">¶</a></h3>
 <blockquote>
@@ -780,6 +763,20 @@ fast load at 750 concurrent users, but several more tests could not reliably
 reproduce this result, so it is not regarded as significant.  The fact that
 pages individually load faster under higher concurrencies is likely due to
 the caching proxy.</p>
+<p>The <a class="reference internal" href="#varnish-statistics-for-authenticated-mobile-reads">Varnish statistics for authenticated mobile reads</a> verify that at
+least 80% of all requests for resources in the mobile authenticated read
+test is being served by Varnish from its cache.</p>
+<p>We analysed some of the content pages and found that several have very high
+numbers of resources, some over a 100.
+(cf.  <a class="reference external" href="http://197.221.50.101/stats/test_AuthenticatedMobileRead-20130916T183506/#id11">http://197.221.50.101/stats/test_AuthenticatedMobileRead-20130916T183506/#id11</a> and
+<a class="reference external" href="http://197.221.50.101/stats/test_AuthenticatedMobileRead-20130916T183506/#id12">http://197.221.50.101/stats/test_AuthenticatedMobileRead-20130916T183506/#id12</a>).
+Each of these resource are requested individually.  This high level of
+resources per page is due to the way the page is structured and not the
+current cluster set-up.  It is a concern though, since high levels of
+requests for small resources creates a situation where the connection
+overhead to actually data throughput ratio becomes a problem.  The system
+spends progressively more time on connection, transport, etc. handling and
+this reduces the effective throughput of data.</p>
 <p>The results indicate that this cluster can serve 4.178 pages per second at
 a concurrency of 1000 users and can manage around 4 pages per second across
 the tested concurrencies.  This means we can potentially serve:</p>
@@ -979,7 +976,35 @@ performance between the 2 mentioned servers.</p>
 <div class="section" id="recommendation-for-scaling-conclusion">
 <h2>Recommendation for scaling / Conclusion<a class="headerlink" href="#recommendation-for-scaling-conclusion" title="Permalink to this headline">¶</a></h2>
 <blockquote>
-<div>Conclusions / Recommendations</div></blockquote>
+<div><p>Conclusions / Recommendations</p>
+<p>TODO:</p>
+<div class="highlight-python"><pre>Difference between min, p10, med, p95 and max across all concurrencies
+- changes slowly for lower concurrencies, spikes for 1000
+
+Add error funkload results to each section in order to show where the
+cluster starts misbehaving under load.
+
+Double check that each section has info on fastest, slowest, avg. and
+projected pages/s.
+
+Would be nice to be able to test the service for an hour and see what
+happens.
+
+before and after stats?
+
+analytics referrer from tracking image, etc.</pre>
+</div>
+</div></blockquote>
+</div>
+<div class="section" id="referenced-images">
+<h2>Referenced images<a class="headerlink" href="#referenced-images" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="varnish-cache-statistics">
+<h3>Varnish cache statistics<a class="headerlink" href="#varnish-cache-statistics" title="Permalink to this headline">¶</a></h3>
+<blockquote>
+<div><img alt="_images/varnish_backend_traffic-day.png" id="varnish-statistics-for-authenticated-mobile-reads" src="_images/varnish_backend_traffic-day.png" />
+<img alt="_images/varnish_hit_rate-day.png" src="_images/varnish_hit_rate-day.png" />
+</div></blockquote>
+</div>
 </div>
 <div class="section" id="extra-issues">
 <h2>Extra issues<a class="headerlink" href="#extra-issues" title="Permalink to this headline">¶</a></h2>
@@ -1036,7 +1061,7 @@ pointing out common problems and suggesting improvements.</li>
     </div>
     <div class="footer">
         &copy; Copyright 2013, Upfront Systems.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2b1.
     </div>
   </body>
 </html>
