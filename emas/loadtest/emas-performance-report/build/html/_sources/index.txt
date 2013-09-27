@@ -25,29 +25,29 @@ Introduction
     
     When viewing the data in the following report one must bear in mind that the
     load generation machine (SP4) accesses the load balancing server (SP1) via
-    a 100 Mbits/s network (cf. `Network topology`_).  This leads to the a very
-    real constraint on the maximum request rates.  Consider the following best 
+    a 100 Mbits/s network (cf. `Network topology`_).  This leads to a very
+    real constraint on the maximum transfer rates.  Consider the following best 
     case scenario:
 
         A 100 Mbit/s network can transfer about 12800 kilobytes per second at
         the maximum.  This means a resource of 30 kilobytes can be transferred 
-        ~426 times per second.  If we take the iperf data into account we see 
-        our 100 Mbits/ s network transfers 12352 kilobytes/s (~96.5 Mbits/s) 
-        which lowers the count for our 30 kilobyte resource to ~411 requests/ s.
+        ~426 times per second.  Using the `iperf`_ utility we measured a 
+        throughput of 12352 kilobytes/s (~96.5 Mbits/s) on the 100 Mbits/s 
+        network, which lowers the count for our 30 kilobyte resource to 
+        ~411 requests/ s.
         
         For a page with 31 resources, like the EMAS home page, we can
         theoretically project a serve rate of:
 
             (411 requests/s) / 31 resources ~ 13 pages/s.
 
-        If we start including higher levels of concurrency, say 100 concurrent 
+        If we start working at higher levels of concurrency, say 100 concurrent 
         users, this picture changes.  Now the network can only serve 
         (411 requests/ s)/100 = 4.11 requests per concurrent user per second.  
-        In effect each user now waits more than 7.29 seconds per page on 
-        average.
+        In effect each user now waits more than 7.29 seconds per page.
 
-        Given this we can say that the best this network can do is for our
-        described page is:
+        Given this we can say that the best this network can do for our
+        described page, if all concurrent users are treated equitably, is:
 
             13 pages/s * 60 s * 60 min = 46800 pages per hour
 
@@ -113,27 +113,27 @@ Siyavula Performance 4 (aka. SP4)
 Network topology
 ----------------
 
-    The public side of the network is 100mbit/sec. The private subnet is
-    1000mbit/sec.  Currently SP1, SP2 and SP3 are on the public network and the
+    The public side of the network is 100 Mbits/sec. The private subnet is
+    1000 Mbits/sec.  Currently SP1, SP2 and SP3 are on the public network and the
     private subnet.  Subsequently all internal communication between these 3
-    servers run at 1000mbit/sec.  SP4 is not on the private 1000mbit/ sec
-    network.  It is only on the 100mbit/sec public network.
+    servers run at 1000 Mbits/sec.  SP4 is not on the private 1000 Mbits/ sec
+    network.  It is only on the 100 Mbits/sec public network.
 
-    In order to validate the above set-up we ran a series of `iperf`_ tests
+    In order to validate the above set-up we ran a series of iperf tests
     between the servers.
 
 
 Observations on network test results
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     
-    The `iperf test data`_ shows throughput of more than 900 Mbits/s between
+    The `iperf data`_ shows throughput of more than 900 Mbits/s between
     SP1, SP2 and SP3.  When one keeps in mind that iperf does actual data
     transfer and that each of the packets sent and received have a protocol
     related overhead, the results for all tested servers are consistent with
-    those of a 1000 mbit/s network.
+    those of a 1000 Mbits/s network.
 
     The same test run between SP1 and SP4 shows a throughput of around 
-    96 Mbits/sec which is consistent for a 100 Mbits/s network.
+    96,5 Mbits/sec which seems reasonable for a 100 Mbits/s network.
 
 
 .. _Testing authenticated reads:
@@ -321,8 +321,8 @@ Concurrent users   Successful pages/s  Total pages served Fastest pages      Slo
 Observations
 ------------
     
-    As the concurrency rises the cluster serves less-and-less pages.  This is
-    clear from the amount of successful pages per second and the total pages
+    As the concurrency rises the cluster serves fewer pages second.  This is 
+    clear from the amount of successful pages per second and the total pages 
     served.  Pages also take longer to serve.  Above 250 concurrent users we 
     start to notice errors.
 
@@ -431,6 +431,20 @@ Varnish statistics via `Munin`_.  The are included here as
 Observations
 ------------
     
+    The successful pages per second for the mobile theme is a concern.  We 
+    analysed some of the content pages and found that several have very high 
+    numbers of resources, some over a 100.  
+    (cf.  http://197.221.50.101/stats/test_AuthenticatedMobileRead-20130916T183506/#id11 and
+    http://197.221.50.101/stats/test_AuthenticatedMobileRead-20130916T183506/#id12).  
+    Each of these resource are requested individually.  This high level of
+    resources per page is due to the way the page is structured and not the 
+    current cluster set-up.  Including the way mathml is converted to images.
+    It is a concern though, since high levels of
+    requests for small resources creates a situation where the connection
+    overhead to actually data throughput ratio becomes a problem.  The system
+    spends progressively more time on connection, transport, etc. handling and
+    this reduces the effective throughput of data.
+
     The cluster exhibits a gradual decline in successful pages served across the
     tested concurrencies.  We observed the same degrade in the performance for
     250 concurrent users as we did for the normal web theme.  In this case we
@@ -439,27 +453,13 @@ Observations
     
     The fastest page is served in 0.322 seconds at 100 concurrent users.  The
     slowest page is served in 75.697 seconds at a concurrency of 250. After this
-    point the minimum page load times increase steadily.  We observed a very
-    fast load at 750 concurrent users, but several more tests could not reliably
-    reproduce this result, so it is not regarded as significant.  The fact that
-    pages individually load faster under higher concurrencies is likely due to
-    the caching proxy.
+    point the minimum page load times increase steadily.  The fact that pages
+    individually load faster under higher concurrencies is likely due to the 
+    caching proxy.
 
     The `Varnish statistics for authenticated mobile reads`_ verify that at
     least 80% of all requests for resources in the mobile authenticated read
     test is being served by Varnish from its cache.
-
-    We analysed some of the content pages and found that several have very high
-    numbers of resources, some over a 100.  
-    (cf.  http://197.221.50.101/stats/test_AuthenticatedMobileRead-20130916T183506/#id11 and
-    http://197.221.50.101/stats/test_AuthenticatedMobileRead-20130916T183506/#id12).  
-    Each of these resource are requested individually.  This high level of
-    resources per page is due to the way the page is structured and not the 
-    current cluster set-up.  It is a concern though, since high levels of
-    requests for small resources creates a situation where the connection
-    overhead to actually data throughput ratio becomes a problem.  The system
-    spends progressively more time on connection, transport, etc. handling and
-    this reduces the effective throughput of data.
 
     The results indicate that this cluster can serve 4.178 pages per second at
     a concurrency of 1000 users and can manage around 4 pages per second across
@@ -555,42 +555,31 @@ Observations
 
 
 Recommendation for scaling / Conclusion
-==========================================
+=======================================
     
-    Conclusions / Recommendations
+    The Hetzner data centre provides a 100 Mbits/s link to our test cluster.   
+    This observation is supported by the `Hetzner network information`_ and 
+    our own iperf tests.
 
-    Hetzner bandwidth comparison / analysis vs. current load capabilities.
+    Comparing the Funkload tests with the maximum stated network throughput 
+    points to the fact that the network itself will be the  limiting factor in 
+    most of our typical usage scenarios (cf. tested scenarios in this document).
 
-    - http://www.hetzner.co.za/helpcentre/index.php/articles/content/category/our_network_and_servers/hetzners_network_115
+    A second point of import is the Google analytics information for August and 
+    September 2013.  It shows maximum usage of ~5000 hits per hour for 
+    everthingmaths and ~5000 for everythingscience.  This leaves us with a 
+    combined peak load of ~11000 page requests per hour.
 
-    Compare current load to what cluster can do
-
-    - Aug/ Sept peaks around 5000 + 5000 for science and maths
-    - google analytics stats?
-    
-    TODO::
-
-        Difference between min, p10, med, p95 and max across all concurrencies
-        - changes slowly for lower concurrencies, spikes for 1000
-
-        Add error funkload results to each section in order to show where the
-        cluster starts misbehaving under load.
-
-        Double check that each section has info on fastest, slowest, avg. and
-        projected pages/s.
-
-        Would be nice to be able to test the service for an hour and see what
-        happens.
-
-        before and after stats?
-
-        analytics referrer from tracking image, etc.
+    The network itself and the tested cluster can handle this load.  We suggest 
+    that the production environment be monitored closely.  When the combined 
+    peak load reaches ~80% of the tested maximum, Siyavula should invest in 
+    another similar cluster.
 
 
 Referenced images and data
 ==========================
 
-.. _iperf test data:
+.. _iperf data:
 
 Network test from SP1 to SP2
 ----------------------------
@@ -769,45 +758,4 @@ Varnish cache statistics
 .. _ZRS: http://www.zope.com/products/x1752814276/Zope-Replication-Services
 .. _Zope Replication Service: http://www.zope.com/products/x1752814276/Zope-Replication-Services
 .. _HAProxy: http://haproxy.1wt.eu/
-
-
-Extra issues 
-============
-
-Hierdie is vir ons om te bespreek Roché. Dis nie iets wat noodwendig
-in die report hoort nie.
-
-Check out http://www.mnot.net/blog/2011/05/18/http_benchmark_rules
-
-CPU
----
-
-    - scaling (on-demand scaling-governor in Linux?)
-    - power saving modes
-    - temperatures lm_sensors, etc.
-
-Basic HTTP sanity check
------------------------
-
-    redbot.org
-
-        - RED is a robot that checks HTTP resources to see how they'll behave,
-          pointing out common problems and suggesting improvements.
-
-JMeter testing
---------------
-
-    http://sqa.stackexchange.com/questions/2546/where-can-i-find-good-jmeter-tutorials
-
-Errors
-------
-
-    Missing fonts
-
-    - installed with: sudo apt-get install ttf-mscorefonts-installer
-
-Mobile is not causing more transactions than necessary
-
-    - Checked in ZODB Connection class.
-    - 2 transactions on image generation; one for _map and one for _reverse_map
-    - this is correct
+.. _Hetzner network information: http://www.hetzner.co.za/helpcentre/index.php/articles/content/category/our_network_and_servers/hetzners_network_115

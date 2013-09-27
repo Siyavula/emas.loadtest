@@ -95,13 +95,6 @@
 <li><a class="reference internal" href="#varnish-cache-statistics">Varnish cache statistics</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#extra-issues">Extra issues</a><ul>
-<li><a class="reference internal" href="#cpu">CPU</a></li>
-<li><a class="reference internal" href="#basic-http-sanity-check">Basic HTTP sanity check</a></li>
-<li><a class="reference internal" href="#jmeter-testing">JMeter testing</a></li>
-<li><a class="reference internal" href="#errors">Errors</a></li>
-</ul>
-</li>
 </ul>
 </li>
 </ul>
@@ -148,26 +141,26 @@ we are attempting to benchmark the EMAS software and hardware cluster
 not external CDNs or external network access.</p>
 <p>When viewing the data in the following report one must bear in mind that the
 load generation machine (SP4) accesses the load balancing server (SP1) via
-a 100 Mbits/s network (cf. <a class="reference internal" href="#network-topology">Network topology</a>).  This leads to the a very
-real constraint on the maximum request rates.  Consider the following best
+a 100 Mbits/s network (cf. <a class="reference internal" href="#network-topology">Network topology</a>).  This leads to a very
+real constraint on the maximum transfer rates.  Consider the following best
 case scenario:</p>
 <blockquote>
 <div><p>A 100 Mbit/s network can transfer about 12800 kilobytes per second at
 the maximum.  This means a resource of 30 kilobytes can be transferred
-~426 times per second.  If we take the iperf data into account we see
-our 100 Mbits/ s network transfers 12352 kilobytes/s (~96.5 Mbits/s)
-which lowers the count for our 30 kilobyte resource to ~411 requests/ s.</p>
+~426 times per second.  Using the <a class="reference external" href="http://iperf.sourceforge.net/">iperf</a> utility we measured a
+throughput of 12352 kilobytes/s (~96.5 Mbits/s) on the 100 Mbits/s
+network, which lowers the count for our 30 kilobyte resource to
+~411 requests/ s.</p>
 <p>For a page with 31 resources, like the EMAS home page, we can
 theoretically project a serve rate of:</p>
 <blockquote>
 <div>(411 requests/s) / 31 resources ~ 13 pages/s.</div></blockquote>
-<p>If we start including higher levels of concurrency, say 100 concurrent
+<p>If we start working at higher levels of concurrency, say 100 concurrent
 users, this picture changes.  Now the network can only serve
 (411 requests/ s)/100 = 4.11 requests per concurrent user per second.
-In effect each user now waits more than 7.29 seconds per page on
-average.</p>
-<p>Given this we can say that the best this network can do is for our
-described page is:</p>
+In effect each user now waits more than 7.29 seconds per page.</p>
+<p>Given this we can say that the best this network can do for our
+described page, if all concurrent users are treated equitably, is:</p>
 <blockquote>
 <div>13 pages/s * 60 s * 60 min = 46800 pages per hour</div></blockquote>
 </div></blockquote>
@@ -242,24 +235,24 @@ functions are excellent.</p>
 <div class="section" id="network-topology">
 <span id="id1"></span><h3>Network topology<a class="headerlink" href="#network-topology" title="Permalink to this headline">¶</a></h3>
 <blockquote>
-<div><p>The public side of the network is 100mbit/sec. The private subnet is
-1000mbit/sec.  Currently SP1, SP2 and SP3 are on the public network and the
+<div><p>The public side of the network is 100 Mbits/sec. The private subnet is
+1000 Mbits/sec.  Currently SP1, SP2 and SP3 are on the public network and the
 private subnet.  Subsequently all internal communication between these 3
-servers run at 1000mbit/sec.  SP4 is not on the private 1000mbit/ sec
-network.  It is only on the 100mbit/sec public network.</p>
-<p>In order to validate the above set-up we ran a series of <a class="reference external" href="http://iperf.sourceforge.net/">iperf</a> tests
+servers run at 1000 Mbits/sec.  SP4 is not on the private 1000 Mbits/ sec
+network.  It is only on the 100 Mbits/sec public network.</p>
+<p>In order to validate the above set-up we ran a series of iperf tests
 between the servers.</p>
 </div></blockquote>
 <div class="section" id="observations-on-network-test-results">
 <h4>Observations on network test results<a class="headerlink" href="#observations-on-network-test-results" title="Permalink to this headline">¶</a></h4>
 <blockquote>
-<div><p>The <a class="reference internal" href="#iperf-test-data">iperf test data</a> shows throughput of more than 900 Mbits/s between
+<div><p>The <a class="reference internal" href="#iperf-data">iperf data</a> shows throughput of more than 900 Mbits/s between
 SP1, SP2 and SP3.  When one keeps in mind that iperf does actual data
 transfer and that each of the packets sent and received have a protocol
 related overhead, the results for all tested servers are consistent with
-those of a 1000 mbit/s network.</p>
+those of a 1000 Mbits/s network.</p>
 <p>The same test run between SP1 and SP4 shows a throughput of around
-96 Mbits/sec which is consistent for a 100 Mbits/s network.</p>
+96,5 Mbits/sec which seems reasonable for a 100 Mbits/s network.</p>
 </div></blockquote>
 </div>
 </div>
@@ -514,7 +507,7 @@ concurrent users.</p>
 <div class="section" id="id3">
 <h3>Observations<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h3>
 <blockquote>
-<div><p>As the concurrency rises the cluster serves less-and-less pages.  This is
+<div><p>As the concurrency rises the cluster serves fewer pages second.  This is
 clear from the amount of successful pages per second and the total pages
 served.  Pages also take longer to serve.  Above 250 concurrent users we
 start to notice errors.</p>
@@ -665,32 +658,32 @@ Varnish statistics via <a class="reference external" href="http://munin-monitori
 <div class="section" id="id5">
 <h3>Observations<a class="headerlink" href="#id5" title="Permalink to this headline">¶</a></h3>
 <blockquote>
-<div><p>The cluster exhibits a gradual decline in successful pages served across the
+<div><p>The successful pages per second for the mobile theme is a concern.  We
+analysed some of the content pages and found that several have very high
+numbers of resources, some over a 100.
+(cf.  <a class="reference external" href="http://197.221.50.101/stats/test_AuthenticatedMobileRead-20130916T183506/#id11">http://197.221.50.101/stats/test_AuthenticatedMobileRead-20130916T183506/#id11</a> and
+<a class="reference external" href="http://197.221.50.101/stats/test_AuthenticatedMobileRead-20130916T183506/#id12">http://197.221.50.101/stats/test_AuthenticatedMobileRead-20130916T183506/#id12</a>).
+Each of these resource are requested individually.  This high level of
+resources per page is due to the way the page is structured and not the
+current cluster set-up.  Including the way mathml is converted to images.
+It is a concern though, since high levels of
+requests for small resources creates a situation where the connection
+overhead to actually data throughput ratio becomes a problem.  The system
+spends progressively more time on connection, transport, etc. handling and
+this reduces the effective throughput of data.</p>
+<p>The cluster exhibits a gradual decline in successful pages served across the
 tested concurrencies.  We observed the same degrade in the performance for
 250 concurrent users as we did for the normal web theme.  In this case we
 also consider it irrelevant for the goal of determining performance and
 scalability under load where mobile authenticated reading is concerned.</p>
 <p>The fastest page is served in 0.322 seconds at 100 concurrent users.  The
 slowest page is served in 75.697 seconds at a concurrency of 250. After this
-point the minimum page load times increase steadily.  We observed a very
-fast load at 750 concurrent users, but several more tests could not reliably
-reproduce this result, so it is not regarded as significant.  The fact that
-pages individually load faster under higher concurrencies is likely due to
-the caching proxy.</p>
+point the minimum page load times increase steadily.  The fact that pages
+individually load faster under higher concurrencies is likely due to the
+caching proxy.</p>
 <p>The <a class="reference internal" href="#varnish-statistics-for-authenticated-mobile-reads">Varnish statistics for authenticated mobile reads</a> verify that at
 least 80% of all requests for resources in the mobile authenticated read
 test is being served by Varnish from its cache.</p>
-<p>We analysed some of the content pages and found that several have very high
-numbers of resources, some over a 100.
-(cf.  <a class="reference external" href="http://197.221.50.101/stats/test_AuthenticatedMobileRead-20130916T183506/#id11">http://197.221.50.101/stats/test_AuthenticatedMobileRead-20130916T183506/#id11</a> and
-<a class="reference external" href="http://197.221.50.101/stats/test_AuthenticatedMobileRead-20130916T183506/#id12">http://197.221.50.101/stats/test_AuthenticatedMobileRead-20130916T183506/#id12</a>).
-Each of these resource are requested individually.  This high level of
-resources per page is due to the way the page is structured and not the
-current cluster set-up.  It is a concern though, since high levels of
-requests for small resources creates a situation where the connection
-overhead to actually data throughput ratio becomes a problem.  The system
-spends progressively more time on connection, transport, etc. handling and
-this reduces the effective throughput of data.</p>
 <p>The results indicate that this cluster can serve 4.178 pages per second at
 a concurrency of 1000 users and can manage around 4 pages per second across
 the tested concurrencies.  This means we can potentially serve:</p>
@@ -862,39 +855,26 @@ performance between the 2 mentioned servers.</p>
 <div class="section" id="recommendation-for-scaling-conclusion">
 <h2>Recommendation for scaling / Conclusion<a class="headerlink" href="#recommendation-for-scaling-conclusion" title="Permalink to this headline">¶</a></h2>
 <blockquote>
-<div><p>Conclusions / Recommendations</p>
-<p>Hetzner bandwidth comparison / analysis vs. current load capabilities.</p>
-<ul class="simple">
-<li><a class="reference external" href="http://www.hetzner.co.za/helpcentre/index.php/articles/content/category/our_network_and_servers/hetzners_network_115">http://www.hetzner.co.za/helpcentre/index.php/articles/content/category/our_network_and_servers/hetzners_network_115</a></li>
-</ul>
-<p>Compare current load to what cluster can do</p>
-<ul class="simple">
-<li>Aug/ Sept peaks around 5000 + 5000 for science and maths</li>
-<li>google analytics stats?</li>
-</ul>
-<p>TODO:</p>
-<div class="highlight-python"><pre>Difference between min, p10, med, p95 and max across all concurrencies
-- changes slowly for lower concurrencies, spikes for 1000
-
-Add error funkload results to each section in order to show where the
-cluster starts misbehaving under load.
-
-Double check that each section has info on fastest, slowest, avg. and
-projected pages/s.
-
-Would be nice to be able to test the service for an hour and see what
-happens.
-
-before and after stats?
-
-analytics referrer from tracking image, etc.</pre>
-</div>
+<div><p>The Hetzner data centre provides a 100 Mbits/s link to our test cluster.
+This observation is supported by the <a class="reference external" href="http://www.hetzner.co.za/helpcentre/index.php/articles/content/category/our_network_and_servers/hetzners_network_115">Hetzner network information</a> and
+our own iperf tests.</p>
+<p>Comparing the Funkload tests with the maximum stated network throughput
+points to the fact that the network itself will be the  limiting factor in
+most of our typical usage scenarios (cf. tested scenarios in this document).</p>
+<p>A second point of import is the Google analytics information for August and
+September 2013.  It shows maximum usage of ~5000 hits per hour for
+everthingmaths and ~5000 for everythingscience.  This leaves us with a
+combined peak load of ~11000 page requests per hour.</p>
+<p>The network itself and the tested cluster can handle this load.  We suggest
+that the production environment be monitored closely.  When the combined
+peak load reaches ~80% of the tested maximum, Siyavula should invest in
+another similar cluster.</p>
 </div></blockquote>
 </div>
 <div class="section" id="referenced-images-and-data">
 <h2>Referenced images and data<a class="headerlink" href="#referenced-images-and-data" title="Permalink to this headline">¶</a></h2>
 <div class="section" id="network-test-from-sp1-to-sp2">
-<span id="iperf-test-data"></span><h3>Network test from SP1 to SP2<a class="headerlink" href="#network-test-from-sp1-to-sp2" title="Permalink to this headline">¶</a></h3>
+<span id="iperf-data"></span><h3>Network test from SP1 to SP2<a class="headerlink" href="#network-test-from-sp1-to-sp2" title="Permalink to this headline">¶</a></h3>
 <blockquote>
 <div><p>SP1 server:</p>
 <div class="highlight-python"><pre>iperf -s -f m
@@ -1034,56 +1014,6 @@ TCP window size: 0.02 MByte (default)
 <blockquote>
 <div><img alt="_images/varnish_backend_traffic-day.png" id="varnish-statistics-for-authenticated-mobile-reads" src="_images/varnish_backend_traffic-day.png" />
 <img alt="_images/varnish_hit_rate-day.png" src="_images/varnish_hit_rate-day.png" />
-</div></blockquote>
-</div>
-</div>
-<div class="section" id="extra-issues">
-<h2>Extra issues<a class="headerlink" href="#extra-issues" title="Permalink to this headline">¶</a></h2>
-<p>Hierdie is vir ons om te bespreek Roché. Dis nie iets wat noodwendig
-in die report hoort nie.</p>
-<p>Check out <a class="reference external" href="http://www.mnot.net/blog/2011/05/18/http_benchmark_rules">http://www.mnot.net/blog/2011/05/18/http_benchmark_rules</a></p>
-<div class="section" id="cpu">
-<h3>CPU<a class="headerlink" href="#cpu" title="Permalink to this headline">¶</a></h3>
-<blockquote>
-<div><ul class="simple">
-<li>scaling (on-demand scaling-governor in Linux?)</li>
-<li>power saving modes</li>
-<li>temperatures lm_sensors, etc.</li>
-</ul>
-</div></blockquote>
-</div>
-<div class="section" id="basic-http-sanity-check">
-<h3>Basic HTTP sanity check<a class="headerlink" href="#basic-http-sanity-check" title="Permalink to this headline">¶</a></h3>
-<blockquote>
-<div><p>redbot.org</p>
-<blockquote>
-<div><ul class="simple">
-<li>RED is a robot that checks HTTP resources to see how they&#8217;ll behave,
-pointing out common problems and suggesting improvements.</li>
-</ul>
-</div></blockquote>
-</div></blockquote>
-</div>
-<div class="section" id="jmeter-testing">
-<h3>JMeter testing<a class="headerlink" href="#jmeter-testing" title="Permalink to this headline">¶</a></h3>
-<blockquote>
-<div><a class="reference external" href="http://sqa.stackexchange.com/questions/2546/where-can-i-find-good-jmeter-tutorials">http://sqa.stackexchange.com/questions/2546/where-can-i-find-good-jmeter-tutorials</a></div></blockquote>
-</div>
-<div class="section" id="errors">
-<h3>Errors<a class="headerlink" href="#errors" title="Permalink to this headline">¶</a></h3>
-<blockquote>
-<div><p>Missing fonts</p>
-<ul class="simple">
-<li>installed with: sudo apt-get install ttf-mscorefonts-installer</li>
-</ul>
-</div></blockquote>
-<p>Mobile is not causing more transactions than necessary</p>
-<blockquote>
-<div><ul class="simple">
-<li>Checked in ZODB Connection class.</li>
-<li>2 transactions on image generation; one for _map and one for _reverse_map</li>
-<li>this is correct</li>
-</ul>
 </div></blockquote>
 </div>
 </div>
