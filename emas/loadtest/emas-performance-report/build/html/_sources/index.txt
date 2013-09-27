@@ -22,17 +22,35 @@ Introduction
     Funkload bench tests were configured not to follow external links, since
     we are attempting to benchmark the EMAS software and hardware cluster
     not external CDNs or external network access.
-
-    Describe constraints of 100 mbit/s network.
-
-    100 mbit/sec max public network
-    sp4 het 100/mbit connection na sp1
-    max request for ~30k doc = ~300 req/s
-    up the 100 cvus 3 req/s
-    thus page with 30 request ~10 sec to load
     
-    Example of AB sp1 vs sp4 results and what exactly what that means for the
-    load the cluster could possibly bear.
+    When viewing the data in the following report one must bear in mind that the
+    load generation machine (SP4) accesses the load balancing server (SP1) via
+    a 100 Mbits/s network (cf. `Network topology`_).  This leads to the a very
+    real constraint on the maximum request rates.  Consider the following best 
+    case scenario:
+
+        A 100 Mbit/s network can transfer about 12800 kilobytes per second at
+        the maximum.  This means a resource of 30 kilobytes can be transferred 
+        ~426 times per second.  If we take the iperf data into account we see 
+        our 100 Mbits/ s network transfers 12352 kilobytes/s (~96.5 Mbits/s) 
+        which lowers the count for our 30 kilobyte resource to ~411 requests/ s.
+        
+        For a page with 31 resources, like the EMAS home page, we can
+        theoretically project a serve rate of:
+
+            (411 requests/s) / 31 resources ~ 13 pages/s.
+
+        If we start including higher levels of concurrency, say 100 concurrent 
+        users, this picture changes.  Now the network can only serve 
+        (411 requests/ s)/100 = 4.11 requests per concurrent user per second.  
+        In effect each user now waits more than 7.29 seconds per page on 
+        average.
+
+        Given this we can say that the best this network can do is for our
+        described page is:
+
+            13 pages/s * 60 s * 60 min = 46800 pages per hour
+
 
 1. Pre-test optimisation
 ========================
@@ -90,6 +108,8 @@ Siyavula Performance 4 (aka. SP4)
     Python, tests are very easy to record, customise and run and the reporting
     functions are excellent.
 
+.. _Network topology:
+
 Network topology
 ----------------
 
@@ -102,130 +122,18 @@ Network topology
     In order to validate the above set-up we ran a series of `iperf`_ tests
     between the servers.
 
-Network test from SP1 to SP2
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    
-    SP1 server::
-
-        iperf -s -f m
-        ------------------------------------------------------------
-        Server listening on TCP port 5001
-        TCP window size: 0.08 MByte (default)
-        ------------------------------------------------------------
-        [  4] local 10.0.0.11 port 5001 connected with 10.0.0.12 port 45482
-        ------------------------------------------------------------
-        Client connecting to 10.0.0.12, TCP port 5001
-        TCP window size: 0.11 MByte (default)
-        ------------------------------------------------------------
-        [  6] local 10.0.0.11 port 51005 connected with 10.0.0.12 port 5001
-        [ ID] Interval       Transfer     Bandwidth
-        [  6]  0.0-10.0 sec  1097 MBytes   920 Mbits/sec
-        [  4]  0.0-10.0 sec  1112 MBytes   930 Mbits/sec
-    
-    SP2 client::
-
-        iperf -c 10.0.0.11 -d -f m
-        ------------------------------------------------------------
-        Server listening on TCP port 5001
-        TCP window size: 0.08 MByte (default)
-        ------------------------------------------------------------
-        ------------------------------------------------------------
-        Client connecting to 10.0.0.11, TCP port 5001
-        TCP window size: 0.14 MByte (default)
-        ------------------------------------------------------------
-        [  5] local 10.0.0.12 port 45482 connected with 10.0.0.11 port 5001
-        [  4] local 10.0.0.12 port 5001 connected with 10.0.0.11 port 51005
-        [ ID] Interval       Transfer     Bandwidth
-        [  5]  0.0-10.0 sec  1112 MBytes   932 Mbits/sec
-        [  4]  0.0-10.0 sec  1097 MBytes   918 Mbits/sec
-    
-Network test from SP1 to SP3
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    
-    SP1 server::
-
-        iperf -s -f m
-        ------------------------------------------------------------
-        Server listening on TCP port 5001
-        TCP window size: 0.08 MByte (default)
-        ------------------------------------------------------------
-        [  4] local 10.0.0.11 port 5001 connected with 10.0.0.13 port 49089
-        ------------------------------------------------------------
-        Client connecting to 10.0.0.13, TCP port 5001
-        TCP window size: 0.11 MByte (default)
-        ------------------------------------------------------------
-        [  6] local 10.0.0.11 port 51450 connected with 10.0.0.13 port 5001
-        [ ID] Interval       Transfer     Bandwidth
-        [  4]  0.0-10.0 sec  1110 MBytes   929 Mbits/sec
-        [  6]  0.0-10.0 sec  1098 MBytes   920 Mbits/se
-        
-    SP3 client::
-
-        iperf -c 10.0.0.11 -d -f m
-        ------------------------------------------------------------
-        Server listening on TCP port 5001
-        TCP window size: 0.08 MByte (default)
-        ------------------------------------------------------------
-        ------------------------------------------------------------
-        Client connecting to 10.0.0.11, TCP port 5001
-        TCP window size: 0.14 MByte (default)
-        ------------------------------------------------------------
-        [  5] local 10.0.0.13 port 49089 connected with 10.0.0.11 port 5001
-        [  4] local 10.0.0.13 port 5001 connected with 10.0.0.11 port 51450
-        [ ID] Interval       Transfer     Bandwidth
-        [  5]  0.0-10.0 sec  1110 MBytes   930 Mbits/sec
-        [  4]  0.0-10.0 sec  1098 MBytes   919 Mbits/sec
-
-Network test between SP2 and SP3
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-    SP2 server::
-
-        iperf -s -f m
-        ------------------------------------------------------------
-        Server listening on TCP port 5001
-        TCP window size: 0.08 MByte (default)
-        ------------------------------------------------------------
-        [  4] local 10.0.0.12 port 5001 connected with 10.0.0.13 port 58467
-        ------------------------------------------------------------
-        Client connecting to 10.0.0.13, TCP port 5001
-        TCP window size: 0.11 MByte (default)
-        ------------------------------------------------------------
-        [  6] local 10.0.0.12 port 42910 connected with 10.0.0.13 port 5001
-        [ ID] Interval       Transfer     Bandwidth
-        [  6]  0.0-10.0 sec  1090 MBytes   914 Mbits/sec
-        [  4]  0.0-10.0 sec  1111 MBytes   930 Mbits/sec
-
-    SP3 bidirectional test::
-
-        iperf -c 10.0.0.12 -d -f m
-        ------------------------------------------------------------
-        Server listening on TCP port 5001
-        TCP window size: 0.08 MByte (default)
-        ------------------------------------------------------------
-        ------------------------------------------------------------
-        Client connecting to 10.0.0.12, TCP port 5001
-        TCP window size: 0.15 MByte (default)
-        ------------------------------------------------------------
-        [  5] local 10.0.0.13 port 58467 connected with 10.0.0.12 port 5001
-        [  4] local 10.0.0.13 port 5001 connected with 10.0.0.12 port 42910
-        [ ID] Interval       Transfer     Bandwidth
-        [  5]  0.0-10.0 sec  1111 MBytes   931 Mbits/sec
-        [  4]  0.0-10.0 sec  1090 MBytes   913 Mbits/sec
-
-Network test from SP1 to SP4
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    
-    This server is not on the private subnet or part of the cluster, so it was
-    not tested.
 
 Observations on network test results
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    
+    The `iperf test data`_ shows throughput of more than 900 Mbits/s between
+    SP1, SP2 and SP3.  When one keeps in mind that iperf does actual data
+    transfer and that each of the packets sent and received have a protocol
+    related overhead, the results for all tested servers are consistent with
+    those of a 1000 mbit/s network.
 
-    The iperf test results show throughput of more than 900 mbits/s.  When one
-    keeps in mind that iperf does actual data transfer and that each of the
-    packets sent and received have a protocol related overhead, the results for
-    all tested servers are consistent with those of a 1000 mbit/s network.
+    The same test run between SP1 and SP4 shows a throughput of around 
+    96 Mbits/sec which is consistent for a 100 Mbits/s network.
 
 
 .. _Testing authenticated reads:
@@ -585,54 +493,54 @@ Observations
 1 user
 ------
 
-    =================   ==============    ===============
-    Complete requests   SP1 requests/s    SP4 requests/s
-    =================   ==============    ===============
-    100                 3799.39           242.94
-    1000                4672.11           242.47  
-    10000               4271.39           242.78
-    100000              4457.42           243.10
-    1000000             4828.27           242.91
-    =================   ==============    ===============
+    =================   ===============
+    Complete requests   SP4 requests/s
+    =================   ===============
+    100                 242.94
+    1000                242.47  
+    10000               242.78
+    100000              243.10
+    1000000             242.91
+    =================   ===============
 
 10 concurrent users
 -------------------
 
-    =================   ==============    ===============
-    Complete requests   SP1 requests/s    SP4 requests/s
-    =================   ==============    ===============
-    100                 11041.18          356.05 
-    1000                20597.32          356.20
-    10000               21980.24          358.07
-    100000              18690.17          358.09
-    1000000             20729.00          358.04
-    =================   ==============    ===============
+    =================   ===============
+    Complete requests   SP4 requests/s
+    =================   ===============
+    100                 356.05 
+    1000                356.20
+    10000               358.07
+    100000              358.09
+    1000000             358.04
+    =================   ===============
 
 100 concurrent users
 --------------------
 
-    =================   ==============    ===============
-    Complete requests   SP1 requests/s    SP4 requests/s
-    =================   ==============    ===============
-    100                 9004.95           242.86 
-    1000                17513.13          357.70
-    10000               18031.14          358.10
-    100000              18753.04          358.13
-    1000000             18552.96          358.13
-    =================   ==============    ===============
+    =================   ===============
+    Complete requests   SP4 requests/s
+    =================   ===============
+    100                 242.86 
+    1000                357.70
+    10000               358.10
+    100000              358.13
+    1000000             358.13
+    =================   ===============
 
 1000 concurrent users
 ---------------------
 
-    =================   ==============    ===============
-    Complete requests   SP1 requests/s    SP4 requests/s
-    =================   ==============    ===============
-    100                 no data (1)       no data
-    1000                10249.79          129.72
-    10000               12786.09          no data
-    100000              15860.49          no data
-    1000000             16436.69          no data
-    =================   ==============    ===============
+    =================   ===============
+    Complete requests   SP4 requests/s
+    =================   ===============
+    100                 no data
+    1000                129.72
+    10000               no data
+    100000              no data
+    1000000             no data
+    =================   ===============
     
     (1) An entry of 'no data' indicates that the test cycle could not complete
     successfully and therefore `Apache Benchmark`_ did not record the statistics.
@@ -679,8 +587,146 @@ Recommendation for scaling / Conclusion
         analytics referrer from tracking image, etc.
 
 
-Referenced images
-=================
+Referenced images and data
+==========================
+
+.. _iperf test data:
+
+Network test from SP1 to SP2
+----------------------------
+    
+    SP1 server::
+
+        iperf -s -f m
+        ------------------------------------------------------------
+        Server listening on TCP port 5001
+        TCP window size: 0.08 MByte (default)
+        ------------------------------------------------------------
+        [  4] local 10.0.0.11 port 5001 connected with 10.0.0.12 port 45482
+        ------------------------------------------------------------
+        Client connecting to 10.0.0.12, TCP port 5001
+        TCP window size: 0.11 MByte (default)
+        ------------------------------------------------------------
+        [  6] local 10.0.0.11 port 51005 connected with 10.0.0.12 port 5001
+        [ ID] Interval       Transfer     Bandwidth
+        [  6]  0.0-10.0 sec  1097 MBytes   920 Mbits/sec
+        [  4]  0.0-10.0 sec  1112 MBytes   930 Mbits/sec
+    
+    SP2 client::
+
+        iperf -c 10.0.0.11 -d -f m
+        ------------------------------------------------------------
+        Server listening on TCP port 5001
+        TCP window size: 0.08 MByte (default)
+        ------------------------------------------------------------
+        ------------------------------------------------------------
+        Client connecting to 10.0.0.11, TCP port 5001
+        TCP window size: 0.14 MByte (default)
+        ------------------------------------------------------------
+        [  5] local 10.0.0.12 port 45482 connected with 10.0.0.11 port 5001
+        [  4] local 10.0.0.12 port 5001 connected with 10.0.0.11 port 51005
+        [ ID] Interval       Transfer     Bandwidth
+        [  5]  0.0-10.0 sec  1112 MBytes   932 Mbits/sec
+        [  4]  0.0-10.0 sec  1097 MBytes   918 Mbits/sec
+    
+Network test from SP1 to SP3
+----------------------------
+    
+    SP1 server::
+
+        iperf -s -f m
+        ------------------------------------------------------------
+        Server listening on TCP port 5001
+        TCP window size: 0.08 MByte (default)
+        ------------------------------------------------------------
+        [  4] local 10.0.0.11 port 5001 connected with 10.0.0.13 port 49089
+        ------------------------------------------------------------
+        Client connecting to 10.0.0.13, TCP port 5001
+        TCP window size: 0.11 MByte (default)
+        ------------------------------------------------------------
+        [  6] local 10.0.0.11 port 51450 connected with 10.0.0.13 port 5001
+        [ ID] Interval       Transfer     Bandwidth
+        [  4]  0.0-10.0 sec  1110 MBytes   929 Mbits/sec
+        [  6]  0.0-10.0 sec  1098 MBytes   920 Mbits/se
+        
+    SP3 client::
+
+        iperf -c 10.0.0.11 -d -f m
+        ------------------------------------------------------------
+        Server listening on TCP port 5001
+        TCP window size: 0.08 MByte (default)
+        ------------------------------------------------------------
+        ------------------------------------------------------------
+        Client connecting to 10.0.0.11, TCP port 5001
+        TCP window size: 0.14 MByte (default)
+        ------------------------------------------------------------
+        [  5] local 10.0.0.13 port 49089 connected with 10.0.0.11 port 5001
+        [  4] local 10.0.0.13 port 5001 connected with 10.0.0.11 port 51450
+        [ ID] Interval       Transfer     Bandwidth
+        [  5]  0.0-10.0 sec  1110 MBytes   930 Mbits/sec
+        [  4]  0.0-10.0 sec  1098 MBytes   919 Mbits/sec
+
+Network test between SP2 and SP3
+--------------------------------
+
+    SP2 server::
+
+        iperf -s -f m
+        ------------------------------------------------------------
+        Server listening on TCP port 5001
+        TCP window size: 0.08 MByte (default)
+        ------------------------------------------------------------
+        [  4] local 10.0.0.12 port 5001 connected with 10.0.0.13 port 58467
+        ------------------------------------------------------------
+        Client connecting to 10.0.0.13, TCP port 5001
+        TCP window size: 0.11 MByte (default)
+        ------------------------------------------------------------
+        [  6] local 10.0.0.12 port 42910 connected with 10.0.0.13 port 5001
+        [ ID] Interval       Transfer     Bandwidth
+        [  6]  0.0-10.0 sec  1090 MBytes   914 Mbits/sec
+        [  4]  0.0-10.0 sec  1111 MBytes   930 Mbits/sec
+
+    SP3 bidirectional test::
+
+        iperf -c 10.0.0.12 -d -f m
+        ------------------------------------------------------------
+        Server listening on TCP port 5001
+        TCP window size: 0.08 MByte (default)
+        ------------------------------------------------------------
+        ------------------------------------------------------------
+        Client connecting to 10.0.0.12, TCP port 5001
+        TCP window size: 0.15 MByte (default)
+        ------------------------------------------------------------
+        [  5] local 10.0.0.13 port 58467 connected with 10.0.0.12 port 5001
+        [  4] local 10.0.0.13 port 5001 connected with 10.0.0.12 port 42910
+        [ ID] Interval       Transfer     Bandwidth
+        [  5]  0.0-10.0 sec  1111 MBytes   931 Mbits/sec
+        [  4]  0.0-10.0 sec  1090 MBytes   913 Mbits/sec
+
+Network test from SP1 to SP4
+----------------------------
+    
+    SP1 server::
+
+        iperf -s -f m
+        ------------------------------------------------------------
+        Server listening on TCP port 5001
+        TCP window size: 0.08 MByte (default)
+        ------------------------------------------------------------
+        [  4] local 197.221.50.98 port 5001 connected with 197.221.50.101 port 35371
+        [ ID] Interval       Transfer     Bandwidth
+        [  4]  0.0-10.3 sec   116 MBytes  94.1 Mbits/sec
+
+    SP4 bidirectional test::
+
+        iperf -c 197.221.50.98 -f m
+        ------------------------------------------------------------
+        Client connecting to 197.221.50.98, TCP port 5001
+        TCP window size: 0.02 MByte (default)
+        ------------------------------------------------------------
+        [  3] local 197.221.50.101 port 35371 connected with 197.221.50.98 port 5001
+        [ ID] Interval       Transfer     Bandwidth
+        [  3]  0.0-10.1 sec   116 MBytes  96.5 Mbits/sec
 
 Varnish cache statistics
 ------------------------
@@ -739,11 +785,6 @@ CPU
     - scaling (on-demand scaling-governor in Linux?)
     - power saving modes
     - temperatures lm_sensors, etc.
-
-Network
--------
-
-    - check actual network iperf/ etc.
 
 Basic HTTP sanity check
 -----------------------

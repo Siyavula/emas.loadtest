@@ -56,10 +56,6 @@
 <li><a class="reference internal" href="#siyavula-performance-3-aka-sp3">Siyavula Performance 3 (aka. SP3)</a></li>
 <li><a class="reference internal" href="#siyavula-performance-4-aka-sp4">Siyavula Performance 4 (aka. SP4)</a></li>
 <li><a class="reference internal" href="#network-topology">Network topology</a><ul>
-<li><a class="reference internal" href="#network-test-from-sp1-to-sp2">Network test from SP1 to SP2</a></li>
-<li><a class="reference internal" href="#network-test-from-sp1-to-sp3">Network test from SP1 to SP3</a></li>
-<li><a class="reference internal" href="#network-test-between-sp2-and-sp3">Network test between SP2 and SP3</a></li>
-<li><a class="reference internal" href="#network-test-from-sp1-to-sp4">Network test from SP1 to SP4</a></li>
 <li><a class="reference internal" href="#observations-on-network-test-results">Observations on network test results</a></li>
 </ul>
 </li>
@@ -73,31 +69,34 @@
 </li>
 <li><a class="reference internal" href="#testing-practice-service">5. Testing practice service</a></li>
 <li><a class="reference internal" href="#results-for-testing-practice-service">6. Results for testing practice service</a><ul>
-<li><a class="reference internal" href="#id2">Observations</a></li>
-<li><a class="reference internal" href="#id3">Optimisations done</a></li>
+<li><a class="reference internal" href="#id3">Observations</a></li>
+<li><a class="reference internal" href="#id4">Optimisations done</a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#testing-mobile-authenticated-reads">7. Testing mobile authenticated reads</a></li>
 <li><a class="reference internal" href="#results-for-testing-mobile-authenticated-reads">8. Results for testing mobile authenticated reads</a><ul>
-<li><a class="reference internal" href="#id4">Observations</a></li>
+<li><a class="reference internal" href="#id5">Observations</a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#testing-varnish">9. Testing Varnish</a></li>
 <li><a class="reference internal" href="#results-of-varnish">10. Results of Varnish</a><ul>
 <li><a class="reference internal" href="#user">1 user</a></li>
 <li><a class="reference internal" href="#concurrent-users">10 concurrent users</a></li>
-<li><a class="reference internal" href="#id5">100 concurrent users</a></li>
-<li><a class="reference internal" href="#id6">1000 concurrent users</a></li>
+<li><a class="reference internal" href="#id6">100 concurrent users</a></li>
+<li><a class="reference internal" href="#id7">1000 concurrent users</a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#recommendation-for-scaling-conclusion">Recommendation for scaling / Conclusion</a></li>
-<li><a class="reference internal" href="#referenced-images">Referenced images</a><ul>
+<li><a class="reference internal" href="#referenced-images-and-data">Referenced images and data</a><ul>
+<li><a class="reference internal" href="#network-test-from-sp1-to-sp2">Network test from SP1 to SP2</a></li>
+<li><a class="reference internal" href="#network-test-from-sp1-to-sp3">Network test from SP1 to SP3</a></li>
+<li><a class="reference internal" href="#network-test-between-sp2-and-sp3">Network test between SP2 and SP3</a></li>
+<li><a class="reference internal" href="#network-test-from-sp1-to-sp4">Network test from SP1 to SP4</a></li>
 <li><a class="reference internal" href="#varnish-cache-statistics">Varnish cache statistics</a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#extra-issues">Extra issues</a><ul>
 <li><a class="reference internal" href="#cpu">CPU</a></li>
-<li><a class="reference internal" href="#network">Network</a></li>
 <li><a class="reference internal" href="#basic-http-sanity-check">Basic HTTP sanity check</a></li>
 <li><a class="reference internal" href="#jmeter-testing">JMeter testing</a></li>
 <li><a class="reference internal" href="#errors">Errors</a></li>
@@ -147,14 +146,31 @@ that were reached and the remedial steps that were taken.</p>
 Funkload bench tests were configured not to follow external links, since
 we are attempting to benchmark the EMAS software and hardware cluster
 not external CDNs or external network access.</p>
-<p>Describe constraints of 100 mbit/s network.</p>
-<p>100 mbit/sec max public network
-sp4 het 100/mbit connection na sp1
-max request for ~30k doc = ~300 req/s
-up the 100 cvus 3 req/s
-thus page with 30 request ~10 sec to load</p>
-<p>Example of AB sp1 vs sp4 results and what exactly what that means for the
-load the cluster could possibly bear.</p>
+<p>When viewing the data in the following report one must bear in mind that the
+load generation machine (SP4) accesses the load balancing server (SP1) via
+a 100 Mbits/s network (cf. <a class="reference internal" href="#network-topology">Network topology</a>).  This leads to the a very
+real constraint on the maximum request rates.  Consider the following best
+case scenario:</p>
+<blockquote>
+<div><p>A 100 Mbit/s network can transfer about 12800 kilobytes per second at
+the maximum.  This means a resource of 30 kilobytes can be transferred
+~426 times per second.  If we take the iperf data into account we see
+our 100 Mbits/ s network transfers 12352 kilobytes/s (~96.5 Mbits/s)
+which lowers the count for our 30 kilobyte resource to ~411 requests/ s.</p>
+<p>For a page with 31 resources, like the EMAS home page, we can
+theoretically project a serve rate of:</p>
+<blockquote>
+<div>(411 requests/s) / 31 resources ~ 13 pages/s.</div></blockquote>
+<p>If we start including higher levels of concurrency, say 100 concurrent
+users, this picture changes.  Now the network can only serve
+(411 requests/ s)/100 = 4.11 requests per concurrent user per second.
+In effect each user now waits more than 7.29 seconds per page on
+average.</p>
+<p>Given this we can say that the best this network can do is for our
+described page is:</p>
+<blockquote>
+<div>13 pages/s * 60 s * 60 min = 46800 pages per hour</div></blockquote>
+</div></blockquote>
 </div></blockquote>
 </div>
 <div class="section" id="pre-test-optimisation">
@@ -224,7 +240,7 @@ functions are excellent.</p>
 </div></blockquote>
 </div>
 <div class="section" id="network-topology">
-<h3>Network topology<a class="headerlink" href="#network-topology" title="Permalink to this headline">¶</a></h3>
+<span id="id1"></span><h3>Network topology<a class="headerlink" href="#network-topology" title="Permalink to this headline">¶</a></h3>
 <blockquote>
 <div><p>The public side of the network is 100mbit/sec. The private subnet is
 1000mbit/sec.  Currently SP1, SP2 and SP3 are on the public network and the
@@ -234,135 +250,22 @@ network.  It is only on the 100mbit/sec public network.</p>
 <p>In order to validate the above set-up we ran a series of <a class="reference external" href="http://iperf.sourceforge.net/">iperf</a> tests
 between the servers.</p>
 </div></blockquote>
-<div class="section" id="network-test-from-sp1-to-sp2">
-<h4>Network test from SP1 to SP2<a class="headerlink" href="#network-test-from-sp1-to-sp2" title="Permalink to this headline">¶</a></h4>
-<blockquote>
-<div><p>SP1 server:</p>
-<div class="highlight-python"><pre>iperf -s -f m
-------------------------------------------------------------
-Server listening on TCP port 5001
-TCP window size: 0.08 MByte (default)
-------------------------------------------------------------
-[  4] local 10.0.0.11 port 5001 connected with 10.0.0.12 port 45482
-------------------------------------------------------------
-Client connecting to 10.0.0.12, TCP port 5001
-TCP window size: 0.11 MByte (default)
-------------------------------------------------------------
-[  6] local 10.0.0.11 port 51005 connected with 10.0.0.12 port 5001
-[ ID] Interval       Transfer     Bandwidth
-[  6]  0.0-10.0 sec  1097 MBytes   920 Mbits/sec
-[  4]  0.0-10.0 sec  1112 MBytes   930 Mbits/sec</pre>
-</div>
-<p>SP2 client:</p>
-<div class="highlight-python"><pre>iperf -c 10.0.0.11 -d -f m
-------------------------------------------------------------
-Server listening on TCP port 5001
-TCP window size: 0.08 MByte (default)
-------------------------------------------------------------
-------------------------------------------------------------
-Client connecting to 10.0.0.11, TCP port 5001
-TCP window size: 0.14 MByte (default)
-------------------------------------------------------------
-[  5] local 10.0.0.12 port 45482 connected with 10.0.0.11 port 5001
-[  4] local 10.0.0.12 port 5001 connected with 10.0.0.11 port 51005
-[ ID] Interval       Transfer     Bandwidth
-[  5]  0.0-10.0 sec  1112 MBytes   932 Mbits/sec
-[  4]  0.0-10.0 sec  1097 MBytes   918 Mbits/sec</pre>
-</div>
-</div></blockquote>
-</div>
-<div class="section" id="network-test-from-sp1-to-sp3">
-<h4>Network test from SP1 to SP3<a class="headerlink" href="#network-test-from-sp1-to-sp3" title="Permalink to this headline">¶</a></h4>
-<blockquote>
-<div><p>SP1 server:</p>
-<div class="highlight-python"><pre>iperf -s -f m
-------------------------------------------------------------
-Server listening on TCP port 5001
-TCP window size: 0.08 MByte (default)
-------------------------------------------------------------
-[  4] local 10.0.0.11 port 5001 connected with 10.0.0.13 port 49089
-------------------------------------------------------------
-Client connecting to 10.0.0.13, TCP port 5001
-TCP window size: 0.11 MByte (default)
-------------------------------------------------------------
-[  6] local 10.0.0.11 port 51450 connected with 10.0.0.13 port 5001
-[ ID] Interval       Transfer     Bandwidth
-[  4]  0.0-10.0 sec  1110 MBytes   929 Mbits/sec
-[  6]  0.0-10.0 sec  1098 MBytes   920 Mbits/se</pre>
-</div>
-<p>SP3 client:</p>
-<div class="highlight-python"><pre>iperf -c 10.0.0.11 -d -f m
-------------------------------------------------------------
-Server listening on TCP port 5001
-TCP window size: 0.08 MByte (default)
-------------------------------------------------------------
-------------------------------------------------------------
-Client connecting to 10.0.0.11, TCP port 5001
-TCP window size: 0.14 MByte (default)
-------------------------------------------------------------
-[  5] local 10.0.0.13 port 49089 connected with 10.0.0.11 port 5001
-[  4] local 10.0.0.13 port 5001 connected with 10.0.0.11 port 51450
-[ ID] Interval       Transfer     Bandwidth
-[  5]  0.0-10.0 sec  1110 MBytes   930 Mbits/sec
-[  4]  0.0-10.0 sec  1098 MBytes   919 Mbits/sec</pre>
-</div>
-</div></blockquote>
-</div>
-<div class="section" id="network-test-between-sp2-and-sp3">
-<h4>Network test between SP2 and SP3<a class="headerlink" href="#network-test-between-sp2-and-sp3" title="Permalink to this headline">¶</a></h4>
-<blockquote>
-<div><p>SP2 server:</p>
-<div class="highlight-python"><pre>iperf -s -f m
-------------------------------------------------------------
-Server listening on TCP port 5001
-TCP window size: 0.08 MByte (default)
-------------------------------------------------------------
-[  4] local 10.0.0.12 port 5001 connected with 10.0.0.13 port 58467
-------------------------------------------------------------
-Client connecting to 10.0.0.13, TCP port 5001
-TCP window size: 0.11 MByte (default)
-------------------------------------------------------------
-[  6] local 10.0.0.12 port 42910 connected with 10.0.0.13 port 5001
-[ ID] Interval       Transfer     Bandwidth
-[  6]  0.0-10.0 sec  1090 MBytes   914 Mbits/sec
-[  4]  0.0-10.0 sec  1111 MBytes   930 Mbits/sec</pre>
-</div>
-<p>SP3 bidirectional test:</p>
-<div class="highlight-python"><pre>iperf -c 10.0.0.12 -d -f m
-------------------------------------------------------------
-Server listening on TCP port 5001
-TCP window size: 0.08 MByte (default)
-------------------------------------------------------------
-------------------------------------------------------------
-Client connecting to 10.0.0.12, TCP port 5001
-TCP window size: 0.15 MByte (default)
-------------------------------------------------------------
-[  5] local 10.0.0.13 port 58467 connected with 10.0.0.12 port 5001
-[  4] local 10.0.0.13 port 5001 connected with 10.0.0.12 port 42910
-[ ID] Interval       Transfer     Bandwidth
-[  5]  0.0-10.0 sec  1111 MBytes   931 Mbits/sec
-[  4]  0.0-10.0 sec  1090 MBytes   913 Mbits/sec</pre>
-</div>
-</div></blockquote>
-</div>
-<div class="section" id="network-test-from-sp1-to-sp4">
-<h4>Network test from SP1 to SP4<a class="headerlink" href="#network-test-from-sp1-to-sp4" title="Permalink to this headline">¶</a></h4>
-<blockquote>
-<div>This server is not on the private subnet or part of the cluster, so it was
-not tested.</div></blockquote>
-</div>
 <div class="section" id="observations-on-network-test-results">
 <h4>Observations on network test results<a class="headerlink" href="#observations-on-network-test-results" title="Permalink to this headline">¶</a></h4>
 <blockquote>
-<div>The iperf test results show throughput of more than 900 mbits/s.  When one
-keeps in mind that iperf does actual data transfer and that each of the
-packets sent and received have a protocol related overhead, the results for
-all tested servers are consistent with those of a 1000 mbit/s network.</div></blockquote>
+<div><p>The <a class="reference internal" href="#iperf-test-data">iperf test data</a> shows throughput of more than 900 Mbits/s between
+SP1, SP2 and SP3.  When one keeps in mind that iperf does actual data
+transfer and that each of the packets sent and received have a protocol
+related overhead, the results for all tested servers are consistent with
+those of a 1000 mbit/s network.</p>
+<p>The same test run between SP1 and SP4 shows a throughput of around
+96 Mbits/sec which is consistent for a 100 Mbits/s network.</p>
+</div></blockquote>
 </div>
 </div>
 </div>
 <div class="section" id="testing-authenticated-reads">
-<span id="id1"></span><h2>3. Testing authenticated reads<a class="headerlink" href="#testing-authenticated-reads" title="Permalink to this headline">¶</a></h2>
+<span id="id2"></span><h2>3. Testing authenticated reads<a class="headerlink" href="#testing-authenticated-reads" title="Permalink to this headline">¶</a></h2>
 <blockquote>
 <div><p>Reading all the possible URLs in the site authenticated was deemed
 impractical due to the amount of time potentially required to do one
@@ -608,8 +511,8 @@ concurrent users.</p>
 </tr>
 </tbody>
 </table>
-<div class="section" id="id2">
-<h3>Observations<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id3">
+<h3>Observations<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h3>
 <blockquote>
 <div><p>As the concurrency rises the cluster serves less-and-less pages.  This is
 clear from the amount of successful pages per second and the total pages
@@ -624,8 +527,8 @@ means it can potentially serve:</p>
 <p>26 pages * 60 seconds * 60 minutes = <strong>93600 practice service pages per hour.</strong></p>
 </div></blockquote>
 </div>
-<div class="section" id="id3">
-<h3>Optimisations done<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id4">
+<h3>Optimisations done<a class="headerlink" href="#id4" title="Permalink to this headline">¶</a></h3>
 <blockquote>
 <div>When we analysed the data from the practice service test we realized that
 the Plone login process takes quite a bit of time.  Upon further
@@ -759,8 +662,8 @@ theme though.</p>
 <p>In order to verify that the mobile theme resources are cached we gathered
 Varnish statistics via <a class="reference external" href="http://munin-monitoring.org/">Munin</a>.  The are included here as
 <a class="reference internal" href="#varnish-statistics-for-authenticated-mobile-reads">Varnish statistics for authenticated mobile reads</a></p>
-<div class="section" id="id4">
-<h3>Observations<a class="headerlink" href="#id4" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id5">
+<h3>Observations<a class="headerlink" href="#id5" title="Permalink to this headline">¶</a></h3>
 <blockquote>
 <div><p>The cluster exhibits a gradual decline in successful pages served across the
 tested concurrencies.  We observed the same degrade in the performance for
@@ -819,35 +722,28 @@ off with 1 user and 10 requests all the way up to 1000 concurrent users and
 <blockquote>
 <div><table border="1" class="docutils">
 <colgroup>
-<col width="37%" />
-<col width="30%" />
-<col width="33%" />
+<col width="53%" />
+<col width="47%" />
 </colgroup>
 <thead valign="bottom">
 <tr class="row-odd"><th class="head">Complete requests</th>
-<th class="head">SP1 requests/s</th>
 <th class="head">SP4 requests/s</th>
 </tr>
 </thead>
 <tbody valign="top">
 <tr class="row-even"><td>100</td>
-<td>3799.39</td>
 <td>242.94</td>
 </tr>
 <tr class="row-odd"><td>1000</td>
-<td>4672.11</td>
 <td>242.47</td>
 </tr>
 <tr class="row-even"><td>10000</td>
-<td>4271.39</td>
 <td>242.78</td>
 </tr>
 <tr class="row-odd"><td>100000</td>
-<td>4457.42</td>
 <td>243.10</td>
 </tr>
 <tr class="row-even"><td>1000000</td>
-<td>4828.27</td>
 <td>242.91</td>
 </tr>
 </tbody>
@@ -859,115 +755,94 @@ off with 1 user and 10 requests all the way up to 1000 concurrent users and
 <blockquote>
 <div><table border="1" class="docutils">
 <colgroup>
-<col width="37%" />
-<col width="30%" />
-<col width="33%" />
+<col width="53%" />
+<col width="47%" />
 </colgroup>
 <thead valign="bottom">
 <tr class="row-odd"><th class="head">Complete requests</th>
-<th class="head">SP1 requests/s</th>
 <th class="head">SP4 requests/s</th>
 </tr>
 </thead>
 <tbody valign="top">
 <tr class="row-even"><td>100</td>
-<td>11041.18</td>
 <td>356.05</td>
 </tr>
 <tr class="row-odd"><td>1000</td>
-<td>20597.32</td>
 <td>356.20</td>
 </tr>
 <tr class="row-even"><td>10000</td>
-<td>21980.24</td>
 <td>358.07</td>
 </tr>
 <tr class="row-odd"><td>100000</td>
-<td>18690.17</td>
 <td>358.09</td>
 </tr>
 <tr class="row-even"><td>1000000</td>
-<td>20729.00</td>
 <td>358.04</td>
 </tr>
 </tbody>
 </table>
 </div></blockquote>
 </div>
-<div class="section" id="id5">
-<h3>100 concurrent users<a class="headerlink" href="#id5" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id6">
+<h3>100 concurrent users<a class="headerlink" href="#id6" title="Permalink to this headline">¶</a></h3>
 <blockquote>
 <div><table border="1" class="docutils">
 <colgroup>
-<col width="37%" />
-<col width="30%" />
-<col width="33%" />
+<col width="53%" />
+<col width="47%" />
 </colgroup>
 <thead valign="bottom">
 <tr class="row-odd"><th class="head">Complete requests</th>
-<th class="head">SP1 requests/s</th>
 <th class="head">SP4 requests/s</th>
 </tr>
 </thead>
 <tbody valign="top">
 <tr class="row-even"><td>100</td>
-<td>9004.95</td>
 <td>242.86</td>
 </tr>
 <tr class="row-odd"><td>1000</td>
-<td>17513.13</td>
 <td>357.70</td>
 </tr>
 <tr class="row-even"><td>10000</td>
-<td>18031.14</td>
 <td>358.10</td>
 </tr>
 <tr class="row-odd"><td>100000</td>
-<td>18753.04</td>
 <td>358.13</td>
 </tr>
 <tr class="row-even"><td>1000000</td>
-<td>18552.96</td>
 <td>358.13</td>
 </tr>
 </tbody>
 </table>
 </div></blockquote>
 </div>
-<div class="section" id="id6">
-<h3>1000 concurrent users<a class="headerlink" href="#id6" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id7">
+<h3>1000 concurrent users<a class="headerlink" href="#id7" title="Permalink to this headline">¶</a></h3>
 <blockquote>
 <div><table border="1" class="docutils">
 <colgroup>
-<col width="37%" />
-<col width="30%" />
-<col width="33%" />
+<col width="53%" />
+<col width="47%" />
 </colgroup>
 <thead valign="bottom">
 <tr class="row-odd"><th class="head">Complete requests</th>
-<th class="head">SP1 requests/s</th>
 <th class="head">SP4 requests/s</th>
 </tr>
 </thead>
 <tbody valign="top">
 <tr class="row-even"><td>100</td>
-<td>no data (1)</td>
 <td>no data</td>
 </tr>
 <tr class="row-odd"><td>1000</td>
-<td>10249.79</td>
 <td>129.72</td>
 </tr>
 <tr class="row-even"><td>10000</td>
-<td>12786.09</td>
 <td>no data</td>
 </tr>
 <tr class="row-odd"><td>100000</td>
-<td>15860.49</td>
 <td>no data</td>
 </tr>
 <tr class="row-even"><td>1000000</td>
-<td>16436.69</td>
 <td>no data</td>
 </tr>
 </tbody>
@@ -1016,8 +891,144 @@ analytics referrer from tracking image, etc.</pre>
 </div>
 </div></blockquote>
 </div>
-<div class="section" id="referenced-images">
-<h2>Referenced images<a class="headerlink" href="#referenced-images" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="referenced-images-and-data">
+<h2>Referenced images and data<a class="headerlink" href="#referenced-images-and-data" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="network-test-from-sp1-to-sp2">
+<span id="iperf-test-data"></span><h3>Network test from SP1 to SP2<a class="headerlink" href="#network-test-from-sp1-to-sp2" title="Permalink to this headline">¶</a></h3>
+<blockquote>
+<div><p>SP1 server:</p>
+<div class="highlight-python"><pre>iperf -s -f m
+------------------------------------------------------------
+Server listening on TCP port 5001
+TCP window size: 0.08 MByte (default)
+------------------------------------------------------------
+[  4] local 10.0.0.11 port 5001 connected with 10.0.0.12 port 45482
+------------------------------------------------------------
+Client connecting to 10.0.0.12, TCP port 5001
+TCP window size: 0.11 MByte (default)
+------------------------------------------------------------
+[  6] local 10.0.0.11 port 51005 connected with 10.0.0.12 port 5001
+[ ID] Interval       Transfer     Bandwidth
+[  6]  0.0-10.0 sec  1097 MBytes   920 Mbits/sec
+[  4]  0.0-10.0 sec  1112 MBytes   930 Mbits/sec</pre>
+</div>
+<p>SP2 client:</p>
+<div class="highlight-python"><pre>iperf -c 10.0.0.11 -d -f m
+------------------------------------------------------------
+Server listening on TCP port 5001
+TCP window size: 0.08 MByte (default)
+------------------------------------------------------------
+------------------------------------------------------------
+Client connecting to 10.0.0.11, TCP port 5001
+TCP window size: 0.14 MByte (default)
+------------------------------------------------------------
+[  5] local 10.0.0.12 port 45482 connected with 10.0.0.11 port 5001
+[  4] local 10.0.0.12 port 5001 connected with 10.0.0.11 port 51005
+[ ID] Interval       Transfer     Bandwidth
+[  5]  0.0-10.0 sec  1112 MBytes   932 Mbits/sec
+[  4]  0.0-10.0 sec  1097 MBytes   918 Mbits/sec</pre>
+</div>
+</div></blockquote>
+</div>
+<div class="section" id="network-test-from-sp1-to-sp3">
+<h3>Network test from SP1 to SP3<a class="headerlink" href="#network-test-from-sp1-to-sp3" title="Permalink to this headline">¶</a></h3>
+<blockquote>
+<div><p>SP1 server:</p>
+<div class="highlight-python"><pre>iperf -s -f m
+------------------------------------------------------------
+Server listening on TCP port 5001
+TCP window size: 0.08 MByte (default)
+------------------------------------------------------------
+[  4] local 10.0.0.11 port 5001 connected with 10.0.0.13 port 49089
+------------------------------------------------------------
+Client connecting to 10.0.0.13, TCP port 5001
+TCP window size: 0.11 MByte (default)
+------------------------------------------------------------
+[  6] local 10.0.0.11 port 51450 connected with 10.0.0.13 port 5001
+[ ID] Interval       Transfer     Bandwidth
+[  4]  0.0-10.0 sec  1110 MBytes   929 Mbits/sec
+[  6]  0.0-10.0 sec  1098 MBytes   920 Mbits/se</pre>
+</div>
+<p>SP3 client:</p>
+<div class="highlight-python"><pre>iperf -c 10.0.0.11 -d -f m
+------------------------------------------------------------
+Server listening on TCP port 5001
+TCP window size: 0.08 MByte (default)
+------------------------------------------------------------
+------------------------------------------------------------
+Client connecting to 10.0.0.11, TCP port 5001
+TCP window size: 0.14 MByte (default)
+------------------------------------------------------------
+[  5] local 10.0.0.13 port 49089 connected with 10.0.0.11 port 5001
+[  4] local 10.0.0.13 port 5001 connected with 10.0.0.11 port 51450
+[ ID] Interval       Transfer     Bandwidth
+[  5]  0.0-10.0 sec  1110 MBytes   930 Mbits/sec
+[  4]  0.0-10.0 sec  1098 MBytes   919 Mbits/sec</pre>
+</div>
+</div></blockquote>
+</div>
+<div class="section" id="network-test-between-sp2-and-sp3">
+<h3>Network test between SP2 and SP3<a class="headerlink" href="#network-test-between-sp2-and-sp3" title="Permalink to this headline">¶</a></h3>
+<blockquote>
+<div><p>SP2 server:</p>
+<div class="highlight-python"><pre>iperf -s -f m
+------------------------------------------------------------
+Server listening on TCP port 5001
+TCP window size: 0.08 MByte (default)
+------------------------------------------------------------
+[  4] local 10.0.0.12 port 5001 connected with 10.0.0.13 port 58467
+------------------------------------------------------------
+Client connecting to 10.0.0.13, TCP port 5001
+TCP window size: 0.11 MByte (default)
+------------------------------------------------------------
+[  6] local 10.0.0.12 port 42910 connected with 10.0.0.13 port 5001
+[ ID] Interval       Transfer     Bandwidth
+[  6]  0.0-10.0 sec  1090 MBytes   914 Mbits/sec
+[  4]  0.0-10.0 sec  1111 MBytes   930 Mbits/sec</pre>
+</div>
+<p>SP3 bidirectional test:</p>
+<div class="highlight-python"><pre>iperf -c 10.0.0.12 -d -f m
+------------------------------------------------------------
+Server listening on TCP port 5001
+TCP window size: 0.08 MByte (default)
+------------------------------------------------------------
+------------------------------------------------------------
+Client connecting to 10.0.0.12, TCP port 5001
+TCP window size: 0.15 MByte (default)
+------------------------------------------------------------
+[  5] local 10.0.0.13 port 58467 connected with 10.0.0.12 port 5001
+[  4] local 10.0.0.13 port 5001 connected with 10.0.0.12 port 42910
+[ ID] Interval       Transfer     Bandwidth
+[  5]  0.0-10.0 sec  1111 MBytes   931 Mbits/sec
+[  4]  0.0-10.0 sec  1090 MBytes   913 Mbits/sec</pre>
+</div>
+</div></blockquote>
+</div>
+<div class="section" id="network-test-from-sp1-to-sp4">
+<h3>Network test from SP1 to SP4<a class="headerlink" href="#network-test-from-sp1-to-sp4" title="Permalink to this headline">¶</a></h3>
+<blockquote>
+<div><p>SP1 server:</p>
+<div class="highlight-python"><pre>iperf -s -f m
+------------------------------------------------------------
+Server listening on TCP port 5001
+TCP window size: 0.08 MByte (default)
+------------------------------------------------------------
+[  4] local 197.221.50.98 port 5001 connected with 197.221.50.101 port 35371
+[ ID] Interval       Transfer     Bandwidth
+[  4]  0.0-10.3 sec   116 MBytes  94.1 Mbits/sec</pre>
+</div>
+<p>SP4 bidirectional test:</p>
+<div class="highlight-python"><pre>iperf -c 197.221.50.98 -f m
+------------------------------------------------------------
+Client connecting to 197.221.50.98, TCP port 5001
+TCP window size: 0.02 MByte (default)
+------------------------------------------------------------
+[  3] local 197.221.50.101 port 35371 connected with 197.221.50.98 port 5001
+[ ID] Interval       Transfer     Bandwidth
+[  3]  0.0-10.1 sec   116 MBytes  96.5 Mbits/sec</pre>
+</div>
+</div></blockquote>
+</div>
 <div class="section" id="varnish-cache-statistics">
 <h3>Varnish cache statistics<a class="headerlink" href="#varnish-cache-statistics" title="Permalink to this headline">¶</a></h3>
 <blockquote>
@@ -1038,14 +1049,6 @@ in die report hoort nie.</p>
 <li>scaling (on-demand scaling-governor in Linux?)</li>
 <li>power saving modes</li>
 <li>temperatures lm_sensors, etc.</li>
-</ul>
-</div></blockquote>
-</div>
-<div class="section" id="network">
-<h3>Network<a class="headerlink" href="#network" title="Permalink to this headline">¶</a></h3>
-<blockquote>
-<div><ul class="simple">
-<li>check actual network iperf/ etc.</li>
 </ul>
 </div></blockquote>
 </div>
