@@ -1,0 +1,21 @@
+\BOOKMARK [0][-]{chapter.1}{Introduction}{}
+\BOOKMARK [0][-]{chapter.2}{1. Pre-test optimisation}{}
+\BOOKMARK [0][-]{chapter.3}{2. An overview of the setup we benchmarked}{}
+\BOOKMARK [0][-]{chapter.4}{3. Testing authenticated reads}{}
+\BOOKMARK [0][-]{chapter.5}{4. Authenticated read test results}{}
+\BOOKMARK [1][-]{section.5.1}{Page analysis}{chapter.5}
+\BOOKMARK [1][-]{section.5.2}{Optimisations done}{chapter.5}
+\BOOKMARK [0][-]{chapter.6}{5. Testing practice service}{}
+\BOOKMARK [0][-]{chapter.7}{6. Results for testing practice service}{}
+\BOOKMARK [1][-]{section.7.1}{Page analysis}{chapter.7}
+\BOOKMARK [1][-]{section.7.2}{Optimisations done}{chapter.7}
+\BOOKMARK [0][-]{chapter.8}{7. Testing mobile reads}{}
+\BOOKMARK [0][-]{chapter.9}{8. Results for testing mobile reads}{}
+\BOOKMARK [1][-]{section.9.1}{page analysis}{chapter.9}
+\BOOKMARK [0][-]{chapter.10}{9. Testing Varnish}{}
+\BOOKMARK [0][-]{chapter.11}{10. Results of Varnish}{}
+\BOOKMARK [1][-]{section.11.1}{1 user}{chapter.11}
+\BOOKMARK [1][-]{section.11.2}{10 concurrent users}{chapter.11}
+\BOOKMARK [1][-]{section.11.3}{100 concurrent users}{chapter.11}
+\BOOKMARK [1][-]{section.11.4}{1000 concurrent users}{chapter.11}
+\BOOKMARK [0][-]{chapter.12}{Recommendation for scaling / Conclusion}{}

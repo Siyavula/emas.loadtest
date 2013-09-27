@@ -23,6 +23,16 @@ Introduction
     we are attempting to benchmark the EMAS software and hardware cluster
     not external CDNs or external network access.
 
+    Describe constraints of 100 mbit/s network.
+
+    100 mbit/sec max public network
+    sp4 het 100/mbit connection na sp1
+    max request for ~30k doc = ~300 req/s
+    up the 100 cvus 3 req/s
+    thus page with 30 request ~10 sec to load
+    
+    Example of AB sp1 vs sp4 results and what exactly what that means for the
+    load the cluster could possibly bear.
 
 1. Pre-test optimisation
 ========================
@@ -214,8 +224,8 @@ Observations on network test results
 
     The iperf test results show throughput of more than 900 mbits/s.  When one
     keeps in mind that iperf does actual data transfer and that each of the
-    packets sent and received have a protocol related overhead, the results are
-    consistent for a 1000 mbit/s network.
+    packets sent and received have a protocol related overhead, the results for
+    all tested servers are consistent with those of a 1000 mbit/s network.
 
 
 .. _Testing authenticated reads:
@@ -640,6 +650,15 @@ Recommendation for scaling / Conclusion
 ==========================================
     
     Conclusions / Recommendations
+
+    Hetzner bandwidth comparison / analysis vs. current load capabilities.
+
+    - http://www.hetzner.co.za/helpcentre/index.php/articles/content/category/our_network_and_servers/hetzners_network_115
+
+    Compare current load to what cluster can do
+
+    - Aug/ Sept peaks around 5000 + 5000 for science and maths
+    - google analytics stats?
     
     TODO::
 
@@ -733,3 +752,21 @@ Basic HTTP sanity check
 
         - RED is a robot that checks HTTP resources to see how they'll behave,
           pointing out common problems and suggesting improvements.
+
+JMeter testing
+--------------
+
+    http://sqa.stackexchange.com/questions/2546/where-can-i-find-good-jmeter-tutorials
+
+Errors
+------
+
+    Missing fonts
+
+    - installed with: sudo apt-get install ttf-mscorefonts-installer
+
+Mobile is not causing more transactions than necessary
+
+    - Checked in ZODB Connection class.
+    - 2 transactions on image generation; one for _map and one for _reverse_map
+    - this is correct
