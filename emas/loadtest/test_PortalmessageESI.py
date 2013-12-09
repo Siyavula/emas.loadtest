@@ -73,8 +73,6 @@ class PortalmessageESI(FunkLoadTestCase):
             ['form.actions.reset_passwd', 'Change Password'],
             ['_authenticator', 'f3be0edec80a3b0236b31d638edbbdcd1dfdd69e']],
             description="Post /@@change-password")
-        
-        import pdb;pdb.set_trace()
 
         # end of test -----------------------------------------------
 
